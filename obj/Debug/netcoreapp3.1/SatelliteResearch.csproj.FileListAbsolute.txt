@@ -1,0 +1,16 @@
+C:\Repository\SatelliteResearch\bin\Debug\netcoreapp3.1\SatelliteResearch.exe
+C:\Repository\SatelliteResearch\bin\Debug\netcoreapp3.1\SatelliteResearch.deps.json
+C:\Repository\SatelliteResearch\bin\Debug\netcoreapp3.1\SatelliteResearch.runtimeconfig.json
+C:\Repository\SatelliteResearch\bin\Debug\netcoreapp3.1\SatelliteResearch.runtimeconfig.dev.json
+C:\Repository\SatelliteResearch\bin\Debug\netcoreapp3.1\SatelliteResearch.dll
+C:\Repository\SatelliteResearch\bin\Debug\netcoreapp3.1\SatelliteResearch.pdb
+C:\Repository\SatelliteResearch\obj\Debug\netcoreapp3.1\SatelliteResearch.MainForm.resources
+C:\Repository\SatelliteResearch\obj\Debug\netcoreapp3.1\SatelliteResearch.csproj.GenerateResource.cache
+C:\Repository\SatelliteResearch\obj\Debug\netcoreapp3.1\SatelliteResearch.AssemblyInfoInputs.cache
+C:\Repository\SatelliteResearch\obj\Debug\netcoreapp3.1\SatelliteResearch.AssemblyInfo.cs
+C:\Repository\SatelliteResearch\obj\Debug\netcoreapp3.1\SatelliteResearch.csproj.CoreCompileInputs.cache
+C:\Repository\SatelliteResearch\obj\Debug\netcoreapp3.1\SatelliteResearch.dll
+C:\Repository\SatelliteResearch\obj\Debug\netcoreapp3.1\SatelliteResearch.pdb
+C:\Repository\SatelliteResearch\obj\Debug\netcoreapp3.1\SatelliteResearch.genruntimeconfig.cache
+C:\Repository\SatelliteResearch\obj\Debug\netcoreapp3.1\SatelliteResearch.RadioStation.resources
+C:\Repository\SatelliteResearch\obj\Debug\netcoreapp3.1\SatelliteResearch.csprojAssemblyReference.cache
