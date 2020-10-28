@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "1IEXrznglRETOFHcc/7+p6rKUyhWOsg5B5BBiSY3W+mpUfd21vxmKTA72RFD/VG4rhrg3PiBeLR1Ea20vGrn5Q==",
+  "success": true,
+  "projectFilePath": "C:\\Repository\\SatelliteResearch\\ResearchModel\\ResearchModel.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\pravm\\.nuget\\packages\\system.windows.forms.datavisualization\\1.0.0-prerelease.20110.1\\system.windows.forms.datavisualization.1.0.0-prerelease.20110.1.nupkg.sha512"
+  ],
+  "logs": []
+}
