@@ -15,6 +15,7 @@ namespace SatelliteResearch
     public partial class MainForm : Form
     {
         double dt12, dt23, dt34;
+        private int delta, minDelta, denominator;
 
         double F(RadioStation source)
         {
@@ -100,12 +101,9 @@ namespace SatelliteResearch
             stepTextBox.Text = "1024";
             minStepTextBox.Text = "1";
             denominatorTextBox.Text = "2";
-        }
-
-        private void RunButtonClick(object sender, EventArgs e)
-        {
-            Stopwatch sp = new Stopwatch();
-            sp.Start();
+            delta = Convert.ToInt32(stepTextBox.Text);
+            minDelta = Convert.ToInt32(minStepTextBox.Text);
+            denominator = Convert.ToInt32(denominatorTextBox.Text);
 
             searcherStation1.Run();
             searcherStation2.Run();
@@ -113,13 +111,12 @@ namespace SatelliteResearch
             searcherStation4.Run();
             trueSource.Run();
             newSource.Run();
+        }
 
-            ChartsForm test = new ChartsForm();
-            test.Show();
-
-            var step = Convert.ToInt32(stepTextBox.Text);
-            var minStep = Convert.ToInt32(minStepTextBox.Text);
-            var denominator = Convert.ToInt32(denominatorTextBox.Text);
+        private void RunButtonClick(object sender, EventArgs e)
+        {
+            Stopwatch sp = new Stopwatch();
+            sp.Start();
 
             dt12 = Math.Sqrt(Math.Pow((searcherStation1.x - trueSource.x), 2) + Math.Pow((searcherStation1.y - trueSource.y), 2) + Math.Pow((searcherStation1.z - trueSource.z), 2))
                    - Math.Sqrt(Math.Pow((searcherStation2.x - trueSource.x), 2) + Math.Pow((searcherStation2.y - trueSource.y), 2) + Math.Pow((searcherStation2.z - trueSource.z), 2));
@@ -128,7 +125,7 @@ namespace SatelliteResearch
             dt34 = Math.Sqrt(Math.Pow((searcherStation3.x - trueSource.x), 2) + Math.Pow((searcherStation3.y - trueSource.y), 2) + Math.Pow((searcherStation3.z - trueSource.z), 2))
                    - Math.Sqrt(Math.Pow((searcherStation4.x - trueSource.x), 2) + Math.Pow((searcherStation4.y - trueSource.y), 2) + Math.Pow((searcherStation4.z - trueSource.z), 2));
 
-            HookJeeves(step, minStep, denominator);
+            HookJeeves(delta, minDelta, denominator);
 
             newSource.xTextBox.Text = newSource.x.ToString();
             newSource.yTextBox.Text = newSource.y.ToString();
@@ -196,6 +193,47 @@ namespace SatelliteResearch
 
         }
 
+        private void DCoordinatesGraphButtonClick(object sender, EventArgs e)
+        {
+            List<double> points = new List<double>();
+            FindSatelliteInaccuracy(delta, minDelta, denominator, points);
+            ChartsForm form;
+
+            form = new ChartsForm();
+
+            form.dtDifference.Series.Clear();
+            var series = new Series
+            {
+                    Name = "",
+                    Color = Color.Green,
+                    IsVisibleInLegend = false,
+                    IsXValueIndexed = true,
+                    ChartType = SeriesChartType.Line
+            };
+            form.dtDifference.Series.Add(series);
+            Parallel.ForEach<double>(points, point => form.dtDifference.Series[0].Points.AddY(point));
+            form.dtDifference.Invalidate();
+            form.Show();
+        }
+
+        private void DtGraphButton(object sender, EventArgs e)
+        {
+            List<double> points = new List<double>();
+            FindDtInaccuracy(delta, minDelta, denominator, points);
+            ChartsForm form;
+            if (ChartsForm.ActiveForm! == null)
+            {
+                form = new ChartsForm();
+            }
+            else
+            {
+                form = (ChartsForm)ChartsForm.ActiveForm;
+            }
+
+            form.dtDifference.Series[0].Points.AddY(points);
+            form.Show();
+        }
+
         double GetNewSourceDistanceDifference()
         {
             return Math.Sqrt(Math.Pow(newSource.x - trueSource.x, 2) + Math.Pow(newSource.y - trueSource.y, 2) + Math.Pow(newSource.z - trueSource.z, 2));
@@ -245,9 +283,9 @@ namespace SatelliteResearch
             RadioStation tmp4 = searcherStation4;
 
             Random rand = new Random();
-            Parallel.For(0, 100, function =>
+            Parallel.For(0, 5, function =>
                     {
-                        Parallel.For(0, 1000, function =>
+                        Parallel.For(0, 1, function =>
                                 {
                                     AddInaccuracy(searcherStation1, tmp1, rand, iter);
                                     AddInaccuracy(searcherStation2, tmp2, rand, iter);

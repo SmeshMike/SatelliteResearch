@@ -11,16 +11,13 @@ namespace ResearchModel
 {
     public partial class ChartsForm : Form
     {
+        public Chart dtDifference;
         public ChartsForm()
         {
             InitializeComponent();
-            Chart dtDifference = new Chart();
+            dtDifference = new Chart();
             dtDifference.Location = new Point(5,5);
-            dtDifference.Size = new Size(895,440);
-
-            Chart coordDifference = new Chart();
-            coordDifference.Location = new Point(5, 450);
-            coordDifference.Size = new Size(895, 440);
+            dtDifference.Size = new Size(790,445);
         }
     }
 }

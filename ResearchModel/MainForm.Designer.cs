@@ -43,6 +43,8 @@
             this.denominatorTextBox = new System.Windows.Forms.TextBox();
             this.refreshButton = new System.Windows.Forms.Button();
             this.timeLabel = new System.Windows.Forms.Label();
+            this.dCoordinatesGraphButton = new System.Windows.Forms.Button();
+            this.dtGraphButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // searcherStation1
@@ -75,7 +77,7 @@
             // 
             // runButton
             // 
-            this.runButton.Location = new System.Drawing.Point(1473, 822);
+            this.runButton.Location = new System.Drawing.Point(1473, 772);
             this.runButton.Name = "runButton";
             this.runButton.Size = new System.Drawing.Size(83, 25);
             this.runButton.TabIndex = 4;
@@ -132,7 +134,7 @@
             // Denomirator
             // 
             this.Denomirator.AutoSize = true;
-            this.Denomirator.Location = new System.Drawing.Point(1502, 690);
+            this.Denomirator.Location = new System.Drawing.Point(1502, 687);
             this.Denomirator.Name = "Denomirator";
             this.Denomirator.Size = new System.Drawing.Size(82, 17);
             this.Denomirator.TabIndex = 5;
@@ -140,14 +142,14 @@
             // 
             // denominatorTextBox
             // 
-            this.denominatorTextBox.Location = new System.Drawing.Point(1502, 710);
+            this.denominatorTextBox.Location = new System.Drawing.Point(1502, 707);
             this.denominatorTextBox.Name = "denominatorTextBox";
             this.denominatorTextBox.Size = new System.Drawing.Size(43, 25);
             this.denominatorTextBox.TabIndex = 6;
             // 
             // refreshButton
             // 
-            this.refreshButton.Location = new System.Drawing.Point(1362, 822);
+            this.refreshButton.Location = new System.Drawing.Point(1362, 772);
             this.refreshButton.Name = "refreshButton";
             this.refreshButton.Size = new System.Drawing.Size(83, 25);
             this.refreshButton.TabIndex = 7;
@@ -158,17 +160,39 @@
             // timeLabel
             // 
             this.timeLabel.AutoSize = true;
-            this.timeLabel.Location = new System.Drawing.Point(1502, 747);
+            this.timeLabel.Location = new System.Drawing.Point(1502, 745);
             this.timeLabel.Name = "timeLabel";
             this.timeLabel.Size = new System.Drawing.Size(46, 17);
             this.timeLabel.TabIndex = 8;
             this.timeLabel.Text = "Время";
+            // 
+            // dCoordinatesGraphButton
+            // 
+            this.dCoordinatesGraphButton.Location = new System.Drawing.Point(1362, 803);
+            this.dCoordinatesGraphButton.Name = "dCoordinatesGraphButton";
+            this.dCoordinatesGraphButton.Size = new System.Drawing.Size(83, 44);
+            this.dCoordinatesGraphButton.TabIndex = 7;
+            this.dCoordinatesGraphButton.Text = "Разница координат";
+            this.dCoordinatesGraphButton.UseVisualStyleBackColor = true;
+            this.dCoordinatesGraphButton.Click += new System.EventHandler(this.DCoordinatesGraphButtonClick);
+            // 
+            // dtGraphButton
+            // 
+            this.dtGraphButton.Location = new System.Drawing.Point(1473, 803);
+            this.dtGraphButton.Name = "dtGraphButton";
+            this.dtGraphButton.Size = new System.Drawing.Size(83, 44);
+            this.dtGraphButton.TabIndex = 4;
+            this.dtGraphButton.Text = "Разница времени";
+            this.dtGraphButton.UseVisualStyleBackColor = true;
+            this.dtGraphButton.Click += new System.EventHandler(this.DtGraphButton);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1584, 859);
+            this.Controls.Add(this.dtGraphButton);
+            this.Controls.Add(this.dCoordinatesGraphButton);
             this.Controls.Add(this.timeLabel);
             this.Controls.Add(this.denominatorTextBox);
             this.Controls.Add(this.Denomirator);
@@ -211,5 +235,7 @@
         private System.Windows.Forms.TextBox textBox;
         private System.Windows.Forms.Button refreshButton;
         private System.Windows.Forms.Label timeLabel;
+        private System.Windows.Forms.Button dCoordinatesGraphButton;
+        private System.Windows.Forms.Button dtGraphButton;
     }
 }
