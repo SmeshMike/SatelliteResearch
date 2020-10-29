@@ -1,4 +1,6 @@
-﻿namespace ResearchModel
+﻿using System.Windows.Forms.DataVisualization.Charting;
+
+namespace ResearchModel
 {
     partial class ChartsForm
     {
@@ -32,6 +34,19 @@
             // 
             // ChartsForm
             // 
+            ChartArea chartArea = new ChartArea();
+            Legend legend = new Legend();
+            this.dtDifference = new Chart();
+            chartArea.Name = "ChartArea";
+            this.dtDifference.ChartAreas.Add(chartArea);
+            this.dtDifference.Dock = System.Windows.Forms.DockStyle.Fill;
+            legend.Name = "Legend";
+            this.dtDifference.Legends.Add(legend);
+            this.dtDifference.Location = new System.Drawing.Point(0, 50);
+            this.dtDifference.Name = "chart";
+            this.dtDifference.TabIndex = 0;
+            this.dtDifference.Text = "chart";
+
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 459);

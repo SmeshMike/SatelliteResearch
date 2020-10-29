@@ -218,14 +218,14 @@
 
         #endregion
 
-        private RadioStation searcherStation1;
-        private RadioStation radioStation;
-        private RadioStation searcherStation2;
-        private RadioStation searcherStation3;
-        private RadioStation searcherStation4;
+        public RadioStation searcherStation1;
+        public RadioStation radioStation;
+        public RadioStation searcherStation2;
+        public RadioStation searcherStation3;
+        public RadioStation searcherStation4;
         private System.Windows.Forms.Button runButton;
-        private RadioStation trueSource;
-        private RadioStation newSource;
+        public RadioStation trueSource;
+        public RadioStation newSource;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox stepTextBox;
         private System.Windows.Forms.Label minstep;

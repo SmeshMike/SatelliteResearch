@@ -15,9 +15,13 @@ namespace ResearchModel
         public ChartsForm()
         {
             InitializeComponent();
-            dtDifference = new Chart();
-            dtDifference.Location = new Point(5,5);
-            dtDifference.Size = new Size(790,445);
+            dtDifference.Location = new Point(5, 5);
+            dtDifference.Size = new Size(790, 445);
+        }
+
+        public void CreateGraphic(List<double> points)
+        {
+            
         }
     }
 }

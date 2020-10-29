@@ -39,6 +39,10 @@
       "frameworks": {
         "netcoreapp3.1": {
           "dependencies": {
+            "System.Data.SqlClient": {
+              "target": "Package",
+              "version": "[4.8.2, )"
+            },
             "System.Windows.Forms.DataVisualization": {
               "target": "Package",
               "version": "[1.0.0-prerelease.20110.1, )"
