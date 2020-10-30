@@ -84,6 +84,27 @@ namespace SatelliteResearch
             trueSource.xTextBox.Text = x.ToString();
             trueSource.yTextBox.Text = y.ToString();
             trueSource.zTextBox.Text = z.ToString();
+
+            if (newSource.xTextBox.Text == "")
+                newSource.xTextBox.Text = "300";
+            if (newSource.yTextBox.Text == "")
+                newSource.yTextBox.Text = "300";
+            if (newSource.zTextBox.Text == "")
+                newSource.zTextBox.Text = "300";
+            
+            searcherStation1.Run();
+            searcherStation2.Run();
+            searcherStation3.Run();
+            searcherStation4.Run();
+            trueSource.Run();
+            newSource.Run();
+            
+            Dt12 = Math.Sqrt(Math.Pow((searcherStation1.x - trueSource.x), 2) + Math.Pow((searcherStation1.y - trueSource.y), 2) + Math.Pow((searcherStation1.z - trueSource.z), 2))
+                   - Math.Sqrt(Math.Pow((searcherStation2.x - trueSource.x), 2) + Math.Pow((searcherStation2.y - trueSource.y), 2) + Math.Pow((searcherStation2.z - trueSource.z), 2));
+            Dt23 = Math.Sqrt(Math.Pow((searcherStation2.x - trueSource.x), 2) + Math.Pow((searcherStation2.y - trueSource.y), 2) + Math.Pow((searcherStation2.z - trueSource.z), 2))
+                   - Math.Sqrt(Math.Pow((searcherStation3.x - trueSource.x), 2) + Math.Pow((searcherStation3.y - trueSource.y), 2) + Math.Pow((searcherStation3.z - trueSource.z), 2));
+            Dt34 = Math.Sqrt(Math.Pow((searcherStation3.x - trueSource.x), 2) + Math.Pow((searcherStation3.y - trueSource.y), 2) + Math.Pow((searcherStation3.z - trueSource.z), 2))
+                   - Math.Sqrt(Math.Pow((searcherStation4.x - trueSource.x), 2) + Math.Pow((searcherStation4.y - trueSource.y), 2) + Math.Pow((searcherStation4.z - trueSource.z), 2));
         }
 
         public MainForm()
@@ -96,27 +117,13 @@ namespace SatelliteResearch
             newSource.xTextBox.Text = "300";
             newSource.yTextBox.Text = "300";
             newSource.zTextBox.Text = "300";
+
             stepTextBox.Text = "1024";
             minStepTextBox.Text = "1";
             denominatorTextBox.Text = "2";
             delta = Convert.ToInt32(stepTextBox.Text);
             minDelta = Convert.ToInt32(minStepTextBox.Text);
             denominator = Convert.ToInt32(denominatorTextBox.Text);
-
-            searcherStation1.Run();
-            searcherStation2.Run();
-            searcherStation3.Run();
-            searcherStation4.Run();
-            trueSource.Run();
-            newSource.Run();
-            
-
-            Dt12 = Math.Sqrt(Math.Pow((searcherStation1.x - trueSource.x), 2) + Math.Pow((searcherStation1.y - trueSource.y), 2) + Math.Pow((searcherStation1.z - trueSource.z), 2))
-                   - Math.Sqrt(Math.Pow((searcherStation2.x - trueSource.x), 2) + Math.Pow((searcherStation2.y - trueSource.y), 2) + Math.Pow((searcherStation2.z - trueSource.z), 2));
-            Dt23 = Math.Sqrt(Math.Pow((searcherStation2.x - trueSource.x), 2) + Math.Pow((searcherStation2.y - trueSource.y), 2) + Math.Pow((searcherStation2.z - trueSource.z), 2))
-                   - Math.Sqrt(Math.Pow((searcherStation3.x - trueSource.x), 2) + Math.Pow((searcherStation3.y - trueSource.y), 2) + Math.Pow((searcherStation3.z - trueSource.z), 2));
-            Dt34 = Math.Sqrt(Math.Pow((searcherStation3.x - trueSource.x), 2) + Math.Pow((searcherStation3.y - trueSource.y), 2) + Math.Pow((searcherStation3.z - trueSource.z), 2))
-                   - Math.Sqrt(Math.Pow((searcherStation4.x - trueSource.x), 2) + Math.Pow((searcherStation4.y - trueSource.y), 2) + Math.Pow((searcherStation4.z - trueSource.z), 2));
         }
 
         private void RunButtonClick(object sender, EventArgs e)
@@ -166,18 +173,26 @@ namespace SatelliteResearch
         {
             List<double> points = new List<double>();
             FindDtInaccuracy(delta, minDelta, denominator, points);
-            ChartsForm form;
-            if (ChartsForm.ActiveForm! == null)
-            {
-                form = new ChartsForm();
-            }
-            else
-            {
-                form = (ChartsForm)ChartsForm.ActiveForm;
-            }
+            ChartsForm form = new ChartsForm();
 
-            form.dtDifference.Series[0].Points.AddY(points);
             form.Show();
+
+            form.dtDifference.Series.Clear();
+            var series = new Series
+            {
+                Name = "Мой хуй",
+                Color = Color.Green,
+                IsVisibleInLegend = true,
+                IsXValueIndexed = true,
+                ChartType = SeriesChartType.Line,
+            };
+            form.dtDifference.Series.Add(series);
+            for (int i = 0; i < points.Count; i++)
+            {
+                form.dtDifference.Series[0].Points.AddXY(i, points[i]);
+            }
+            form.Controls.Add(form.dtDifference);
+            form.dtDifference.Show();
         }
 
 

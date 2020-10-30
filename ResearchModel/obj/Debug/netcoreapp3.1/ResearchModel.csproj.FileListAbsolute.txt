@@ -23,3 +23,28 @@ C:\Repository\SatelliteResearch\ResearchModel\bin\Debug\netcoreapp3.1\runtimes\w
 C:\Repository\SatelliteResearch\ResearchModel\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Repository\SatelliteResearch\ResearchModel\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Repository\SatelliteResearch\ResearchModel\obj\Debug\netcoreapp3.1\ResearchModel.csproj.CoreCompileInputs.cache
+D:\VS Pojects\SatelliteResearch\ResearchModel\bin\Debug\netcoreapp3.1\ResearchModel.exe
+D:\VS Pojects\SatelliteResearch\ResearchModel\bin\Debug\netcoreapp3.1\ResearchModel.deps.json
+D:\VS Pojects\SatelliteResearch\ResearchModel\bin\Debug\netcoreapp3.1\ResearchModel.runtimeconfig.json
+D:\VS Pojects\SatelliteResearch\ResearchModel\bin\Debug\netcoreapp3.1\ResearchModel.runtimeconfig.dev.json
+D:\VS Pojects\SatelliteResearch\ResearchModel\bin\Debug\netcoreapp3.1\ResearchModel.dll
+D:\VS Pojects\SatelliteResearch\ResearchModel\bin\Debug\netcoreapp3.1\ResearchModel.pdb
+D:\VS Pojects\SatelliteResearch\ResearchModel\bin\Debug\netcoreapp3.1\System.Data.SqlClient.dll
+D:\VS Pojects\SatelliteResearch\ResearchModel\bin\Debug\netcoreapp3.1\System.Windows.Forms.DataVisualization.dll
+D:\VS Pojects\SatelliteResearch\ResearchModel\bin\Debug\netcoreapp3.1\runtimes\win-arm64\native\sni.dll
+D:\VS Pojects\SatelliteResearch\ResearchModel\bin\Debug\netcoreapp3.1\runtimes\win-x64\native\sni.dll
+D:\VS Pojects\SatelliteResearch\ResearchModel\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\sni.dll
+D:\VS Pojects\SatelliteResearch\ResearchModel\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+D:\VS Pojects\SatelliteResearch\ResearchModel\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
+D:\VS Pojects\SatelliteResearch\ResearchModel\obj\Debug\netcoreapp3.1\ResearchModel.csprojAssemblyReference.cache
+D:\VS Pojects\SatelliteResearch\ResearchModel\obj\Debug\netcoreapp3.1\ResearchModel.ChartsForm.resources
+D:\VS Pojects\SatelliteResearch\ResearchModel\obj\Debug\netcoreapp3.1\SatelliteResearch.MainForm.resources
+D:\VS Pojects\SatelliteResearch\ResearchModel\obj\Debug\netcoreapp3.1\SatelliteResearch.RadioStation.resources
+D:\VS Pojects\SatelliteResearch\ResearchModel\obj\Debug\netcoreapp3.1\ResearchModel.csproj.GenerateResource.cache
+D:\VS Pojects\SatelliteResearch\ResearchModel\obj\Debug\netcoreapp3.1\ResearchModel.AssemblyInfoInputs.cache
+D:\VS Pojects\SatelliteResearch\ResearchModel\obj\Debug\netcoreapp3.1\ResearchModel.AssemblyInfo.cs
+D:\VS Pojects\SatelliteResearch\ResearchModel\obj\Debug\netcoreapp3.1\ResearchModel.csproj.CoreCompileInputs.cache
+D:\VS Pojects\SatelliteResearch\ResearchModel\obj\Debug\netcoreapp3.1\ResearchModel.csproj.CopyComplete
+D:\VS Pojects\SatelliteResearch\ResearchModel\obj\Debug\netcoreapp3.1\ResearchModel.dll
+D:\VS Pojects\SatelliteResearch\ResearchModel\obj\Debug\netcoreapp3.1\ResearchModel.pdb
+D:\VS Pojects\SatelliteResearch\ResearchModel\obj\Debug\netcoreapp3.1\ResearchModel.genruntimeconfig.cache

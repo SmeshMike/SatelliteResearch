@@ -1,29 +1,33 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Repository\\SatelliteResearch\\xTests\\xTests.csproj": {}
+    "D:\\VS Pojects\\SatelliteResearch\\xTests\\xTests.csproj": {}
   },
   "projects": {
-    "C:\\Repository\\SatelliteResearch\\ResearchModel\\ResearchModel.csproj": {
+    "D:\\VS Pojects\\SatelliteResearch\\ResearchModel\\ResearchModel.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Repository\\SatelliteResearch\\ResearchModel\\ResearchModel.csproj",
+        "projectUniqueName": "D:\\VS Pojects\\SatelliteResearch\\ResearchModel\\ResearchModel.csproj",
         "projectName": "ResearchModel",
-        "projectPath": "C:\\Repository\\SatelliteResearch\\ResearchModel\\ResearchModel.csproj",
-        "packagesPath": "C:\\Users\\pravm\\.nuget\\packages\\",
-        "outputPath": "C:\\Repository\\SatelliteResearch\\ResearchModel\\obj\\",
+        "projectPath": "D:\\VS Pojects\\SatelliteResearch\\ResearchModel\\ResearchModel.csproj",
+        "packagesPath": "C:\\Users\\Mishanya - PC\\.nuget\\packages\\",
+        "outputPath": "D:\\VS Pojects\\SatelliteResearch\\ResearchModel\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\pravm\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\Mishanya - PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {},
-          "https://www.nuget.org/packages/": {}
+          "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "netcoreapp3.1": {
@@ -66,36 +70,40 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.403\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.302\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Repository\\SatelliteResearch\\xTests\\xTests.csproj": {
+    "D:\\VS Pojects\\SatelliteResearch\\xTests\\xTests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Repository\\SatelliteResearch\\xTests\\xTests.csproj",
+        "projectUniqueName": "D:\\VS Pojects\\SatelliteResearch\\xTests\\xTests.csproj",
         "projectName": "xTests",
-        "projectPath": "C:\\Repository\\SatelliteResearch\\xTests\\xTests.csproj",
-        "packagesPath": "C:\\Users\\pravm\\.nuget\\packages\\",
-        "outputPath": "C:\\Repository\\SatelliteResearch\\xTests\\obj\\",
+        "projectPath": "D:\\VS Pojects\\SatelliteResearch\\xTests\\xTests.csproj",
+        "packagesPath": "C:\\Users\\Mishanya - PC\\.nuget\\packages\\",
+        "outputPath": "D:\\VS Pojects\\SatelliteResearch\\xTests\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\pravm\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\Mishanya - PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {},
-          "https://www.nuget.org/packages/": {}
+          "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "netcoreapp3.1": {
             "projectReferences": {
-              "C:\\Repository\\SatelliteResearch\\ResearchModel\\ResearchModel.csproj": {
-                "projectPath": "C:\\Repository\\SatelliteResearch\\ResearchModel\\ResearchModel.csproj"
+              "D:\\VS Pojects\\SatelliteResearch\\ResearchModel\\ResearchModel.csproj": {
+                "projectPath": "D:\\VS Pojects\\SatelliteResearch\\ResearchModel\\ResearchModel.csproj"
               }
             }
           }
@@ -144,7 +152,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.403\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.302\\RuntimeIdentifierGraph.json"
         }
       }
     }

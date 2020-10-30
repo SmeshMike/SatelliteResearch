@@ -143,19 +143,18 @@ namespace SatelliteResearch
 
         public static void FindDtInaccuracy(int delta, int minDelta, int denominator, List<double> inaccuracyArr)
         {
-            
-            
+            int err = 0;
+            double inaccuracy = 0;
+
             Random rand = new Random();
 
             var tmpDt12 = dt12;
             var tmpDt23 = dt23;
             var tmpDt34 = dt34;
 
-            Parallel.For(0, 100, i =>
+            for (int i = 0; i < 100; i++)
             {
-                int err;
-                double inaccuracy = 0;
-                Parallel.For(0, 1000, j =>
+                for (int j = 0; j < 1000; j++)
                 {
                     err = rand.Next(i) * 2 - i;
                     dt12 = tmpDt12 + err;
@@ -167,10 +166,8 @@ namespace SatelliteResearch
                     HookJeeves(delta, minDelta, denominator);
                     inaccuracy += GetNewSourceDistanceDifference();
                 }
-                );
                 inaccuracyArr.Add(inaccuracy / 1000);
             }
-            );
 
         }
 
@@ -184,9 +181,9 @@ namespace SatelliteResearch
             RadioStation tmp4 = searcherStation4;
 
             Random rand = new Random();
-            Parallel.For(0, 20, function =>
+            for (int i = 0; i < 100; i++)
             {
-                for (int i = 0; i < 1000; i++)
+                for (int j = 0; j < 1000; j++)
                 {
                     AddInaccuracy(searcherStation1, tmp1, rand, iter);
                     AddInaccuracy(searcherStation2, tmp2, rand, iter);
@@ -200,7 +197,6 @@ namespace SatelliteResearch
                 inaccuracy = 0;
                 iter++;
             }
-            );
         }
 
         static void AddInaccuracy(RadioStation rs, RadioStation tmpRs, Random rand, int iter)
