@@ -152,9 +152,9 @@ namespace SatelliteResearch
             var tmpDt23 = dt23;
             var tmpDt34 = dt34;
 
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 200; i+=2)
             {
-                for (int j = 0; j < 1000; j++)
+                for (int j = 0; j < 10; j++)
                 {
                     err = rand.Next(i) * 2 - i;
                     dt12 = tmpDt12 + err;
@@ -183,7 +183,7 @@ namespace SatelliteResearch
             Random rand = new Random();
             for (int i = 0; i < 100; i++)
             {
-                for (int j = 0; j < 1000; j++)
+                for (int j = 0; j < 10; j++)
                 {
                     AddInaccuracy(searcherStation1, tmp1, rand, iter);
                     AddInaccuracy(searcherStation2, tmp2, rand, iter);

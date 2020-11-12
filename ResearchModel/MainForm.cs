@@ -5,6 +5,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using ResearchModel;
@@ -118,7 +119,7 @@ namespace SatelliteResearch
             newSource.yTextBox.Text = "300";
             newSource.zTextBox.Text = "300";
 
-            stepTextBox.Text = "1024";
+            stepTextBox.Text = "4";
             minStepTextBox.Text = "1";
             denominatorTextBox.Text = "2";
             delta = Convert.ToInt32(stepTextBox.Text);
@@ -151,17 +152,17 @@ namespace SatelliteResearch
             form.dtDifference.Series.Clear();
             var series = new Series
             {
-                    Name = "Мой хуй",
+                    Name = "сам щит",
                     Color = Color.Green,
                     IsVisibleInLegend = true,
                     IsXValueIndexed = true,
                     ChartType = SeriesChartType.Line,
             };
             form.dtDifference.Series.Add(series);
-            for (int i = 0; i < points.Count; i++)
+            Parallel.For(0, points.Count, new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount }, (i) =>
             {
                 form.dtDifference.Series[0].Points.AddXY(i, points[i]);
-            }
+            });
             form.Controls.Add(form.dtDifference);
             form.dtDifference.Show();
 
@@ -180,7 +181,7 @@ namespace SatelliteResearch
             form.dtDifference.Series.Clear();
             var series = new Series
             {
-                Name = "Мой хуй",
+                Name = "сам щит",
                 Color = Color.Green,
                 IsVisibleInLegend = true,
                 IsXValueIndexed = true,
