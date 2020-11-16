@@ -78,16 +78,13 @@ namespace SatelliteResearch
         }
 
 
-        // 
-        
-
 
         static void CheckNeighbourPoints(int delta)
         {
 
-            double tmpF = F(newSource);
+            var tmpF = F(newSource);
             var f = tmpF;
-            Parallel.For(0, 3, i =>
+            for (int i = 0; i < 3; i++)
             {
                 newSource.coordinates[i] += delta;
                 f = F(newSource);
@@ -97,12 +94,12 @@ namespace SatelliteResearch
                 {
                     newSource.coordinates[i] -= 2 * delta;
                     f = F(newSource);
-                     if (tmpF > f)
+                    if (tmpF > f)
                         tmpF = f;
                     else
                         newSource.coordinates[i] += delta;
                 }
-            });
+            }
         }
 
         public static void HookJeeves(int delta, int minDelta, int denominator)
@@ -154,7 +151,7 @@ namespace SatelliteResearch
 
             for (int i = 0; i < 200; i+=2)
             {
-                for (int j = 0; j < 10; j++)
+                for (int j = 0; j < 2; j++)
                 {
                     err = rand.Next(i) * 2 - i;
                     dt12 = tmpDt12 + err;

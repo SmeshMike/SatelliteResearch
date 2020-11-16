@@ -159,10 +159,10 @@ namespace SatelliteResearch
                     ChartType = SeriesChartType.Line,
             };
             form.dtDifference.Series.Add(series);
-            Parallel.For(0, points.Count, new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount }, (i) =>
+            for (int i = 0; i < points.Count; i++)
             {
                 form.dtDifference.Series[0].Points.AddXY(i, points[i]);
-            });
+            }
             form.Controls.Add(form.dtDifference);
             form.dtDifference.Show();
 

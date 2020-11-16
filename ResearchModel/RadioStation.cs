@@ -38,11 +38,14 @@ namespace SatelliteResearch
         public RadioStation()
         {
             InitializeComponent();
+            coordinates = new int[3];
+            x = 0;
+            y = 0;
+            z = 0;
         }
 
         public void Run()
         {
-            coordinates = new int[3];
             x = Convert.ToInt32(xTextBox.Text);
             y = Convert.ToInt32(yTextBox.Text);
             z = Convert.ToInt32(zTextBox.Text);
