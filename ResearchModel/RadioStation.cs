@@ -17,28 +17,28 @@ namespace SatelliteResearch
             set => nameLabel = value;
         }
         
-        public int x {
+        public double x {
             get => coordinates[0];
             set => coordinates[0] = value;
         }
 
-        public int y
+        public double y
         {
             get => coordinates[1];
             set => coordinates[1] = value;
         }
-        public int z
+        public double z
         {
             get => coordinates[2];
             set => coordinates[2] = value;
         }
 
-        public int[] coordinates;
+        public double[] coordinates;
 
         public RadioStation()
         {
             InitializeComponent();
-            coordinates = new int[3];
+            coordinates = new double[3];
             x = 0;
             y = 0;
             z = 0;
