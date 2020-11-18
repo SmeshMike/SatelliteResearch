@@ -51,6 +51,12 @@ namespace SatelliteResearch
             SearcherStation4 = searcherStation4;
             NewSource = newSource;
             TrueSource = trueSource;
+
+            progressBar.Visible = true;
+            progressBar.Minimum = 1;
+            progressBar.Maximum = 200;
+            progressBar.Value = 1;
+            progressBar.Step = 1;
         }
 
         private void refreshButtonClick(object sender, EventArgs e)
@@ -59,29 +65,31 @@ namespace SatelliteResearch
             newSource.yTextBox.Text = "0";
             newSource.zTextBox.Text = "0";
 
-            DotInitialize();
+            GenerateDots(4);
+
             searcherStation1.NameLabel.Text = "Спутник 1";
-            searcherStation1.xTextBox.Text = x.ToString();
-            searcherStation1.yTextBox.Text = y.ToString();
-            searcherStation1.zTextBox.Text = z.ToString();
+            searcherStation1.xTextBox.Text = Coordinate[0,0].ToString();
+            searcherStation1.yTextBox.Text = Coordinate[0, 1].ToString();
+            searcherStation1.zTextBox.Text = Coordinate[0, 2].ToString();
+            searcherStation1.Run();
 
-            DotInitialize();
             searcherStation2.NameLabel.Text = "Спутник 2";
-            searcherStation2.xTextBox.Text = x.ToString();
-            searcherStation2.yTextBox.Text = y.ToString();
-
-            searcherStation2.zTextBox.Text = z.ToString();
-            DotInitialize();
+            searcherStation2.xTextBox.Text = Coordinate[1, 0].ToString();
+            searcherStation2.yTextBox.Text = Coordinate[1, 1].ToString();
+            searcherStation2.zTextBox.Text = Coordinate[1, 2].ToString();
+            searcherStation2.Run();
+            
             searcherStation3.NameLabel.Text = "Спутник 3";
-            searcherStation3.xTextBox.Text = x.ToString();
-            searcherStation3.yTextBox.Text = y.ToString();
-            searcherStation3.zTextBox.Text = z.ToString();
+            searcherStation3.xTextBox.Text = Coordinate[2, 0].ToString();
+            searcherStation3.yTextBox.Text = Coordinate[2, 1].ToString();
+            searcherStation3.zTextBox.Text = Coordinate[2, 2].ToString();
+            searcherStation3.Run();
 
-            DotInitialize();
             searcherStation4.NameLabel.Text = "Спутник 4";
-            searcherStation4.xTextBox.Text = x.ToString();
-            searcherStation4.yTextBox.Text = y.ToString();
-            searcherStation4.zTextBox.Text = z.ToString();
+            searcherStation4.xTextBox.Text = Coordinate[3, 0].ToString();
+            searcherStation4.yTextBox.Text = Coordinate[3, 1].ToString();
+            searcherStation4.zTextBox.Text = Coordinate[3, 2].ToString();
+            searcherStation4.Run();
 
             SourceInitialize();
             trueSource.NameLabel.Text = "Источник";
@@ -96,10 +104,9 @@ namespace SatelliteResearch
             if (newSource.zTextBox.Text == "")
                 newSource.zTextBox.Text = "0";
 
-            searcherStation1.Run();
-            searcherStation2.Run();
-            searcherStation3.Run();
-            searcherStation4.Run();
+            
+            
+            
             trueSource.Run();
             newSource.Run();
             
@@ -121,9 +128,9 @@ namespace SatelliteResearch
             InitializeComponent();
             newSource.NameLabel.Text = "Предполагаемые координаты";
 
-            stepTextBox.Text = "512";
-            minStepTextBox.Text = "0,25";
-            denominatorTextBox.Text = "4";
+            stepTextBox.Text = "262144";
+            minStepTextBox.Text = "0,015625";
+            denominatorTextBox.Text = "64";
 
             refreshButtonClick(null, EventArgs.Empty);
         }
@@ -140,6 +147,7 @@ namespace SatelliteResearch
             newSource.zTextBox.Text = Convert.ToInt32(newSource.z).ToString();
             var time = sp.Elapsed;
             timeLabel.Text = $"{time.Minutes:00}:{time.Seconds:00}.{time.Milliseconds:00}";
+            errorLabel.Text = GetNewSourceDistanceDifference().ToString();
         }
 
         private void DCoordinatesGraphButtonClick(object sender, EventArgs e)
@@ -174,7 +182,7 @@ namespace SatelliteResearch
         private void DtGraphButton(object sender, EventArgs e)
         {
             List<double> points = new List<double>();
-            FindDtInaccuracy(delta, minDelta, denominator, points);
+            FindDtInaccuracy(delta, minDelta, denominator, points, progressBar);
             ChartsForm form = new ChartsForm();
 
             form.Show();

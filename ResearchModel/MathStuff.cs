@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using SatelliteResearch;
 using ResearchModel;
 
@@ -10,6 +11,15 @@ namespace SatelliteResearch
     public static class MathStuff
     {
         private static RadioStation searcherStation1, searcherStation2, searcherStation3, searcherStation4, newSource, trueSource;
+        private static double[,] coef;
+        private static double[,] coordinate;
+
+        public static double[,] Coordinate
+        {
+            get => coordinate;
+            set => coordinate = value;
+        }
+
         public static RadioStation SearcherStation1
         {
             get => searcherStation1;
@@ -133,12 +143,12 @@ namespace SatelliteResearch
 
         }
 
-        static double GetNewSourceDistanceDifference()
+        public static double GetNewSourceDistanceDifference()
         {
-            return Math.Sqrt(Math.Pow(newSource.x - trueSource.x, 2) + Math.Pow(newSource.y - trueSource.y, 2) + Math.Pow(newSource.z - trueSource.z, 2));
+            return Convert.ToInt32(Math.Sqrt(Math.Pow(newSource.x - trueSource.x, 2) + Math.Pow(newSource.y - trueSource.y, 2) + Math.Pow(newSource.z - trueSource.z, 2)));
         }
 
-        public static void FindDtInaccuracy(double delta, double minDelta, double denominator, List<double> inaccuracyArr)
+        public static void FindDtInaccuracy(double delta, double minDelta, double denominator, List<double> inaccuracyArr, ProgressBar pb)
         {
             int err = 0;
             double inaccuracy = 0;
@@ -163,6 +173,7 @@ namespace SatelliteResearch
                     HookJeeves(delta, minDelta, denominator);
                     inaccuracy += GetNewSourceDistanceDifference();
                 }
+                pb.PerformStep();
                 inaccuracyArr.Add(inaccuracy / 100);
             }
 
@@ -179,6 +190,7 @@ namespace SatelliteResearch
             Random rand = new Random();
             for (int i = 0; i < 200; i+=2)
             {
+                
                 for (int j = 0; j < 100; j++)
                 {
                     AddInaccuracy(searcherStation1, tmp1, rand, i);
@@ -199,6 +211,56 @@ namespace SatelliteResearch
             rs.x = tmpRs.x + (rand.Next(iter) * 2 - iter);
             rs.y = tmpRs.y + (rand.Next(iter) * 2 - iter);
             rs.z = tmpRs.z + (rand.Next(iter) * 2 - iter);
+        }
+
+        static void CreatePlane()
+        {
+            coef = new double[3,3];
+            coef[0, 0] = -Math.Sin(Math.PI / 180 * 155);
+            coef[0, 1] = 0;
+            coef[0, 2] = Math.Cos(Math.PI / 180 * 155);
+            coef[1, 0] = -Math.Sin(Math.PI / 180 * 155) * Math.Cos(Math.PI / 180 * 120);
+            coef[1, 1] = -Math.Sin(Math.PI / 180 * 155) * Math.Sin(Math.PI / 180 * 120);
+            coef[1, 2] = Math.Cos(Math.PI / 180 * 120);
+            coef[2, 0] = -Math.Sin(Math.PI / 180 * 155) * Math.Cos(Math.PI / 180 * 240);
+            coef[2, 1] = -Math.Sin(Math.PI / 180 * 155) * Math.Sin(Math.PI / 180 * 240);
+            coef[2, 2] = Math.Cos(Math.PI / 180 * 240);
+        }
+
+        public static void GenerateDots(short n)
+        {
+            CreatePlane();
+            coordinate = new double[n,3];
+
+            long r = 25420000;
+
+            Random random = new Random();
+
+            var x = random.Next(Convert.ToInt32(r)) * 2 - r;
+            coordinate[0, 0] = x;
+            var y = (long)Math.Sqrt(r * r - x * x);
+            coordinate[0, 1] = y;
+            var z = Convert.ToInt64((-coef[0, 0] * x - coef[0, 1] * y) / coef[0, 2]);
+            coordinate[0, 2] = z;
+
+            
+            for (int i = 1; i < n; ++i)
+            {
+                do
+                {
+                    x = random.Next(Convert.ToInt32(r)) * 2 - r;
+                    y = (long) Math.Sqrt(r * r - x * x);
+                    z = Convert.ToInt64((-coef[i-1, 0] * x - coef[i - 1, 1] * y) / coef[i - 1, 2]);
+
+                } while (Math.Sqrt((coordinate[i - 1, 0] - x) * (coordinate[i - 1, 0] - x))< 1000000 || Math.Sqrt((coordinate[i - 1, 1] - y) * (coordinate[i - 1, 1] - y)) < 1000000 || Math.Sqrt((coordinate[i - 1, 2] - z) * (coordinate[i - 1, 2] - z)) < 1000000);
+
+                coordinate[i, 0] = x;
+                coordinate[i, 1] = y;
+                coordinate[i, 2] = z;
+            }
+
+
+
         }
     }
 }
