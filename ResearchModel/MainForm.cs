@@ -53,7 +53,7 @@ namespace SatelliteResearch
             TrueSource = trueSource;
 
             progressBar.Visible = true;
-            progressBar.Minimum = 1;
+            progressBar.Minimum = 0;
             progressBar.Maximum = 200;
             progressBar.Value = 1;
             progressBar.Step = 1;
@@ -140,8 +140,11 @@ namespace SatelliteResearch
             Stopwatch sp = new Stopwatch();
             sp.Start();
 
-            HookJeeves(delta, minDelta, denominator);
-
+            while(!HookJeeves(delta, minDelta, denominator))
+            {
+                refreshButtonClick(null, EventArgs.Empty);
+            }
+            
             newSource.xTextBox.Text = Convert.ToInt32(newSource.x).ToString();
             newSource.yTextBox.Text = Convert.ToInt32(newSource.y).ToString();
             newSource.zTextBox.Text = Convert.ToInt32(newSource.z).ToString();
@@ -153,7 +156,7 @@ namespace SatelliteResearch
         private void DCoordinatesGraphButtonClick(object sender, EventArgs e)
         {
             List<double> points = new List<double>();
-            FindSatelliteInaccuracy(delta, minDelta, denominator, points);
+            FindSatelliteInaccuracy(delta, minDelta, denominator, points, progressBar);
             ChartsForm form = new ChartsForm();
 
             form.Show();

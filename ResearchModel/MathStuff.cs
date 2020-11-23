@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SatelliteResearch;
 using ResearchModel;
+using static ResearchModel.ThreadControl;
 
 namespace SatelliteResearch
 {
@@ -112,35 +113,38 @@ namespace SatelliteResearch
             });
         }
 
-        public static void HookJeeves(double delta, double minDelta, double denominator)
+        public static bool HookJeeves(double delta, double minDelta, double denominator)
         {
-            var tmpSource = new RadioStation();
-            tmpSource.coordinates = new double[3];
-            Array.Copy(newSource.coordinates, tmpSource.coordinates, 3);
-
-            while (delta >= minDelta)
-            {
-                CheckNeighbourPoints(delta);
-                if (tmpSource == newSource)
-                    delta /= denominator;
-                else
-                {
-                    var f1 = F(newSource);
-                    newSource.x = 2 * newSource.x - tmpSource.x;
-                    newSource.y = 2 * newSource.y - tmpSource.y;
-                    newSource.z = 2 * newSource.z - tmpSource.z;
-                    var f2 = F(newSource);
-                    if (f2 >= f1)
+            return ExecuteWithTimeLimit(TimeSpan.FromSeconds(1), () =>
                     {
-                        newSource.x = (newSource.x + tmpSource.x) / 2;
-                        newSource.y = (newSource.y + tmpSource.y) / 2;
-                        newSource.z = (newSource.z + tmpSource.z) / 2;
+                        var tmpSource = new RadioStation();
+                        tmpSource.coordinates = new double[3];
+                        Array.Copy(newSource.coordinates, tmpSource.coordinates, 3);
+
+                        while (delta >= minDelta)
+                        {
+                            CheckNeighbourPoints(delta);
+                            if (tmpSource == newSource)
+                                delta /= denominator;
+                            else
+                            {
+                                var f1 = F(newSource);
+                                newSource.x = 2 * newSource.x - tmpSource.x;
+                                newSource.y = 2 * newSource.y - tmpSource.y;
+                                newSource.z = 2 * newSource.z - tmpSource.z;
+                                var f2 = F(newSource);
+                                if (f2 >= f1)
+                                {
+                                    newSource.x = (newSource.x + tmpSource.x) / 2;
+                                    newSource.y = (newSource.y + tmpSource.y) / 2;
+                                    newSource.z = (newSource.z + tmpSource.z) / 2;
+                                }
+
+                                Array.Copy(newSource.coordinates, tmpSource.coordinates, 3);
+                            }
+                        }
                     }
-
-                    Array.Copy(newSource.coordinates, tmpSource.coordinates, 3);
-                }
-            }
-
+            );
         }
 
         public static double GetNewSourceDistanceDifference()
@@ -151,6 +155,7 @@ namespace SatelliteResearch
         public static void FindDtInaccuracy(double delta, double minDelta, double denominator, List<double> inaccuracyArr, ProgressBar pb)
         {
             int err = 0;
+            pb.Value = 0;
             double inaccuracy = 0;
 
             Random rand = new Random();
@@ -173,14 +178,19 @@ namespace SatelliteResearch
                     HookJeeves(delta, minDelta, denominator);
                     inaccuracy += GetNewSourceDistanceDifference();
                 }
-                pb.PerformStep();
+                
                 inaccuracyArr.Add(inaccuracy / 100);
+                inaccuracy = 0;
+
+                pb.PerformStep();
+                pb.PerformStep();
             }
 
         }
 
-        public static void FindSatelliteInaccuracy(double delta, double minDelta, double denominator, List<double> inaccuracyArr)
+        public static void FindSatelliteInaccuracy(double delta, double minDelta, double denominator, List<double> inaccuracyArr, ProgressBar pb)
         {
+            pb.Value=0;
             double inaccuracy = 0;
             RadioStation tmp1 = searcherStation1;
             RadioStation tmp2 = searcherStation2;
@@ -203,6 +213,9 @@ namespace SatelliteResearch
                 }
                 inaccuracyArr.Add(inaccuracy / 100);
                 inaccuracy = 0;
+
+                pb.PerformStep();
+                pb.PerformStep();
             }
         }
 
