@@ -114,12 +114,15 @@ namespace ResearchModel
         {
             Stopwatch sp = new Stopwatch();
             sp.Start();
+            int type = 0;
+            if (!dmRadioButton.Checked)
+                type = ddRadioButton.Checked ? 1 : 2; 
 
-            while(!HookJeeves(delta, minDelta, denominator))
+            while (!HookJeeves(delta, minDelta, denominator, type))
             {
                 RefreshButtonClick(null, EventArgs.Empty);
             }
-            
+
             newSource.xTextBox.Text = Convert.ToInt32(newSource.X).ToString();
             newSource.yTextBox.Text = Convert.ToInt32(newSource.Y).ToString();
             newSource.zTextBox.Text = Convert.ToInt32(newSource.Z).ToString();
@@ -131,7 +134,10 @@ namespace ResearchModel
         private void DCoordinatesGraphButtonClick(object sender, EventArgs e)
         {
             List<double> points = new List<double>();
-            FindSatelliteInaccuracy(delta, minDelta, denominator, points, progressBar);
+            int type = 0;
+            if (!dmRadioButton.Checked)
+                type = ddRadioButton.Checked ? 1 : 2;
+            FindSatelliteInaccuracy(delta, minDelta, denominator,type, points, progressBar);
             ChartsForm form = new ChartsForm();
 
             form.Show();
@@ -160,7 +166,10 @@ namespace ResearchModel
         private void DtGraphButton(object sender, EventArgs e)
         {
             List<double> points = new List<double>();
-            FindDtInaccuracy(delta, minDelta, denominator, points, progressBar);
+            int type = 0;
+            if (!dmRadioButton.Checked)
+                type = ddRadioButton.Checked ? 1 : 2;
+            FindDtInaccuracy(delta, minDelta, denominator, type, points, progressBar);
             ChartsForm form = new ChartsForm();
 
             form.Show();
