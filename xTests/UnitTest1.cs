@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Threading.Tasks;
-
+using ResearchModel;
 using SatelliteResearch;
 using Xunit;
 using Xunit.Abstractions;
@@ -45,15 +45,15 @@ namespace xTests
                 else
                 {
                     var f1 = F(newSource);
-                    newSource.x = 2 * newSource.x - tmpSource.x;
-                    newSource.y = 2 * newSource.y - tmpSource.y;
-                    newSource.z = 2 * newSource.z - tmpSource.z;
+                    newSource.X = 2 * newSource.X - tmpSource.X;
+                    newSource.Y = 2 * newSource.Y - tmpSource.Y;
+                    newSource.Z = 2 * newSource.Z - tmpSource.Z;
                     var f2 = F(newSource);
                     if (f2 >= f1)
                     {
-                        newSource.x = (newSource.x + tmpSource.x) / 2;
-                        newSource.y = (newSource.y + tmpSource.y) / 2;
-                        newSource.z = (newSource.z + tmpSource.z) / 2;
+                        newSource.X = (newSource.X + tmpSource.X) / 2;
+                        newSource.Y = (newSource.Y + tmpSource.Y) / 2;
+                        newSource.Z = (newSource.Z + tmpSource.Z) / 2;
                     }
 
                     Array.Copy(newSource.coordinates, tmpSource.coordinates, 3);
@@ -87,16 +87,16 @@ namespace xTests
 
         double F(RadioStation source)
         {
-            return Math.Pow(Math.Sqrt(Math.Pow((searcherStation1.x - source.x), 2) + Math.Pow((searcherStation1.y - source.y), 2) + Math.Pow((searcherStation1.z - source.z), 2))
-                            - Math.Sqrt(Math.Pow((searcherStation2.x - source.x), 2) + Math.Pow((searcherStation2.y - source.y), 2) +
-                                        Math.Pow((searcherStation2.z - source.z), 2)) - dt12, 2)
-                   + Math.Pow(Math.Sqrt(Math.Pow((searcherStation2.x - source.x), 2) + Math.Pow((searcherStation2.y - source.y), 2) + Math.Pow((searcherStation2.z - source.z), 2))
+            return Math.Pow(Math.Sqrt(Math.Pow((searcherStation1.X - source.X), 2) + Math.Pow((searcherStation1.Y - source.Y), 2) + Math.Pow((searcherStation1.Z - source.Z), 2))
+                            - Math.Sqrt(Math.Pow((searcherStation2.X - source.X), 2) + Math.Pow((searcherStation2.Y - source.Y), 2) +
+                                        Math.Pow((searcherStation2.Z - source.Z), 2)) - dt12, 2)
+                   + Math.Pow(Math.Sqrt(Math.Pow((searcherStation2.X - source.X), 2) + Math.Pow((searcherStation2.Y - source.Y), 2) + Math.Pow((searcherStation2.Z - source.Z), 2))
                               - Math.Sqrt(
-                                  Math.Pow((searcherStation3.x - source.x), 2) + Math.Pow((searcherStation3.y - source.y), 2) + Math.Pow((searcherStation3.z - source.z), 2)) -
+                                  Math.Pow((searcherStation3.X - source.X), 2) + Math.Pow((searcherStation3.Y - source.Y), 2) + Math.Pow((searcherStation3.Z - source.Z), 2)) -
                               dt23, 2)
-                   + Math.Pow(Math.Sqrt(Math.Pow((searcherStation3.x - source.x), 2) + Math.Pow((searcherStation3.y - source.y), 2) + Math.Pow((searcherStation3.z - source.z), 2))
+                   + Math.Pow(Math.Sqrt(Math.Pow((searcherStation3.X - source.X), 2) + Math.Pow((searcherStation3.Y - source.Y), 2) + Math.Pow((searcherStation3.Z - source.Z), 2))
                               - Math.Sqrt(
-                                  Math.Pow((searcherStation4.x - source.x), 2) + Math.Pow((searcherStation4.y - source.y), 2) + Math.Pow((searcherStation4.z - source.z), 2)) -
+                                  Math.Pow((searcherStation4.X - source.X), 2) + Math.Pow((searcherStation4.Y - source.Y), 2) + Math.Pow((searcherStation4.Z - source.Z), 2)) -
                               dt34, 2);
         }
 
@@ -212,54 +212,54 @@ namespace xTests
                 tmp = 20000000;
                 Random rand = new Random();
                 x = rand.Next(Convert.ToInt32(tmp));
-                searcherStation1.x = x;
+                searcherStation1.X = x;
                 tmp = Convert.ToInt64(Math.Sqrt(tmp * tmp - x * x));
                 y = rand.Next(Convert.ToInt32(tmp));
-                searcherStation1.y = y;
+                searcherStation1.Y = y;
                 z = Convert.ToInt32(Math.Sqrt(tmp * tmp - y * y));
-                searcherStation1.z = z;
+                searcherStation1.Z = z;
 
                 x = rand.Next(Convert.ToInt32(tmp));
-                searcherStation2.x = x;
+                searcherStation2.X = x;
                 tmp = Convert.ToInt64(Math.Sqrt(tmp * tmp - x * x));
                 y = rand.Next(Convert.ToInt32(tmp));
-                searcherStation2.y = y;
+                searcherStation2.Y = y;
                 z = Convert.ToInt32(Math.Sqrt(tmp * tmp - y * y));
-                searcherStation2.z = z;
+                searcherStation2.Z = z;
 
                 x = rand.Next(Convert.ToInt32(tmp));
-                searcherStation3.x = x;
+                searcherStation3.X = x;
                 tmp = Convert.ToInt64(Math.Sqrt(tmp * tmp - x * x));
                 y = rand.Next(Convert.ToInt32(tmp));
-                searcherStation3.y = y;
+                searcherStation3.Y = y;
                 z = Convert.ToInt32(Math.Sqrt(tmp * tmp - y * y));
-                searcherStation3.z = z;
+                searcherStation3.Z = z;
 
                 x = rand.Next(Convert.ToInt32(tmp));
-                searcherStation4.x = x;
+                searcherStation4.X = x;
                 tmp = Convert.ToInt64(Math.Sqrt(tmp * tmp - x * x));
                 y = rand.Next(Convert.ToInt32(tmp));
-                searcherStation4.y = y;
+                searcherStation4.Y = y;
                 z = Convert.ToInt32(Math.Sqrt(tmp * tmp - y * y));
-                searcherStation4.z = z;
+                searcherStation4.Z = z;
 
                 tmp = 6370000;
                 x = rand.Next(Convert.ToInt32(tmp));
-                newSource.x = x;
+                newSource.X = x;
                 tmp = Convert.ToInt64(Math.Sqrt(tmp * tmp - x * x));
                 y = rand.Next(Convert.ToInt32(tmp));
-                newSource.y = y;
+                newSource.Y = y;
                 z = Convert.ToInt32(Math.Sqrt(tmp * tmp - y * y));
-                newSource.z = z;
+                newSource.Z = z;
                 sp.Restart();
 
                 for (int j = 0; j < 10; j++)
                 {
                     HookJeeves(delta, 1, 2);
 
-                    newSource.xTextBox.Text = newSource.x.ToString();
-                    newSource.yTextBox.Text = newSource.y.ToString();
-                    newSource.zTextBox.Text = newSource.z.ToString();
+                    newSource.xTextBox.Text = newSource.X.ToString();
+                    newSource.yTextBox.Text = newSource.Y.ToString();
+                    newSource.zTextBox.Text = newSource.Z.ToString();
                 }
 
                 tsL.Add(sp.Elapsed/10);

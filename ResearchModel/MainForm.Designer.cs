@@ -1,4 +1,4 @@
-﻿namespace SatelliteResearch
+﻿namespace ResearchModel
 {
     partial class MainForm
     {
@@ -28,13 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.searcherStation1 = new SatelliteResearch.RadioStation();
-            this.searcherStation2 = new SatelliteResearch.RadioStation();
-            this.searcherStation3 = new SatelliteResearch.RadioStation();
-            this.searcherStation4 = new SatelliteResearch.RadioStation();
+            this.searcherStation1 = new RadioStation();
+            this.searcherStation2 = new RadioStation();
+            this.searcherStation3 = new RadioStation();
+            this.searcherStation4 = new RadioStation();
             this.runButton = new System.Windows.Forms.Button();
-            this.trueSource = new SatelliteResearch.RadioStation();
-            this.newSource = new SatelliteResearch.RadioStation();
+            this.trueSource = new RadioStation();
+            this.newSource = new RadioStation();
             this.label1 = new System.Windows.Forms.Label();
             this.stepTextBox = new System.Windows.Forms.TextBox();
             this.minstep = new System.Windows.Forms.Label();
@@ -55,9 +55,9 @@
             this.searcherStation1.Name = "searcherStation1";
             this.searcherStation1.Size = new System.Drawing.Size(226, 69);
             this.searcherStation1.TabIndex = 0;
-            this.searcherStation1.x = 0D;
-            this.searcherStation1.y = 0D;
-            this.searcherStation1.z = 0D;
+            this.searcherStation1.X = 0D;
+            this.searcherStation1.Y = 0D;
+            this.searcherStation1.Z = 0D;
             // 
             // searcherStation2
             // 
@@ -65,9 +65,9 @@
             this.searcherStation2.Name = "searcherStation2";
             this.searcherStation2.Size = new System.Drawing.Size(226, 69);
             this.searcherStation2.TabIndex = 1;
-            this.searcherStation2.x = 0D;
-            this.searcherStation2.y = 0D;
-            this.searcherStation2.z = 0D;
+            this.searcherStation2.X = 0D;
+            this.searcherStation2.Y = 0D;
+            this.searcherStation2.Z = 0D;
             // 
             // searcherStation3
             // 
@@ -75,9 +75,9 @@
             this.searcherStation3.Name = "searcherStation3";
             this.searcherStation3.Size = new System.Drawing.Size(226, 69);
             this.searcherStation3.TabIndex = 2;
-            this.searcherStation3.x = 0D;
-            this.searcherStation3.y = 0D;
-            this.searcherStation3.z = 0D;
+            this.searcherStation3.X = 0D;
+            this.searcherStation3.Y = 0D;
+            this.searcherStation3.Z = 0D;
             // 
             // searcherStation4
             // 
@@ -85,9 +85,9 @@
             this.searcherStation4.Name = "searcherStation4";
             this.searcherStation4.Size = new System.Drawing.Size(226, 69);
             this.searcherStation4.TabIndex = 3;
-            this.searcherStation4.x = 0D;
-            this.searcherStation4.y = 0D;
-            this.searcherStation4.z = 0D;
+            this.searcherStation4.X = 0D;
+            this.searcherStation4.Y = 0D;
+            this.searcherStation4.Z = 0D;
             // 
             // runButton
             // 
@@ -105,9 +105,9 @@
             this.trueSource.Name = "trueSource";
             this.trueSource.Size = new System.Drawing.Size(226, 69);
             this.trueSource.TabIndex = 3;
-            this.trueSource.x = 0D;
-            this.trueSource.y = 0D;
-            this.trueSource.z = 0D;
+            this.trueSource.X = 0D;
+            this.trueSource.Y = 0D;
+            this.trueSource.Z = 0D;
             // 
             // newSource
             // 
@@ -115,9 +115,9 @@
             this.newSource.Name = "newSource";
             this.newSource.Size = new System.Drawing.Size(226, 69);
             this.newSource.TabIndex = 3;
-            this.newSource.x = 0D;
-            this.newSource.y = 0D;
-            this.newSource.z = 0D;
+            this.newSource.X = 0D;
+            this.newSource.Y = 0D;
+            this.newSource.Z = 0D;
             // 
             // label1
             // 
@@ -175,7 +175,7 @@
             this.refreshButton.TabIndex = 7;
             this.refreshButton.Text = "Refresh";
             this.refreshButton.UseVisualStyleBackColor = true;
-            this.refreshButton.Click += new System.EventHandler(this.refreshButtonClick);
+            this.refreshButton.Click += new System.EventHandler(this.RefreshButtonClick);
             // 
             // timeLabel
             // 

@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
-using ResearchModel;
-using static SatelliteResearch.MathStuff;
+using static ResearchModel.MathStuff;
+using static ResearchModel.ProcessCoordinates;
 
-namespace SatelliteResearch
+namespace ResearchModel
 {
 
     public partial class MainForm : Form
@@ -19,29 +15,8 @@ namespace SatelliteResearch
 
         private double delta, minDelta, denominator;
 
-        private long x, y, z;
+        private long _x, _y, _z;
 
-        void DotInitialize()
-        {
-            
-            long tmp = 20000000;
-            Random rand = new Random();
-            x = rand.Next(Convert.ToInt32(tmp));
-            tmp = Convert.ToInt64(Math.Sqrt(tmp * tmp - (x * x)));
-            y = rand.Next(Convert.ToInt32(tmp));
-            z = Convert.ToInt32(Math.Sqrt(tmp * tmp - y * y));
-
-        }
-
-        void SourceInitialize()
-        {
-            long tmp = 6370000;
-            Random rand = new Random();
-            x = rand.Next(Convert.ToInt32(tmp));
-            tmp = Convert.ToInt64(Math.Sqrt(tmp * tmp - x * x));
-            y = rand.Next(Convert.ToInt32(tmp));
-            z = Convert.ToInt32(Math.Sqrt(tmp * tmp - y * y));
-        }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
@@ -59,16 +34,15 @@ namespace SatelliteResearch
             progressBar.Step = 1;
         }
 
-        private void refreshButtonClick(object sender, EventArgs e)
+        private void RefreshButtonClick(object sender, EventArgs e)
         {
             newSource.xTextBox.Text = "0";
             newSource.yTextBox.Text = "0";
             newSource.zTextBox.Text = "0";
 
-            GenerateDots(4);
-
+            GetStormCoordinates(4);
             searcherStation1.NameLabel.Text = "Спутник 1";
-            searcherStation1.xTextBox.Text = Coordinate[0,0].ToString();
+            searcherStation1.xTextBox.Text = Coordinate[0, 0].ToString();
             searcherStation1.yTextBox.Text = Coordinate[0, 1].ToString();
             searcherStation1.zTextBox.Text = Coordinate[0, 2].ToString();
             searcherStation1.Run();
@@ -91,31 +65,31 @@ namespace SatelliteResearch
             searcherStation4.zTextBox.Text = Coordinate[3, 2].ToString();
             searcherStation4.Run();
 
-            SourceInitialize();
+            GenerateStormSource();
             trueSource.NameLabel.Text = "Источник";
-            trueSource.xTextBox.Text = x.ToString();
-            trueSource.yTextBox.Text = y.ToString();
-            trueSource.zTextBox.Text = z.ToString();
+            trueSource.xTextBox.Text = ProcessCoordinates._x.ToString();
+            trueSource.yTextBox.Text = ProcessCoordinates._y.ToString();
+            trueSource.zTextBox.Text = ProcessCoordinates._z.ToString();
 
-            if (newSource.xTextBox.Text == "")
-                newSource.xTextBox.Text = "0";
-            if (newSource.yTextBox.Text == "")
-                newSource.yTextBox.Text = "0";
-            if (newSource.zTextBox.Text == "")
-                newSource.zTextBox.Text = "0";
+            //if (newSource.xTextBox.Text == "")
+                newSource.xTextBox.Text = (ProcessCoordinates._x - 1000).ToString() ; 
+            //if (newSource.yTextBox.Text == "")
+                newSource.yTextBox.Text = (ProcessCoordinates._y - 1000).ToString();
+            //if (newSource.zTextBox.Text == "")
+                newSource.zTextBox.Text = (ProcessCoordinates._z - 1000).ToString();
 
-            
-            
-            
+
+
+
             trueSource.Run();
             newSource.Run();
             
-            Dt12 = Math.Sqrt(Math.Pow((searcherStation1.x - trueSource.x), 2) + Math.Pow((searcherStation1.y - trueSource.y), 2) + Math.Pow((searcherStation1.z - trueSource.z), 2))
-                   - Math.Sqrt(Math.Pow((searcherStation2.x - trueSource.x), 2) + Math.Pow((searcherStation2.y - trueSource.y), 2) + Math.Pow((searcherStation2.z - trueSource.z), 2));
-            Dt23 = Math.Sqrt(Math.Pow((searcherStation2.x - trueSource.x), 2) + Math.Pow((searcherStation2.y - trueSource.y), 2) + Math.Pow((searcherStation2.z - trueSource.z), 2))
-                   - Math.Sqrt(Math.Pow((searcherStation3.x - trueSource.x), 2) + Math.Pow((searcherStation3.y - trueSource.y), 2) + Math.Pow((searcherStation3.z - trueSource.z), 2));
-            Dt34 = Math.Sqrt(Math.Pow((searcherStation3.x - trueSource.x), 2) + Math.Pow((searcherStation3.y - trueSource.y), 2) + Math.Pow((searcherStation3.z - trueSource.z), 2))
-                   - Math.Sqrt(Math.Pow((searcherStation4.x - trueSource.x), 2) + Math.Pow((searcherStation4.y - trueSource.y), 2) + Math.Pow((searcherStation4.z - trueSource.z), 2));
+            Dt12 = Math.Sqrt(Math.Pow((searcherStation1.X - trueSource.X), 2) + Math.Pow((searcherStation1.Y - trueSource.Y), 2) + Math.Pow((searcherStation1.Z - trueSource.Z), 2))
+                   - Math.Sqrt(Math.Pow((searcherStation2.X - trueSource.X), 2) + Math.Pow((searcherStation2.Y - trueSource.Y), 2) + Math.Pow((searcherStation2.Z - trueSource.Z), 2));
+            Dt23 = Math.Sqrt(Math.Pow((searcherStation2.X - trueSource.X), 2) + Math.Pow((searcherStation2.Y - trueSource.Y), 2) + Math.Pow((searcherStation2.Z - trueSource.Z), 2))
+                   - Math.Sqrt(Math.Pow((searcherStation3.X - trueSource.X), 2) + Math.Pow((searcherStation3.Y - trueSource.Y), 2) + Math.Pow((searcherStation3.Z - trueSource.Z), 2));
+            Dt34 = Math.Sqrt(Math.Pow((searcherStation3.X - trueSource.X), 2) + Math.Pow((searcherStation3.Y - trueSource.Y), 2) + Math.Pow((searcherStation3.Z - trueSource.Z), 2))
+                   - Math.Sqrt(Math.Pow((searcherStation4.X - trueSource.X), 2) + Math.Pow((searcherStation4.Y - trueSource.Y), 2) + Math.Pow((searcherStation4.Z - trueSource.Z), 2));
 
 
             delta = Convert.ToDouble(stepTextBox.Text.Replace('.',','));
@@ -126,13 +100,14 @@ namespace SatelliteResearch
         public MainForm()
         {
             InitializeComponent();
+            InitializeStormSatellites();
             newSource.NameLabel.Text = "Предполагаемые координаты";
 
             stepTextBox.Text = "262144";
             minStepTextBox.Text = "0,015625";
             denominatorTextBox.Text = "64";
 
-            refreshButtonClick(null, EventArgs.Empty);
+            RefreshButtonClick(null, EventArgs.Empty);
         }
 
         private void RunButtonClick(object sender, EventArgs e)
@@ -142,15 +117,15 @@ namespace SatelliteResearch
 
             while(!HookJeeves(delta, minDelta, denominator))
             {
-                refreshButtonClick(null, EventArgs.Empty);
+                RefreshButtonClick(null, EventArgs.Empty);
             }
             
-            newSource.xTextBox.Text = Convert.ToInt32(newSource.x).ToString();
-            newSource.yTextBox.Text = Convert.ToInt32(newSource.y).ToString();
-            newSource.zTextBox.Text = Convert.ToInt32(newSource.z).ToString();
+            newSource.xTextBox.Text = Convert.ToInt32(newSource.X).ToString();
+            newSource.yTextBox.Text = Convert.ToInt32(newSource.Y).ToString();
+            newSource.zTextBox.Text = Convert.ToInt32(newSource.Z).ToString();
             var time = sp.Elapsed;
             timeLabel.Text = $"{time.Minutes:00}:{time.Seconds:00}.{time.Milliseconds:00}";
-            errorLabel.Text = GetNewSourceDistanceDifference().ToString();
+            errorLabel.Text = GetSourceDifference().ToString();
         }
 
         private void DCoordinatesGraphButtonClick(object sender, EventArgs e)

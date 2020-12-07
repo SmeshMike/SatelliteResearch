@@ -1,4 +1,4 @@
-﻿namespace SatelliteResearch
+﻿namespace ResearchModel
 {
     partial class RadioStation
     {
