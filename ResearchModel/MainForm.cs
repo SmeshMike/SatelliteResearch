@@ -15,7 +15,7 @@ namespace ResearchModel
 
         private double delta, minDelta, denominator;
 
-        private long _x, _y, _z;
+        private FunctionType type;
 
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -72,17 +72,16 @@ namespace ResearchModel
             trueSource.zTextBox.Text = ProcessCoordinates._z.ToString();
 
             //if (newSource.xTextBox.Text == "")
-                newSource.xTextBox.Text = (ProcessCoordinates._x - 1000).ToString() ; 
+            newSource.xTextBox.Text = (ProcessCoordinates._x - 2500).ToString();
             //if (newSource.yTextBox.Text == "")
-                newSource.yTextBox.Text = (ProcessCoordinates._y - 1000).ToString();
+            newSource.yTextBox.Text = (ProcessCoordinates._y + 5000).ToString();
             //if (newSource.zTextBox.Text == "")
-                newSource.zTextBox.Text = (ProcessCoordinates._z - 1000).ToString();
-
+            newSource.zTextBox.Text = (ProcessCoordinates._z - 1500).ToString();
 
 
 
             trueSource.Run();
-            newSource.Run();
+            
             
             Dt12 = Math.Sqrt(Math.Pow((searcherStation1.X - trueSource.X), 2) + Math.Pow((searcherStation1.Y - trueSource.Y), 2) + Math.Pow((searcherStation1.Z - trueSource.Z), 2))
                    - Math.Sqrt(Math.Pow((searcherStation2.X - trueSource.X), 2) + Math.Pow((searcherStation2.Y - trueSource.Y), 2) + Math.Pow((searcherStation2.Z - trueSource.Z), 2));
@@ -95,6 +94,97 @@ namespace ResearchModel
             delta = Convert.ToDouble(stepTextBox.Text.Replace('.',','));
             minDelta = Convert.ToDouble(minStepTextBox.Text);
             denominator = Convert.ToDouble(denominatorTextBox.Text);
+        }
+        private void ddRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (earthRadioButton.Checked && ddRadioButton.Checked)
+            {
+                searcherStation3.Enabled = true;
+                searcherStation4.Enabled = false;
+                type = FunctionType.ddEarth;
+            }
+            else if (ddRadioButton.Checked)
+            {
+                searcherStation3.Enabled = true;
+                searcherStation4.Enabled = true;
+                type = FunctionType.ddSpace;
+            }
+        }
+
+        private void dmRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (earthRadioButton.Checked && dmRadioButton.Checked)
+            {
+                searcherStation3.Enabled = true;
+                searcherStation4.Enabled = false;
+                type = FunctionType.dmEarth;
+            }
+            else if (dmRadioButton.Checked)
+            {
+                searcherStation3.Enabled = true;
+                searcherStation4.Enabled = true;
+                type = FunctionType.dmSpace;
+            }
+        }
+
+        private void sumRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (earthRadioButton.Checked && sumRadioButton.Checked)
+            {
+                searcherStation3.Enabled = false;
+                searcherStation4.Enabled = false;
+                type = FunctionType.sumEarth;
+            }
+            else if(sumRadioButton.Checked)
+            {
+                searcherStation3.Enabled = true;
+                searcherStation4.Enabled = false;
+                type = FunctionType.sumSpace;
+            }
+        }
+
+        private void spaceRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ddRadioButton.Checked && spaceRadioButton.Checked)
+            {
+                searcherStation3.Enabled = true;
+                searcherStation4.Enabled = true;
+                type = FunctionType.ddSpace;
+            }
+            else if(dmRadioButton.Checked && spaceRadioButton.Checked)
+            {
+                searcherStation3.Enabled = true;
+                searcherStation4.Enabled = true;
+                type = FunctionType.dmSpace;
+            }
+            else if(spaceRadioButton.Checked)
+            {
+                searcherStation3.Enabled = true;
+                searcherStation4.Enabled = false;
+                type = FunctionType.sumSpace;
+            }
+        }
+
+        private void earthRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ddRadioButton.Checked  && earthRadioButton.Checked)
+            {
+                searcherStation3.Enabled = true;
+                searcherStation4.Enabled = false;
+                type = FunctionType.ddEarth;
+            }
+            else if (dmRadioButton.Checked && earthRadioButton.Checked)
+            {
+                searcherStation3.Enabled = true;
+                searcherStation4.Enabled = false;
+                type = FunctionType.dmEarth;
+            }
+            else if (earthRadioButton.Checked)
+            {
+                searcherStation3.Enabled = false;
+                searcherStation4.Enabled = false;
+                type = FunctionType.sumEarth;
+            }
         }
 
         public MainForm()
@@ -114,10 +204,7 @@ namespace ResearchModel
         {
             Stopwatch sp = new Stopwatch();
             sp.Start();
-            int type = 0;
-            if (!dmRadioButton.Checked)
-                type = ddRadioButton.Checked ? 1 : 2; 
-
+            newSource.Run();
             while (!HookJeeves(delta, minDelta, denominator, type))
             {
                 RefreshButtonClick(null, EventArgs.Empty);
@@ -134,9 +221,7 @@ namespace ResearchModel
         private void DCoordinatesGraphButtonClick(object sender, EventArgs e)
         {
             List<double> points = new List<double>();
-            int type = 0;
-            if (!dmRadioButton.Checked)
-                type = ddRadioButton.Checked ? 1 : 2;
+
             FindSatelliteInaccuracy(delta, minDelta, denominator,type, points, progressBar);
             ChartsForm form = new ChartsForm();
 
@@ -166,9 +251,6 @@ namespace ResearchModel
         private void DtGraphButton(object sender, EventArgs e)
         {
             List<double> points = new List<double>();
-            int type = 0;
-            if (!dmRadioButton.Checked)
-                type = ddRadioButton.Checked ? 1 : 2;
             FindDtInaccuracy(delta, minDelta, denominator, type, points, progressBar);
             ChartsForm form = new ChartsForm();
 
