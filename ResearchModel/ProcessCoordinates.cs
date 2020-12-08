@@ -117,7 +117,7 @@ namespace ResearchModel
                         result.Add(tmp);
                     }
                     break;
-
+                    
             }
 
             return result;

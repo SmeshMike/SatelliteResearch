@@ -5,7 +5,8 @@ namespace ResearchModel
 {
     public partial class RadioStation : UserControl
     {
-
+        const int c = 300000000;
+        const long w0 = 6000000000;
         public Label NameLabel
         {
             get => nameLabel;
@@ -115,8 +116,7 @@ namespace ResearchModel
 
         public RadioStation(double x, double y, double z, double vx, double vy, double vz)
         {
-            const int c = 300000000;
-            const long w0 = 6000000000;
+            
             InitializeComponent();
             coordinates = new double[3];
             velocity = new double[4];
@@ -140,6 +140,22 @@ namespace ResearchModel
             X = Convert.ToDouble(xTextBox.Text);
             Y = Convert.ToDouble(yTextBox.Text);
             Z = Convert.ToDouble(zTextBox.Text);
+
+        }
+
+        public void Run(RadioStation rs)
+        {
+            X = rs.X;
+            Y = rs.Y;
+            Z = rs.Z;
+            Vx = rs.Vx;
+            Vy = rs.Vy;
+            Vz = rs.Vz;
+            VAbs = Math.Sqrt(Vx * Vx + Vy * Vy + Vz * Vz);
+            Wx = w0 / (1 + Vx / c);
+            Wy = w0 / (1 + Vy / c);
+            Wz = w0 / (1 + Vz / c);
+            WAbs = w0 / (1 + VAbs / c);
         }
 
         public static bool operator ==(RadioStation a, RadioStation b)
