@@ -10,7 +10,7 @@ namespace ResearchModel
     public class ProcessCoordinates
     {
         private static double[,] _coef;
-        public static long _x, _y, _z;
+        public static double x, y, z;
         private static double[,,] allSatelliteStats;
         public static double[,] Coordinate { get; set; }
 
@@ -36,17 +36,17 @@ namespace ResearchModel
                 {
                     
                     var elements = line[j+7].Replace('.', ',').Split(' ', StringSplitOptions.RemoveEmptyEntries);
-                    var x = Convert.ToInt32(Convert.ToDouble(elements[4]) * 1000);
+                    var x = Convert.ToDouble(elements[4]) * 1000;
                     allSatelliteStats[i,j, 0] = x;
-                    var y = Convert.ToInt32(Convert.ToDouble(elements[5]) * 1000);
+                    var y = Convert.ToDouble(elements[5]) * 1000;
                     allSatelliteStats[i,j, 1] = y;
-                    var z = Convert.ToInt32(Convert.ToDouble(elements[6]) * 1000);
+                    var z = Convert.ToDouble(elements[6]) * 1000;
                     allSatelliteStats[i,j, 2] = z;
-                    var vx = Convert.ToInt32(Convert.ToDouble(elements[7]) * 1000);
+                    var vx = Convert.ToDouble(elements[7]) * 1000;
                     allSatelliteStats[i,j, 3] = vx;
-                    var vy = Convert.ToInt32(Convert.ToDouble(elements[8]) * 1000);
+                    var vy = Convert.ToDouble(elements[8]) * 1000;
                     allSatelliteStats[i,j, 4] = vy;
-                    var vz = Convert.ToInt32(Convert.ToDouble(elements[9]) * 1000);
+                    var vz = Convert.ToDouble(elements[9]) * 1000;
                     allSatelliteStats[i,j, 5] = vz;
                 }
             }
@@ -122,25 +122,14 @@ namespace ResearchModel
 
             return result;
         }
-        public static void GenerateStormSource()
+        public static void GenerateSource()
         {
-            long tmp = 6370000;
+            double tmp = 6370000;
             Random rand = new Random();
-            _z = rand.Next(4582194, Convert.ToInt32(tmp));
-            tmp = Convert.ToInt64(Math.Sqrt(tmp * tmp - _z * _z));
-            _y = rand.Next(Convert.ToInt32(tmp));
-            _x = Convert.ToInt32(Math.Sqrt(tmp * tmp - _y * _y));
-
-        }
-
-        public static void GenerateGlonassSource()
-        {
-            long tmp = 6370000;
-            Random rand = new Random();
-            _x = rand.Next(Convert.ToInt32(tmp));
-            tmp = Convert.ToInt64(Math.Sqrt(tmp * tmp - _x * _x));
-            _y = rand.Next(Convert.ToInt32(tmp));
-            _z = Convert.ToInt32(Math.Sqrt(tmp * tmp - _y * _y));
+            z = rand.NextDouble()* tmp - 4582194;
+            tmp = Math.Sqrt(tmp * tmp - z * z);
+            y = rand.NextDouble()* tmp;
+            x = Math.Sqrt(tmp * tmp - y * y);
         }
 
         public static void GenerateGlonassSatellites(short n)
@@ -148,35 +137,37 @@ namespace ResearchModel
             CreateGlonassPlane();
             Coordinate = new double[n, 6];
 
-            long r = 25420000;
+            double r = 25420000;
 
             Random random = new Random();
 
-            _x = random.Next(Convert.ToInt32(r)) * 2 - r;
-            Coordinate[0, 0] = _x;
-            _y = (long) Math.Sqrt(r * r - _x * _x);
-            Coordinate[0, 1] = _y;
-            _z = Convert.ToInt64((long) ((-_coef[0, 0] * _x - _coef[0, 1] * _y) / _coef[0, 2]));
-            Coordinate[0, 2] = _z;
-
+            x = random.NextDouble() * 2 * r - r;
+            Coordinate[0, 0] = x;
+            y =  Math.Sqrt(r * r - x * x);
+            Coordinate[0, 1] = y;
+            z = Convert.ToDouble(((-_coef[0, 0] * x - _coef[0, 1] * y) / _coef[0, 2]));
+            Coordinate[0, 2] = z;
+            Coordinate[0, 3] = new Random().NextDouble() * 5000;
+            Coordinate[0, 4] = new Random().NextDouble() * 5000;
+            Coordinate[0, 5] = new Random().NextDouble() * 5000;
 
             for (int i = 1; i < n; ++i)
             {
                 do
                 {
-                    _x = random.Next(Convert.ToInt32(r)) * 2 - r;
-                    _y = (long) Math.Sqrt(r * r - _x * _x);
-                    _z = Convert.ToInt64((long) ((-_coef[i - 1, 0] * _x - _coef[i - 1, 1] * _y) / _coef[i - 1, 2]));
+                    x = random.NextDouble()*2*r- r;
+                    y = Math.Sqrt(r * r - x * x);
+                    z = Convert.ToDouble((long) ((-_coef[i - 1, 0] * x - _coef[i - 1, 1] * y) / _coef[i - 1, 2]));
 
-                } while (Math.Sqrt((Coordinate[i - 1, 0] - _x) * (Coordinate[i - 1, 0] - _x)) < 1000000 || Math.Sqrt((Coordinate[i - 1, 1] - _y) * (Coordinate[i - 1, 1] - _y)) < 1000000
-                                                                                                      || Math.Sqrt((Coordinate[i - 1, 2] - _z) * (Coordinate[i - 1, 2] - _z)) < 1000000);
+                } while (Math.Sqrt((Coordinate[i - 1, 0] - x) * (Coordinate[i - 1, 0] - x)) < 1000000 || Math.Sqrt((Coordinate[i - 1, 1] - y) * (Coordinate[i - 1, 1] - y)) < 1000000
+                                                                                                      || Math.Sqrt((Coordinate[i - 1, 2] - z) * (Coordinate[i - 1, 2] - z)) < 1000000);
 
-                Coordinate[i, 0] = _x;
-                Coordinate[i, 1] = _y;
-                Coordinate[i, 2] = _z;
-                Coordinate[i, 3] = 0;
-                Coordinate[i, 4] = 0;
-                Coordinate[i, 5] = 0;
+                Coordinate[i, 0] = x;
+                Coordinate[i, 1] = y;
+                Coordinate[i, 2] = z;
+                Coordinate[i, 3] = new Random().NextDouble() * 5000;
+                Coordinate[i, 4] = new Random().NextDouble() * 5000;
+                Coordinate[i, 5] = new Random().NextDouble() * 5000;
             }
         }
 

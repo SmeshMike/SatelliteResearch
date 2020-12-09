@@ -28,66 +28,137 @@ namespace ResearchModel
             newSource.xTextBox.Text = "0";
             newSource.yTextBox.Text = "0";
             newSource.zTextBox.Text = "0";
-            
 
 
-            var tmp = GetStormCoordinates(4);
+            if (stormRadioButton.Checked && (type == FunctionType.ddSpace || type == FunctionType.dmSpace))
+            {
+                var tmp = GetStormCoordinates(4);
 
-            searcherStation1.xTextBox.Text = Coordinate[0, 0].ToString();
-            searcherStation1.yTextBox.Text = Coordinate[0, 1].ToString();
-            searcherStation1.zTextBox.Text = Coordinate[0, 2].ToString();
-            //searcherStation1 = tmp[0];
-            //searcherStation1.Run();
-            searcherStation1.Run(tmp[0]);
+                searcherStation1.xTextBox.Text = Coordinate[0, 0].ToString();
+                searcherStation1.yTextBox.Text = Coordinate[0, 1].ToString();
+                searcherStation1.zTextBox.Text = Coordinate[0, 2].ToString();
+                searcherStation1.Run(tmp[0]);
 
-            
-            searcherStation2.xTextBox.Text = Coordinate[1, 0].ToString();
-            searcherStation2.yTextBox.Text = Coordinate[1, 1].ToString();
-            searcherStation2.zTextBox.Text = Coordinate[1, 2].ToString();
-            //searcherStation1 = tmp[1];
-            //searcherStation2.Run();
-            searcherStation2.Run(tmp[1]);
 
-            
-            searcherStation3.xTextBox.Text = Coordinate[2, 0].ToString();
-            searcherStation3.yTextBox.Text = Coordinate[2, 1].ToString();
-            searcherStation3.zTextBox.Text = Coordinate[2, 2].ToString();
-            //searcherStation1 = tmp[2]; 
-            //searcherStation3.Run();
-            searcherStation3.Run(tmp[2]);
+                searcherStation2.xTextBox.Text = Coordinate[1, 0].ToString();
+                searcherStation2.yTextBox.Text = Coordinate[1, 1].ToString();
+                searcherStation2.zTextBox.Text = Coordinate[1, 2].ToString();
+                searcherStation2.Run(tmp[1]);
 
-            
-            searcherStation4.xTextBox.Text = Coordinate[3, 0].ToString();
-            searcherStation4.yTextBox.Text = Coordinate[3, 1].ToString();
-            searcherStation4.zTextBox.Text = Coordinate[3, 2].ToString();
-            //searcherStation1 = tmp[3];
-            //searcherStation4.Run();
-            searcherStation4.Run(tmp[3]);
 
-            GenerateStormSource();
-            
-            trueSource.xTextBox.Text = ProcessCoordinates._x.ToString();
-            trueSource.yTextBox.Text = ProcessCoordinates._y.ToString();
-            trueSource.zTextBox.Text = ProcessCoordinates._z.ToString();
+                searcherStation3.xTextBox.Text = Coordinate[2, 0].ToString();
+                searcherStation3.yTextBox.Text = Coordinate[2, 1].ToString();
+                searcherStation3.zTextBox.Text = Coordinate[2, 2].ToString();
+                searcherStation3.Run(tmp[2]);
+
+
+                searcherStation4.xTextBox.Text = Coordinate[3, 0].ToString();
+                searcherStation4.yTextBox.Text = Coordinate[3, 1].ToString();
+                searcherStation4.zTextBox.Text = Coordinate[3, 2].ToString();
+                searcherStation4.Run(tmp[3]);
+
+            }
+            else if (type == FunctionType.ddEarth || type == FunctionType.dmEarth || type == FunctionType.sumSpace)
+            {
+                var tmp = GetStormCoordinates(3);
+
+                searcherStation1.xTextBox.Text = Coordinate[0, 0].ToString();
+                searcherStation1.yTextBox.Text = Coordinate[0, 1].ToString();
+                searcherStation1.zTextBox.Text = Coordinate[0, 2].ToString();
+                searcherStation1.Run(tmp[0]);
+
+
+                searcherStation2.xTextBox.Text = Coordinate[1, 0].ToString();
+                searcherStation2.yTextBox.Text = Coordinate[1, 1].ToString();
+                searcherStation2.zTextBox.Text = Coordinate[1, 2].ToString();
+                searcherStation2.Run(tmp[1]);
+
+
+                searcherStation3.xTextBox.Text = Coordinate[2, 0].ToString();
+                searcherStation3.yTextBox.Text = Coordinate[2, 1].ToString();
+                searcherStation3.zTextBox.Text = Coordinate[2, 2].ToString();
+                searcherStation3.Run(tmp[2]);
+
+
+                searcherStation4.xTextBox.Text = (0).ToString();
+                searcherStation4.yTextBox.Text = (0).ToString();
+                searcherStation4.zTextBox.Text = (0).ToString();
+
+            }
+            else if (type == FunctionType.sumEarth)
+            {
+                var tmp = GetStormCoordinates(2);
+
+                searcherStation1.xTextBox.Text = Coordinate[0, 0].ToString();
+                searcherStation1.yTextBox.Text = Coordinate[0, 1].ToString();
+                searcherStation1.zTextBox.Text = Coordinate[0, 2].ToString();
+                searcherStation1.Run(tmp[0]);
+
+
+                searcherStation2.xTextBox.Text = Coordinate[1, 0].ToString();
+                searcherStation2.yTextBox.Text = Coordinate[1, 1].ToString();
+                searcherStation2.zTextBox.Text = Coordinate[1, 2].ToString();
+                searcherStation2.Run(tmp[1]);
+
+
+                searcherStation3.xTextBox.Text = (0).ToString();
+                searcherStation3.yTextBox.Text = (0).ToString();
+                searcherStation3.zTextBox.Text = (0).ToString();
+
+
+                searcherStation4.xTextBox.Text = (0).ToString();
+                searcherStation4.yTextBox.Text = (0).ToString();
+                searcherStation4.zTextBox.Text = (0).ToString();
+
+            }
+            else
+            {
+                
+                GenerateGlonassSatellites(4);
+
+                searcherStation1.xTextBox.Text = Coordinate[0, 0].ToString();
+                searcherStation1.yTextBox.Text = Coordinate[0, 1].ToString();
+                searcherStation1.zTextBox.Text = Coordinate[0, 2].ToString();
+                var tmp = new RadioStation(Coordinate[0, 0], Coordinate[0, 1], Coordinate[0, 2], Coordinate[0, 3], Coordinate[0, 4], Coordinate[0, 5]);
+                searcherStation1.Run(tmp);
+
+
+                searcherStation2.xTextBox.Text = Coordinate[1, 0].ToString();
+                searcherStation2.yTextBox.Text = Coordinate[1, 1].ToString();
+                searcherStation2.zTextBox.Text = Coordinate[1, 2].ToString();
+                tmp = new RadioStation(Coordinate[1, 0], Coordinate[1, 1], Coordinate[1, 2], Coordinate[1, 3], Coordinate[1, 4], Coordinate[1, 5]);
+                searcherStation2.Run(tmp);
+
+
+                searcherStation3.xTextBox.Text = Coordinate[2, 0].ToString();
+                searcherStation3.yTextBox.Text = Coordinate[2, 1].ToString();
+                searcherStation3.zTextBox.Text = Coordinate[2, 2].ToString();
+                tmp = new RadioStation(Coordinate[2, 0], Coordinate[2, 1], Coordinate[2, 2], Coordinate[2, 3], Coordinate[2, 4], Coordinate[2, 5]);
+                searcherStation3.Run(tmp);
+
+
+                searcherStation4.xTextBox.Text = Coordinate[3, 0].ToString();
+                searcherStation4.yTextBox.Text = Coordinate[3, 1].ToString();
+                searcherStation4.zTextBox.Text = Coordinate[3, 2].ToString();
+                tmp = new RadioStation(Coordinate[3, 0], Coordinate[3, 1], Coordinate[3, 2], Coordinate[3, 3], Coordinate[3, 4], Coordinate[3, 5]);
+                searcherStation4.Run(tmp);
+            }
+
+            GenerateSource();
+
+            trueSource.xTextBox.Text = x.ToString();
+            trueSource.yTextBox.Text = y.ToString();
+            trueSource.zTextBox.Text = z.ToString();
             trueSource.Run();
-            //if (newSource.xTextBox.Text == "")
-            newSource.xTextBox.Text = (ProcessCoordinates._x - 2500).ToString();
-            //if (newSource.yTextBox.Text == "")
-            newSource.yTextBox.Text = (ProcessCoordinates._y + 5000).ToString();
-            //if (newSource.zTextBox.Text == "")
-            newSource.zTextBox.Text = (ProcessCoordinates._z - 1500).ToString();
-
-
-
-            //Dt12 = Math.Sqrt(Math.Pow((searcherStation1.X - trueSource.X), 2) + Math.Pow((searcherStation1.Y - trueSource.Y), 2) + Math.Pow((searcherStation1.Z - trueSource.Z), 2))
-            //       - Math.Sqrt(Math.Pow((searcherStation2.X - trueSource.X), 2) + Math.Pow((searcherStation2.Y -trueSource.Y), 2) + Math.Pow((searcherStation2.Z - trueSource.Z), 2));
-            //Dt23 = Math.Sqrt(Math.Pow((searcherStation2.X - trueSource.X), 2) + Math.Pow((searcherStation2.Y - trueSource.Y), 2) + Math.Pow((searcherStation2.Z - trueSource.Z), 2))
-            //       - Math.Sqrt(Math.Pow((searcherStation3.X - trueSource.X), 2) + Math.Pow((searcherStation3.Y - trueSource.Y), 2) + Math.Pow((searcherStation3.Z - trueSource.Z), 2));
-            //Dt34 = Math.Sqrt(Math.Pow((searcherStation3.X - trueSource.X), 2) + Math.Pow((searcherStation3.Y - trueSource.Y), 2) + Math.Pow((searcherStation3.Z - trueSource.Z), 2))
-            //       - Math.Sqrt(Math.Pow((searcherStation4.X - trueSource.X), 2) + Math.Pow((searcherStation4.Y - trueSource.Y), 2) + Math.Pow((searcherStation4.Z - trueSource.Z), 2));
-
-
-
+            ////if (newSource.xTextBox.Text == "")
+            //newSource.xTextBox.Text = (ProcessCoordinates.x - 2500).ToString();
+            ////if (newSource.yTextBox.Text == "")
+            //newSource.yTextBox.Text = (ProcessCoordinates.y + 5000).ToString();
+            ////if (newSource.zTextBox.Text == "")
+            //newSource.zTextBox.Text = (ProcessCoordinates.z - 1500).ToString();
+            newSource.xTextBox.Text = (x-5000).ToString();
+            newSource.yTextBox.Text = (y-5000).ToString();
+            newSource.zTextBox.Text = (z-5000).ToString();
         }
         private void ddRadioButton_CheckedChanged(object sender, EventArgs e)
         {
@@ -223,12 +294,17 @@ namespace ResearchModel
                 RefreshButtonClick(null, EventArgs.Empty);
             }
 
-            newSource.xTextBox.Text = Convert.ToInt32(newSource.X).ToString();
-            newSource.yTextBox.Text = Convert.ToInt32(newSource.Y).ToString();
-            newSource.zTextBox.Text = Convert.ToInt32(newSource.Z).ToString();
+            newSource.xTextBox.Text = Convert.ToDouble(newSource.X).ToString();
+            newSource.yTextBox.Text = Convert.ToDouble(newSource.Y).ToString();
+            newSource.zTextBox.Text = Convert.ToDouble(newSource.Z).ToString();
             var time = sp.Elapsed;
             timeLabel.Text = $"{time.Minutes:00}:{time.Seconds:00}.{time.Milliseconds:00}";
-            errorLabel.Text = GetSourceDifference().ToString();
+            errorLabel.Text = Convert.ToInt32(GetSourceDifference()).ToString();
+        }
+
+        private void glonassRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            RefreshButtonClick(sender, e);
         }
 
         private void DCoordinatesGraphButtonClick(object sender, EventArgs e)

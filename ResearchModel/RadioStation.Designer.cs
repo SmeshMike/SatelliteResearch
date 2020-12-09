@@ -41,21 +41,21 @@
             // 
             this.xTextBox.Location = new System.Drawing.Point(9, 40);
             this.xTextBox.Name = "xTextBox";
-            this.xTextBox.Size = new System.Drawing.Size(62, 25);
+            this.xTextBox.Size = new System.Drawing.Size(150, 25);
             this.xTextBox.TabIndex = 0;
             // 
             // yTextBox
             // 
-            this.yTextBox.Location = new System.Drawing.Point(80, 40);
+            this.yTextBox.Location = new System.Drawing.Point(165, 40);
             this.yTextBox.Name = "yTextBox";
-            this.yTextBox.Size = new System.Drawing.Size(62, 25);
+            this.yTextBox.Size = new System.Drawing.Size(150, 25);
             this.yTextBox.TabIndex = 0;
             // 
             // zTextBox
             // 
-            this.zTextBox.Location = new System.Drawing.Point(151, 40);
+            this.zTextBox.Location = new System.Drawing.Point(321, 40);
             this.zTextBox.Name = "zTextBox";
-            this.zTextBox.Size = new System.Drawing.Size(62, 25);
+            this.zTextBox.Size = new System.Drawing.Size(150, 25);
             this.zTextBox.TabIndex = 0;
             // 
             // nameLabel
@@ -69,7 +69,7 @@
             // xLabel
             // 
             this.xLabel.AutoSize = true;
-            this.xLabel.Location = new System.Drawing.Point(55, 20);
+            this.xLabel.Location = new System.Drawing.Point(143, 20);
             this.xLabel.Name = "xLabel";
             this.xLabel.Size = new System.Drawing.Size(16, 17);
             this.xLabel.TabIndex = 2;
@@ -78,7 +78,7 @@
             // yLabel
             // 
             this.yLabel.AutoSize = true;
-            this.yLabel.Location = new System.Drawing.Point(127, 20);
+            this.yLabel.Location = new System.Drawing.Point(300, 20);
             this.yLabel.Name = "yLabel";
             this.yLabel.Size = new System.Drawing.Size(15, 17);
             this.yLabel.TabIndex = 3;
@@ -87,7 +87,7 @@
             // zLabel
             // 
             this.zLabel.AutoSize = true;
-            this.zLabel.Location = new System.Drawing.Point(198, 20);
+            this.zLabel.Location = new System.Drawing.Point(456, 20);
             this.zLabel.Name = "zLabel";
             this.zLabel.Size = new System.Drawing.Size(15, 17);
             this.zLabel.TabIndex = 3;
@@ -105,7 +105,7 @@
             this.Controls.Add(this.yTextBox);
             this.Controls.Add(this.xTextBox);
             this.Name = "RadioStation";
-            this.Size = new System.Drawing.Size(222, 72);
+            this.Size = new System.Drawing.Size(481, 72);
             this.ResumeLayout(false);
             this.PerformLayout();
 
