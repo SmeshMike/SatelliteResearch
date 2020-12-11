@@ -5,8 +5,8 @@ namespace ResearchModel
 {
     public partial class RadioStation : UserControl
     {
-        const int c = 300000000;
-        const long w0 = 6000000000;
+        const double c = 300000000;
+        const double w0 = 6000000000;
         public Label NameLabel
         {
             get => nameLabel;

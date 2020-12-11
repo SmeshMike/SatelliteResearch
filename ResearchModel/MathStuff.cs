@@ -21,9 +21,9 @@ namespace ResearchModel
             sumEarth = 5,
         }
 
-        const long w0 = 6000000000;
-        const int c = 300000000;
-        const long rE = 6370000;
+        const double w0 = 6000000000;
+        const double c = 300000000;
+        const double rE = 6370000;
         public static RadioStation SearcherStation1 { get; set; }
 
         public static RadioStation SearcherStation2 { get; set; }
@@ -37,8 +37,11 @@ namespace ResearchModel
         public static RadioStation TrueSource { get; set; }
 
         public static double Dt12 { get; set; }
+        public static double Dt13 { get; set; }
+        public static double Dt14 { get; set; }
 
         public static double Dt23 { get; set; }
+        public static double Dt24 { get; set; }
 
         public static double Dt34 { get; set; }
 
@@ -48,8 +51,11 @@ namespace ResearchModel
 
         public static double Dw14 { get; set; }
         public static double Dw23 { get; set; }
+        public static double Dw24 { get; set; }
+        public static double Dw34 { get; set; }
         public static double W1 { get; set; }
         public static double W2 { get; set; }
+        public static double W3 { get; set; }
 
         public delegate double F(RadioStation source);
 
@@ -73,40 +79,59 @@ namespace ResearchModel
 
         private static double DmSpaceF(RadioStation source)
         {
-            return Math.Pow(Math.Sqrt(Math.Pow((SearcherStation1.X - source.X), 2) + Math.Pow((SearcherStation1.Y - source.Y), 2) + Math.Pow((SearcherStation1.Z - source.Z), 2))
-                            - Math.Sqrt(Math.Pow((SearcherStation2.X - source.X), 2) + Math.Pow((SearcherStation2.Y - source.Y), 2) + Math.Pow((SearcherStation2.Z - source.Z), 2)) - Dt12, 2)
-                   + Math.Pow(Math.Sqrt(Math.Pow((SearcherStation2.X - source.X), 2) + Math.Pow((SearcherStation2.Y - source.Y), 2) + Math.Pow((SearcherStation2.Z - source.Z), 2))
-                              - Math.Sqrt(Math.Pow((SearcherStation3.X - source.X), 2) + Math.Pow((SearcherStation3.Y - source.Y), 2) + Math.Pow((SearcherStation3.Z - source.Z), 2)) - Dt23, 2)
-                   + Math.Pow(Math.Sqrt(Math.Pow((SearcherStation3.X - source.X), 2) + Math.Pow((SearcherStation3.Y - source.Y), 2) + Math.Pow((SearcherStation3.Z - source.Z), 2))
-                              - Math.Sqrt(Math.Pow((SearcherStation4.X - source.X), 2) + Math.Pow((SearcherStation4.Y - source.Y), 2) + Math.Pow((SearcherStation4.Z - source.Z), 2)) - Dt34, 2);
+            var tmp1 = Math.Pow(Math.Sqrt(Math.Pow((SearcherStation1.X - source.X), 2) + Math.Pow((SearcherStation1.Y - source.Y), 2) + Math.Pow((SearcherStation1.Z - source.Z), 2))
+                                - Math.Sqrt(Math.Pow((SearcherStation2.X - source.X), 2) + Math.Pow((SearcherStation2.Y - source.Y), 2) + Math.Pow((SearcherStation2.Z - source.Z), 2)) - Dt12, 2);
+            var tmp2 = Math.Pow(Math.Sqrt(Math.Pow((SearcherStation1.X - source.X), 2) + Math.Pow((SearcherStation1.Y - source.Y), 2) + Math.Pow((SearcherStation1.Z - source.Z), 2))
+                                - Math.Sqrt(Math.Pow((SearcherStation3.X - source.X), 2) + Math.Pow((SearcherStation3.Y - source.Y), 2) + Math.Pow((SearcherStation3.Z - source.Z), 2)) - Dt13, 2);
+            var tmp3 = Math.Pow(Math.Sqrt(Math.Pow((SearcherStation1.X - source.X), 2) + Math.Pow((SearcherStation1.Y - source.Y), 2) + Math.Pow((SearcherStation1.Z - source.Z), 2))
+                                - Math.Sqrt(Math.Pow((SearcherStation4.X - source.X), 2) + Math.Pow((SearcherStation4.Y - source.Y), 2) + Math.Pow((SearcherStation4.Z - source.Z), 2)) - Dt14, 2);
+            var tmp4 = Math.Pow(Math.Sqrt(Math.Pow((SearcherStation2.X - source.X), 2) + Math.Pow((SearcherStation2.Y - source.Y), 2) + Math.Pow((SearcherStation2.Z - source.Z), 2))
+                                - Math.Sqrt(Math.Pow((SearcherStation3.X - source.X), 2) + Math.Pow((SearcherStation3.Y - source.Y), 2) + Math.Pow((SearcherStation3.Z - source.Z), 2)) - Dt23, 2);
+            var tmp5 = Math.Pow(Math.Sqrt(Math.Pow((SearcherStation2.X - source.X), 2) + Math.Pow((SearcherStation2.Y - source.Y), 2) + Math.Pow((SearcherStation2.Z - source.Z), 2))
+                                - Math.Sqrt(Math.Pow((SearcherStation4.X - source.X), 2) + Math.Pow((SearcherStation4.Y - source.Y), 2) + Math.Pow((SearcherStation4.Z - source.Z), 2)) - Dt24, 2);
+            var tmp6 = Math.Pow(Math.Sqrt(Math.Pow((SearcherStation3.X - source.X), 2) + Math.Pow((SearcherStation3.Y - source.Y), 2) + Math.Pow((SearcherStation3.Z - source.Z), 2))
+                                - Math.Sqrt(Math.Pow((SearcherStation4.X - source.X), 2) + Math.Pow((SearcherStation4.Y - source.Y), 2) + Math.Pow((SearcherStation4.Z - source.Z), 2)) - Dt34, 2);
+
+            return tmp1 + tmp2 + tmp3 + tmp4 + tmp5 + tmp6;
         }
 
 
         private static double DdSpaceF(RadioStation source)
         {
-            return Math.Pow((V(1, source) - V(2, source)) / (c + V(1,source)) - Dw12 / W1, 2)
-                   + Math.Pow((V(1, source) - V(3, source)) / (c + V(1, source)) - Dw13/ W1, 2)
-                   + Math.Pow((V(1, source) - V(4, source)) / (c + V(1, source)) - Dw14/ W1, 2);
+            var tmp1 = Math.Pow((V(1, source) - V(2, source)) / (c + V(1, source)) - Dw12 / W1, 2);
+            var tmp2 = Math.Pow((V(1, source) - V(3, source)) / (c + V(1, source)) - Dw13 / W1, 2);
+            var tmp3 = Math.Pow((V(1, source) - V(4, source)) / (c + V(1, source)) - Dw14 / W1, 2);
+            //var tmp4 = Math.Pow((V(2, source) - V(3, source)) / (c + V(2, source)) - Dw23 / W2, 2);
+            //var tmp5 = Math.Pow((V(2, source) - V(3, source)) / (c + V(2, source)) - Dw24 / W2, 2);
+            //var tmp6 = Math.Pow((V(3, source) - V(4, source)) / (c + V(3, source)) - Dw34 / W3, 2);
+            return tmp1 + tmp2 + tmp3;// + tmp4 + tmp5 + tmp6;
         }
 
         private static double SumSpaceF(RadioStation source)
         {
             var tmp1 = Math.Pow((V(1, source) - V(2, source)) / (c + V(1, source)) - Dw12 / W1, 2);
             var tmp2 = Math.Pow((V(1, source) - V(3, source)) / (c + V(1, source)) - Dw13 / W1, 2);
-            var tmp3 = Math.Pow(Math.Sqrt(Math.Pow((SearcherStation1.X - source.X), 2) + Math.Pow((SearcherStation1.Y - source.Y), 2) + Math.Pow((SearcherStation1.Z - source.Z), 2))
+            var tmp3 = Math.Pow((V(2, source) - V(3, source)) / (c + V(2, source)) - Dw23 / W2, 2);
+            var tmp4 = Math.Pow(Math.Sqrt(Math.Pow((SearcherStation1.X - source.X), 2) + Math.Pow((SearcherStation1.Y - source.Y), 2) + Math.Pow((SearcherStation1.Z - source.Z), 2))
                                 - Math.Sqrt(Math.Pow((SearcherStation2.X - source.X), 2) + Math.Pow((SearcherStation2.Y - source.Y), 2) + Math.Pow((SearcherStation2.Z - source.Z), 2)) - Dt12, 2);
-            var tmp4 = Math.Pow(Math.Sqrt(Math.Pow((SearcherStation2.X - source.X), 2) + Math.Pow((SearcherStation2.Y - source.Y), 2) + Math.Pow((SearcherStation2.Z - source.Z), 2)) -
+            var tmp5 = Math.Pow(Math.Sqrt(Math.Pow((SearcherStation1.X - source.X), 2) + Math.Pow((SearcherStation1.Y - source.Y), 2) + Math.Pow((SearcherStation1.Z - source.Z), 2))
+                                - Math.Sqrt(Math.Pow((SearcherStation3.X - source.X), 2) + Math.Pow((SearcherStation3.Y - source.Y), 2) + Math.Pow((SearcherStation3.Z - source.Z), 2)) - Dt13, 2);
+            var tmp6 = Math.Pow(Math.Sqrt(Math.Pow((SearcherStation2.X - source.X), 2) + Math.Pow((SearcherStation2.Y - source.Y), 2) + Math.Pow((SearcherStation2.Z - source.Z), 2)) -
                                 Math.Sqrt(Math.Pow((SearcherStation3.X - source.X), 2) + Math.Pow((SearcherStation3.Y - source.Y), 2) + Math.Pow((SearcherStation3.Z - source.Z), 2)) - Dt23, 2);
-            return tmp1 + tmp2 + tmp3 + tmp4;
+            return tmp1 + tmp2 +/* tmp3 +*/ tmp4 + tmp5 /*+ tmp6*/;
         }
 
         private static double DmEarthF(RadioStation source)
         {
-            return Math.Pow(Math.Sqrt(Math.Pow((SearcherStation1.X - source.X), 2) + Math.Pow((SearcherStation1.Y - source.Y), 2) + Math.Pow((SearcherStation1.Z - source.Z), 2))
-                            - Math.Sqrt(Math.Pow((SearcherStation2.X - source.X), 2) + Math.Pow((SearcherStation2.Y - source.Y), 2) + Math.Pow((SearcherStation2.Z - source.Z), 2)) - Dt12, 2)
-                   + Math.Pow(Math.Sqrt(Math.Pow((SearcherStation2.X - source.X), 2) + Math.Pow((SearcherStation2.Y - source.Y), 2) + Math.Pow((SearcherStation2.Z - source.Z), 2))
-                              - Math.Sqrt(Math.Pow((SearcherStation3.X - source.X), 2) + Math.Pow((SearcherStation3.Y - source.Y), 2) + Math.Pow((SearcherStation3.Z - source.Z), 2)) - Dt23, 2)
-                   + Math.Pow(rE - Math.Sqrt(source.X * source.X + source.Y * source.Y + source.Z * source.Z), 2);
+            var tmp1 = Math.Pow(Math.Sqrt(Math.Pow((SearcherStation1.X - source.X), 2) + Math.Pow((SearcherStation1.Y - source.Y), 2) + Math.Pow((SearcherStation1.Z - source.Z), 2))
+                                - Math.Sqrt(Math.Pow((SearcherStation2.X - source.X), 2) + Math.Pow((SearcherStation2.Y - source.Y), 2) + Math.Pow((SearcherStation2.Z - source.Z), 2)) - Dt12, 2);
+            var tmp2 = Math.Pow(Math.Sqrt(Math.Pow((SearcherStation1.X - source.X), 2) + Math.Pow((SearcherStation1.Y - source.Y), 2) + Math.Pow((SearcherStation1.Z - source.Z), 2))
+                                - Math.Sqrt(Math.Pow((SearcherStation3.X - source.X), 2) + Math.Pow((SearcherStation3.Y - source.Y), 2) + Math.Pow((SearcherStation3.Z - source.Z), 2)) - Dt13, 2);
+            var tmp3 = Math.Pow(Math.Sqrt(Math.Pow((SearcherStation2.X - source.X), 2) + Math.Pow((SearcherStation2.Y - source.Y), 2) + Math.Pow((SearcherStation2.Z - source.Z), 2))
+                                - Math.Sqrt(Math.Pow((SearcherStation3.X - source.X), 2) + Math.Pow((SearcherStation3.Y - source.Y), 2) + Math.Pow((SearcherStation3.Z - source.Z), 2)) - Dt23, 2);
+            var tmp4 = Math.Pow(rE - Math.Sqrt(source.X * source.X + source.Y * source.Y + source.Z * source.Z), 2);
+
+            return tmp1 + tmp2 + tmp3 + tmp4;
         }
 
 
@@ -114,17 +139,18 @@ namespace ResearchModel
         {
             var tmp1 = Math.Pow((V(1, source) - V(2, source)) / (c + V(1, source)) - Dw12 / W1, 2);
             var tmp2 = Math.Pow((V(1, source) - V(3, source)) / (c + V(1, source)) - Dw13 / W1, 2);
-            var tmp3 = Math.Pow(rE - Math.Sqrt(source.X * source.X + source.Y * source.Y + source.Z * source.Z), 2);
-            //var tmp4 = Math.Pow((V(2, source) - V(3, source)) / (c + V(2, source)) - Dw23 / W2, 2);
-            return tmp1 + tmp2 + tmp3;
+            var tmp3 = Math.Pow((V(2, source) - V(3, source)) / (c + V(2, source)) - Dw23 / W2, 2);
+            var tmp4 = Math.Pow(rE - Math.Sqrt(source.X * source.X + source.Y * source.Y + source.Z * source.Z), 2);
+            return tmp1 + tmp2 /*+ tmp3*/ + tmp4;
         }
 
         private static double SumEarthF(RadioStation source)
         {
-            return Math.Pow((V(1, source) - V(2, source)) / (c + V(1, source)) - Dw12 / W1, 2)
-                   + Math.Pow(Math.Sqrt(Math.Pow((SearcherStation1.X - source.X), 2) + Math.Pow((SearcherStation1.Y - source.Y), 2) + Math.Pow((SearcherStation1.Z - source.Z), 2))
-                              - Math.Sqrt(Math.Pow((SearcherStation2.X - source.X), 2) + Math.Pow((SearcherStation2.Y - source.Y), 2) + Math.Pow((SearcherStation2.Z - source.Z), 2)) - Dt12, 2)
-                   + Math.Pow(rE - Math.Sqrt(source.X * source.X + source.Y * source.Y + source.Z * source.Z), 2);
+            var tmp1 = Math.Pow((V(1, source) - V(2, source)) / (c + V(1, source)) - Dw12 / W1, 2);
+            var tmp2 = Math.Pow(Math.Sqrt(Math.Pow((SearcherStation1.X - source.X), 2) + Math.Pow((SearcherStation1.Y - source.Y), 2) + Math.Pow((SearcherStation1.Z - source.Z), 2))
+                                - Math.Sqrt(Math.Pow((SearcherStation2.X - source.X), 2) + Math.Pow((SearcherStation2.Y - source.Y), 2) + Math.Pow((SearcherStation2.Z - source.Z), 2)) - Dt12, 2);
+            var tmp3 = Math.Pow(rE - Math.Sqrt(source.X * source.X + source.Y * source.Y + source.Z * source.Z), 2);
+            return tmp1+tmp2+tmp3;
         }
 
         private static void AddInaccuracy(RadioStation rs, RadioStation tmpRs, Random rand, int iter)
@@ -171,8 +197,14 @@ namespace ResearchModel
                     function = DmSpaceF;
                     Dt12 = Math.Sqrt(Math.Pow((SearcherStation1.X - TrueSource.X), 2) + Math.Pow((SearcherStation1.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation1.Z - TrueSource.Z), 2)) -
                            Math.Sqrt(Math.Pow((SearcherStation2.X - TrueSource.X), 2) + Math.Pow((SearcherStation2.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation2.Z - TrueSource.Z), 2));
+                    Dt13 = Math.Sqrt(Math.Pow((SearcherStation1.X - TrueSource.X), 2) + Math.Pow((SearcherStation1.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation1.Z - TrueSource.Z), 2)) -
+                           Math.Sqrt(Math.Pow((SearcherStation3.X - TrueSource.X), 2) + Math.Pow((SearcherStation3.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation3.Z - TrueSource.Z), 2));
+                    Dt14 = Math.Sqrt(Math.Pow((SearcherStation1.X - TrueSource.X), 2) + Math.Pow((SearcherStation1.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation1.Z - TrueSource.Z), 2)) -
+                           Math.Sqrt(Math.Pow((SearcherStation4.X - TrueSource.X), 2) + Math.Pow((SearcherStation4.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation4.Z - TrueSource.Z), 2));
                     Dt23 = Math.Sqrt(Math.Pow((SearcherStation2.X - TrueSource.X), 2) + Math.Pow((SearcherStation2.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation2.Z - TrueSource.Z), 2)) -
                            Math.Sqrt(Math.Pow((SearcherStation3.X - TrueSource.X), 2) + Math.Pow((SearcherStation3.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation3.Z - TrueSource.Z), 2));
+                    Dt24 = Math.Sqrt(Math.Pow((SearcherStation2.X - TrueSource.X), 2) + Math.Pow((SearcherStation2.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation2.Z - TrueSource.Z), 2)) -
+                           Math.Sqrt(Math.Pow((SearcherStation4.X - TrueSource.X), 2) + Math.Pow((SearcherStation4.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation4.Z - TrueSource.Z), 2));
                     Dt34 = Math.Sqrt(Math.Pow((SearcherStation3.X - TrueSource.X), 2) + Math.Pow((SearcherStation3.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation3.Z - TrueSource.Z), 2)) -
                            Math.Sqrt(Math.Pow((SearcherStation4.X - TrueSource.X), 2) + Math.Pow((SearcherStation4.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation4.Z - TrueSource.Z), 2));
                     break;
@@ -182,13 +214,18 @@ namespace ResearchModel
                     Dw13 = (V(1, TrueSource) - V(3, TrueSource)) * w0 / c;
                     Dw14 = (V(1, TrueSource) - V(4, TrueSource)) * w0 / c;
                     Dw23 = (V(2, TrueSource) - V(3, TrueSource)) * w0 / c;
+                    Dw24 = (V(2, TrueSource) - V(4, TrueSource)) * w0 / c;
+                    Dw34 = (V(3, TrueSource) - V(4, TrueSource)) * w0 / c;
                     W1 = (1 + (V(1, TrueSource)) / c) * w0;
                     W2 = (1 + (V(2, TrueSource)) / c) * w0;
+                    W3 = (1 + (V(3, TrueSource)) / c) * w0;
                     break;
                 case (FunctionType) 2:
                     function = SumSpaceF;
                     Dt12 = Math.Sqrt(Math.Pow((SearcherStation1.X - TrueSource.X), 2) + Math.Pow((SearcherStation1.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation1.Z - TrueSource.Z), 2)) -
                            Math.Sqrt(Math.Pow((SearcherStation2.X - TrueSource.X), 2) + Math.Pow((SearcherStation2.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation2.Z - TrueSource.Z), 2));
+                    Dt13 = Math.Sqrt(Math.Pow((SearcherStation1.X - TrueSource.X), 2) + Math.Pow((SearcherStation1.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation1.Z - TrueSource.Z), 2)) -
+                           Math.Sqrt(Math.Pow((SearcherStation3.X - TrueSource.X), 2) + Math.Pow((SearcherStation3.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation3.Z - TrueSource.Z), 2));
                     Dt23 = Math.Sqrt(Math.Pow((SearcherStation2.X - TrueSource.X), 2) + Math.Pow((SearcherStation2.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation2.Z - TrueSource.Z), 2)) -
                            Math.Sqrt(Math.Pow((SearcherStation3.X - TrueSource.X), 2) + Math.Pow((SearcherStation3.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation3.Z - TrueSource.Z), 2));
                     Dw12 = (V(1, TrueSource) - V(2, TrueSource)) * w0 / c;
@@ -201,6 +238,8 @@ namespace ResearchModel
                     function = DmEarthF;
                     Dt12 = Math.Sqrt(Math.Pow((SearcherStation1.X - TrueSource.X), 2) + Math.Pow((SearcherStation1.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation1.Z - TrueSource.Z), 2)) -
                            Math.Sqrt(Math.Pow((SearcherStation2.X - TrueSource.X), 2) + Math.Pow((SearcherStation2.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation2.Z - TrueSource.Z), 2));
+                    Dt13 = Math.Sqrt(Math.Pow((SearcherStation1.X - TrueSource.X), 2) + Math.Pow((SearcherStation1.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation1.Z - TrueSource.Z), 2)) -
+                           Math.Sqrt(Math.Pow((SearcherStation3.X - TrueSource.X), 2) + Math.Pow((SearcherStation3.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation3.Z - TrueSource.Z), 2));
                     Dt23 = Math.Sqrt(Math.Pow((SearcherStation2.X - TrueSource.X), 2) + Math.Pow((SearcherStation2.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation2.Z - TrueSource.Z), 2)) -
                            Math.Sqrt(Math.Pow((SearcherStation3.X - TrueSource.X), 2) + Math.Pow((SearcherStation3.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation3.Z - TrueSource.Z), 2));
                     break;
@@ -210,7 +249,6 @@ namespace ResearchModel
                     Dw12 = (V(1, TrueSource) - V(2, TrueSource)) * w0 / c;
                     Dw13 = (V(1, TrueSource) - V(3, TrueSource)) * w0 / c;
                     Dw23 = (V(2, TrueSource) - V(3, TrueSource)) * w0 / c;
-
                     W1 = (1 + (V(1, TrueSource)) / c) * w0;
                     W2 = (1 + (V(2, TrueSource)) / c) * w0;
                     break;
@@ -220,14 +258,19 @@ namespace ResearchModel
                            Math.Sqrt(Math.Pow((SearcherStation2.X - TrueSource.X), 2) + Math.Pow((SearcherStation2.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation2.Z - TrueSource.Z), 2));
                     Dw12 = (V(1, TrueSource) - V(2, TrueSource)) * w0 / c;
                     W1 = (1 + (V(1, TrueSource)) / c) * w0;
-                    W2 = (1 + (V(2, TrueSource)) / c) * w0;
                     break;
                 default:
                     function = DmSpaceF;
                     Dt12 = Math.Sqrt(Math.Pow((SearcherStation1.X - TrueSource.X), 2) + Math.Pow((SearcherStation1.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation1.Z - TrueSource.Z), 2)) -
                            Math.Sqrt(Math.Pow((SearcherStation2.X - TrueSource.X), 2) + Math.Pow((SearcherStation2.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation2.Z - TrueSource.Z), 2));
+                    Dt13 = Math.Sqrt(Math.Pow((SearcherStation1.X - TrueSource.X), 2) + Math.Pow((SearcherStation1.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation1.Z - TrueSource.Z), 2)) -
+                           Math.Sqrt(Math.Pow((SearcherStation3.X - TrueSource.X), 2) + Math.Pow((SearcherStation3.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation3.Z - TrueSource.Z), 2));
+                    Dt14 = Math.Sqrt(Math.Pow((SearcherStation1.X - TrueSource.X), 2) + Math.Pow((SearcherStation1.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation1.Z - TrueSource.Z), 2)) -
+                           Math.Sqrt(Math.Pow((SearcherStation4.X - TrueSource.X), 2) + Math.Pow((SearcherStation4.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation4.Z - TrueSource.Z), 2));
                     Dt23 = Math.Sqrt(Math.Pow((SearcherStation2.X - TrueSource.X), 2) + Math.Pow((SearcherStation2.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation2.Z - TrueSource.Z), 2)) -
                            Math.Sqrt(Math.Pow((SearcherStation3.X - TrueSource.X), 2) + Math.Pow((SearcherStation3.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation3.Z - TrueSource.Z), 2));
+                    Dt24 = Math.Sqrt(Math.Pow((SearcherStation2.X - TrueSource.X), 2) + Math.Pow((SearcherStation2.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation2.Z - TrueSource.Z), 2)) -
+                           Math.Sqrt(Math.Pow((SearcherStation4.X - TrueSource.X), 2) + Math.Pow((SearcherStation4.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation4.Z - TrueSource.Z), 2));
                     Dt34 = Math.Sqrt(Math.Pow((SearcherStation3.X - TrueSource.X), 2) + Math.Pow((SearcherStation3.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation3.Z - TrueSource.Z), 2)) -
                            Math.Sqrt(Math.Pow((SearcherStation4.X - TrueSource.X), 2) + Math.Pow((SearcherStation4.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation4.Z - TrueSource.Z), 2));
                     break;
@@ -280,11 +323,11 @@ namespace ResearchModel
             {
                 for (int j = 0; j < 100; j++)
                 {
-                    var err = rand.Next(i) * 2 - i;
+                    var err = rand.NextDouble()*i * 2 - i;
                     Dt12 = tmpDt12 + err;
-                    err = rand.Next(i) * 2 - i;
+                    err = rand.NextDouble() * i * 2 - i;
                     Dt23 = tmpDt23 + err;
-                    err = rand.Next(i) * 2 - i;
+                    err = rand.NextDouble() * i * 2 - i;
                     Dt34 = tmpDt34 + err;
 
                     HookJeeves(delta, minDelta, denominator, type);
