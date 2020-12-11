@@ -289,7 +289,23 @@ namespace ResearchModel
             delta = Convert.ToDouble(stepTextBox.Text.Replace('.', ','));
             minDelta = Convert.ToDouble(minStepTextBox.Text);
             denominator = Convert.ToDouble(denominatorTextBox.Text);
-            while (!HookJeeves(delta, minDelta, denominator, type))
+            F function = Initialization(type);
+
+            var i = Convert.ToDouble(errorTextBox.Text);
+            var err = new Random().NextDouble() * i * 2 - i;
+            Dt12 += err;
+            err = new Random().NextDouble() * i * 2 - i;
+            Dt13 += err;
+            err = new Random().NextDouble() * i * 2 - i;
+            Dt14 += err;
+            err = new Random().NextDouble() * i * 2 - i;
+            Dt23  += err;
+            err = new Random().NextDouble() * i * 2 - i;
+            Dt24 += err;
+            err = new Random().NextDouble() * i * 2 - i;
+            Dt34 += err;
+
+            while (!HookJeeves(delta, minDelta, denominator, function))
             {
                 RefreshButtonClick(null, EventArgs.Empty);
             }
@@ -307,11 +323,16 @@ namespace ResearchModel
             RefreshButtonClick(sender, e);
         }
 
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
         private void DCoordinatesGraphButtonClick(object sender, EventArgs e)
         {
             List<double> points = new List<double>();
-
-            FindSatelliteInaccuracy(delta, minDelta, denominator,type, points, progressBar);
+            F function = Initialization(type);
+            FindSatelliteInaccuracy(delta, minDelta, denominator,function, points, progressBar);
             ChartsForm form = new ChartsForm();
 
             form.Show();
@@ -340,7 +361,8 @@ namespace ResearchModel
         private void DtGraphButton(object sender, EventArgs e)
         {
             List<double> points = new List<double>();
-            FindDtInaccuracy(delta, minDelta, denominator, type, points, progressBar);
+            F function = Initialization(type);
+            FindDtInaccuracy(delta, minDelta, denominator, function, points, progressBar);
             ChartsForm form = new ChartsForm();
 
             form.Show();

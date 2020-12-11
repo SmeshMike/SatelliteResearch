@@ -57,6 +57,7 @@
             this.stormRadioButton = new System.Windows.Forms.RadioButton();
             this.glonassRadioButton = new System.Windows.Forms.RadioButton();
             this.systemGroupBox = new System.Windows.Forms.GroupBox();
+            this.errorTextBox = new System.Windows.Forms.TextBox();
             this.methodGroupBox.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.systemGroupBox.SuspendLayout();
@@ -399,11 +400,21 @@
             this.systemGroupBox.TabStop = false;
             this.systemGroupBox.Text = "Place";
             // 
+            // errorTextBox
+            // 
+            this.errorTextBox.Location = new System.Drawing.Point(1244, 772);
+            this.errorTextBox.Name = "errorTextBox";
+            this.errorTextBox.Size = new System.Drawing.Size(54, 25);
+            this.errorTextBox.TabIndex = 6;
+            this.errorTextBox.Text = "0";
+            this.errorTextBox.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1584, 859);
+            this.Controls.Add(this.errorTextBox);
             this.Controls.Add(this.systemGroupBox);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.methodGroupBox);
@@ -472,5 +483,6 @@
         private System.Windows.Forms.RadioButton stormRadioButton;
         private System.Windows.Forms.RadioButton glonassRadioButton;
         private System.Windows.Forms.GroupBox systemGroupBox;
+        private System.Windows.Forms.TextBox errorTextBox;
     }
 }
