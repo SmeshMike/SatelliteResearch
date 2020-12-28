@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using SatelliteResearch;
-using static ResearchModel.ThreadControl;
+using static ResearchModel.Extensions;
 
 namespace ResearchModel
 {
@@ -24,6 +24,8 @@ namespace ResearchModel
         const double w0 = 6000000000;
         const double c = 300000000;
         const double rE = 6370000;
+
+        public static RadioStation tmpSource;
         public static RadioStation SearcherStation1 { get; set; }
 
         public static RadioStation SearcherStation2 { get; set; }
@@ -101,10 +103,10 @@ namespace ResearchModel
             var tmp1 = Math.Pow((V(1, source) - V(2, source)) / (c + V(1, source)) - Dw12 / W1, 2);
             var tmp2 = Math.Pow((V(1, source) - V(3, source)) / (c + V(1, source)) - Dw13 / W1, 2);
             var tmp3 = Math.Pow((V(1, source) - V(4, source)) / (c + V(1, source)) - Dw14 / W1, 2);
-            //var tmp4 = Math.Pow((V(2, source) - V(3, source)) / (c + V(2, source)) - Dw23 / W2, 2);
+           // var tmp4 = Math.Pow((V(2, source) - V(3, source)) / (c + V(2, source)) - Dw23 / W2, 2);
             //var tmp5 = Math.Pow((V(2, source) - V(3, source)) / (c + V(2, source)) - Dw24 / W2, 2);
             //var tmp6 = Math.Pow((V(3, source) - V(4, source)) / (c + V(3, source)) - Dw34 / W3, 2);
-            return tmp1 + tmp2 + tmp3;// + tmp4 + tmp5 + tmp6;
+            return tmp1 + tmp2 + tmp3;// + tmp4 + tmp5 + tmp6;  
         }
 
         private static double SumSpaceF(RadioStation source)
@@ -283,10 +285,10 @@ namespace ResearchModel
         {
             //return ExecuteWithTimeLimit(TimeSpan.FromSeconds(30), () =>
             //        {
+
+
+
             
-
-
-            var tmpSource = new RadioStation();
             Array.Copy(NewSource.coordinates, tmpSource.coordinates, 3);
 
             while (delta >= minDelta)
@@ -321,7 +323,9 @@ namespace ResearchModel
         {
             pb.Value = 0;
             double inaccuracy = 0;
-
+            int iCount = 100;
+            int jCount = 1000;
+            pb.Maximum = iCount;
             Random rand = new Random();
 
             var tmpDt12 = Dt12;
@@ -330,12 +334,16 @@ namespace ResearchModel
             var tmpDt23 = Dt23;
             var tmpDt24 = Dt24;
             var tmpDt34 = Dt34;
+            tmpSource = new RadioStation();
 
-
-            for (int i = 0; i < 200; i += 2)
+            for (int i = 0; i < iCount; ++i)
             {
-                for (int j = 0; j < 100; j++)
+                for (int j = 0; j < jCount; j++)
                 {
+                    NewSource.X = TrueSource.X - 5000;
+                    NewSource.Y = TrueSource.Y - 5000;
+                    NewSource.Z = TrueSource.Z - 5000;
+
                     var err = rand.NextDouble()*i * 2 - i;
                     Dt12 = tmpDt12 + err;
                     err = rand.NextDouble() * i * 2 - i;
@@ -353,10 +361,125 @@ namespace ResearchModel
                     inaccuracy += GetSourceDifference();
                 }
 
-                inaccuracyArr.Add(inaccuracy / 100);
+                inaccuracyArr.Add(inaccuracy / jCount);
                 inaccuracy = 0;
 
                 pb.PerformStep();
+            }
+
+        }
+
+        public static void FindDwInaccuracy(double delta, double minDelta, double denominator, F function, List<double> inaccuracyArr, ProgressBar pb)
+        {
+            pb.Value = 0;
+            double inaccuracy = 0;
+            int iCount = 100;
+            int jCount = 100;
+            pb.Maximum = iCount;
+            Random rand = new Random();
+
+            var tmpDw12 = Dw12;
+            var tmpDw13 = Dw13;
+            var tmpDw14 = Dw14;
+            var tmpDw23 = Dw23;
+            var tmpDw24 = Dw24;
+            var tmpDw34 = Dw34;
+
+            tmpSource = new RadioStation();
+            for (int i = 0; i < iCount; ++i)
+            {
+                for (int j = 0; j < jCount; j++)
+                {
+                    NewSource.X = TrueSource.X - 5000;
+                    NewSource.Y = TrueSource.Y - 5000;
+                    NewSource.Z = TrueSource.Z - 5000;
+
+                    var err = rand.NextDouble() * i * 2 - i;
+                    Dw12 = tmpDw12 + err;
+                    err = rand.NextDouble() * i * 2 - i;
+                    Dw13 = tmpDw13 + err;
+                    err = rand.NextDouble() * i * 2 - i;
+                    Dw14 = tmpDw14 + err;
+                    err = rand.NextDouble() * i * 2 - i;
+                    Dw23 = tmpDw23 + err;
+                    err = rand.NextDouble() * i * 2 - i;
+                    Dw24 = tmpDw24 + err;
+                    err = rand.NextDouble() * i * 2 - i;
+                    Dw34 = tmpDw34 + err;
+
+                    HookJeeves(delta, minDelta, denominator, function);
+                    inaccuracy += GetSourceDifference();
+                }
+
+                inaccuracyArr.Add(inaccuracy / jCount);
+                inaccuracy = 0;
+
+                pb.PerformStep();
+            }
+
+        }
+
+        public static void FindSumInaccuracy(double delta, double minDelta, double denominator, F function, List<double> inaccuracyArr, ProgressBar pb)
+        {
+            pb.Value = 0;
+            double inaccuracy = 0;
+            int iCount = 100;
+            int jCount = 1000;
+            pb.Maximum = iCount;
+            Random rand = new Random();
+
+            var tmpDw12 = Dw12;
+            var tmpDw13 = Dw13;
+            var tmpDw14 = Dw14;
+            var tmpDw23 = Dw23;
+            var tmpDw24 = Dw24;
+            var tmpDw34 = Dw34;
+            var tmpDt12 = Dt12;
+            var tmpDt13 = Dt13;
+            var tmpDt14 = Dt14;
+            var tmpDt23 = Dt23;
+            var tmpDt24 = Dt24;
+            var tmpDt34 = Dt34;
+            tmpSource = new RadioStation();
+            for (int i = 0; i < iCount; ++i)
+            {
+                for (int j = 0; j < jCount; j++)
+                {
+                    NewSource.X = TrueSource.X - 5000;
+                    NewSource.Y = TrueSource.Y - 5000;
+                    NewSource.Z = TrueSource.Z - 5000;
+
+                    var err = rand.NextDouble() * i * 2 - i;
+                    Dw12 = tmpDw12 + err;
+                    err = rand.NextDouble() * i * 2 - i;
+                    Dw13 = tmpDw13 + err;
+                    err = rand.NextDouble() * i * 2 - i;
+                    Dw14 = tmpDw14 + err;
+                    err = rand.NextDouble() * i * 2 - i;
+                    Dw23 = tmpDw23 + err;
+                    err = rand.NextDouble() * i * 2 - i;
+                    Dw24 = tmpDw24 + err;
+                    err = rand.NextDouble() * i * 2 - i;
+                    Dw34 = tmpDw34 + err;
+                    Dt12 = tmpDt12 + err;
+                    err = rand.NextDouble() * i * 2 - i;
+                    Dt13 = tmpDt13 + err;
+                    err = rand.NextDouble() * i * 2 - i;
+                    Dt14 = tmpDt14 + err;
+                    err = rand.NextDouble() * i * 2 - i;
+                    Dt23 = tmpDt23 + err;
+                    err = rand.NextDouble() * i * 2 - i;
+                    Dt24 = tmpDt24 + err;
+                    err = rand.NextDouble() * i * 2 - i;
+                    Dt34 = tmpDt34 + err;
+
+                    HookJeeves(delta, minDelta, denominator, function);
+                    inaccuracy += GetSourceDifference();
+                }
+
+                inaccuracyArr.Add(inaccuracy / jCount);
+                inaccuracy = 0;
+
                 pb.PerformStep();
             }
 
@@ -364,19 +487,31 @@ namespace ResearchModel
 
         public static void FindSatelliteInaccuracy(double delta, double minDelta, double denominator, F function, List<double> inaccuracyArr, ProgressBar pb)
         {
+
             pb.Value = 0;
             double inaccuracy = 0;
-            RadioStation tmp1 = SearcherStation1;
-            RadioStation tmp2 = SearcherStation2;
-            RadioStation tmp3 = SearcherStation3;
-            RadioStation tmp4 = SearcherStation4;
+            RadioStation tmp1 = new RadioStation();
+            tmp1.Run(SearcherStation1);
+            RadioStation tmp2 = new RadioStation();
+            tmp2.Run(SearcherStation2);
+            RadioStation tmp3 = new RadioStation();
+            tmp3.Run(SearcherStation3);
+            RadioStation tmp4 = new RadioStation();
+            tmp4.Run(SearcherStation4);
 
+            int iCount = 100;
+            int jCount = 1000;
+            pb.Maximum = iCount;
             Random rand = new Random();
-            for (int i = 0; i < 200; i += 2)
+            tmpSource = new RadioStation();
+            for (int i = 0; i < iCount; ++i)
             {
 
-                for (int j = 0; j < 100; j++)
+                for (int j = 0; j < jCount; j++)
                 {
+                    NewSource.X = TrueSource.X - 5000;
+                    NewSource.Y = TrueSource.Y - 5000;
+                    NewSource.Z = TrueSource.Z - 5000;
                     AddInaccuracy(SearcherStation1, tmp1, rand, i);
                     AddInaccuracy(SearcherStation2, tmp2, rand, i);
                     AddInaccuracy(SearcherStation3, tmp3, rand, i);
@@ -386,12 +521,12 @@ namespace ResearchModel
                     inaccuracy += GetSourceDifference();
                 }
 
-                inaccuracyArr.Add(inaccuracy / 100);
+                inaccuracyArr.Add(inaccuracy / jCount);
                 inaccuracy = 0;
 
                 pb.PerformStep();
-                pb.PerformStep();
             }
+
         }
 
     }

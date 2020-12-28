@@ -58,6 +58,7 @@
             this.glonassRadioButton = new System.Windows.Forms.RadioButton();
             this.systemGroupBox = new System.Windows.Forms.GroupBox();
             this.errorTextBox = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.methodGroupBox.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.systemGroupBox.SuspendLayout();
@@ -65,9 +66,9 @@
             // 
             // searcherStation1
             // 
-            this.searcherStation1.Location = new System.Drawing.Point(1101, 12);
+            this.searcherStation1.Location = new System.Drawing.Point(1101, 11);
             this.searcherStation1.Name = "searcherStation1";
-            this.searcherStation1.Size = new System.Drawing.Size(483, 78);
+            this.searcherStation1.Size = new System.Drawing.Size(483, 69);
             this.searcherStation1.TabIndex = 0;
             this.searcherStation1.VAbs = 0D;
             this.searcherStation1.Vx = 0D;
@@ -83,9 +84,9 @@
             // 
             // searcherStation2
             // 
-            this.searcherStation2.Location = new System.Drawing.Point(1101, 96);
+            this.searcherStation2.Location = new System.Drawing.Point(1101, 85);
             this.searcherStation2.Name = "searcherStation2";
-            this.searcherStation2.Size = new System.Drawing.Size(483, 78);
+            this.searcherStation2.Size = new System.Drawing.Size(483, 69);
             this.searcherStation2.TabIndex = 1;
             this.searcherStation2.VAbs = 0D;
             this.searcherStation2.Vx = 0D;
@@ -101,9 +102,9 @@
             // 
             // searcherStation3
             // 
-            this.searcherStation3.Location = new System.Drawing.Point(1101, 180);
+            this.searcherStation3.Location = new System.Drawing.Point(1101, 159);
             this.searcherStation3.Name = "searcherStation3";
-            this.searcherStation3.Size = new System.Drawing.Size(483, 78);
+            this.searcherStation3.Size = new System.Drawing.Size(483, 69);
             this.searcherStation3.TabIndex = 2;
             this.searcherStation3.VAbs = 0D;
             this.searcherStation3.Vx = 0D;
@@ -119,9 +120,9 @@
             // 
             // searcherStation4
             // 
-            this.searcherStation4.Location = new System.Drawing.Point(1101, 264);
+            this.searcherStation4.Location = new System.Drawing.Point(1101, 233);
             this.searcherStation4.Name = "searcherStation4";
-            this.searcherStation4.Size = new System.Drawing.Size(483, 78);
+            this.searcherStation4.Size = new System.Drawing.Size(483, 69);
             this.searcherStation4.TabIndex = 3;
             this.searcherStation4.VAbs = 0D;
             this.searcherStation4.Vx = 0D;
@@ -137,9 +138,9 @@
             // 
             // runButton
             // 
-            this.runButton.Location = new System.Drawing.Point(1473, 772);
+            this.runButton.Location = new System.Drawing.Point(1473, 681);
             this.runButton.Name = "runButton";
-            this.runButton.Size = new System.Drawing.Size(83, 25);
+            this.runButton.Size = new System.Drawing.Size(83, 22);
             this.runButton.TabIndex = 4;
             this.runButton.Text = "Run";
             this.runButton.UseVisualStyleBackColor = true;
@@ -147,9 +148,9 @@
             // 
             // trueSource
             // 
-            this.trueSource.Location = new System.Drawing.Point(1101, 348);
+            this.trueSource.Location = new System.Drawing.Point(1101, 307);
             this.trueSource.Name = "trueSource";
-            this.trueSource.Size = new System.Drawing.Size(483, 78);
+            this.trueSource.Size = new System.Drawing.Size(483, 69);
             this.trueSource.TabIndex = 3;
             this.trueSource.VAbs = 0D;
             this.trueSource.Vx = 0D;
@@ -165,9 +166,9 @@
             // 
             // newSource
             // 
-            this.newSource.Location = new System.Drawing.Point(1101, 432);
+            this.newSource.Location = new System.Drawing.Point(1101, 381);
             this.newSource.Name = "newSource";
-            this.newSource.Size = new System.Drawing.Size(471, 78);
+            this.newSource.Size = new System.Drawing.Size(471, 69);
             this.newSource.TabIndex = 3;
             this.newSource.VAbs = 0D;
             this.newSource.Vx = 0D;
@@ -184,56 +185,56 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(1502, 572);
+            this.label1.Location = new System.Drawing.Point(1502, 505);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(34, 17);
+            this.label1.Size = new System.Drawing.Size(30, 15);
             this.label1.TabIndex = 5;
             this.label1.Text = "Step";
             // 
             // stepTextBox
             // 
-            this.stepTextBox.Location = new System.Drawing.Point(1502, 592);
+            this.stepTextBox.Location = new System.Drawing.Point(1502, 522);
             this.stepTextBox.Name = "stepTextBox";
-            this.stepTextBox.Size = new System.Drawing.Size(54, 25);
+            this.stepTextBox.Size = new System.Drawing.Size(54, 23);
             this.stepTextBox.TabIndex = 6;
             // 
             // minstep
             // 
             this.minstep.AutoSize = true;
-            this.minstep.Location = new System.Drawing.Point(1502, 628);
+            this.minstep.Location = new System.Drawing.Point(1502, 554);
             this.minstep.Name = "minstep";
-            this.minstep.Size = new System.Drawing.Size(63, 17);
+            this.minstep.Size = new System.Drawing.Size(59, 15);
             this.minstep.TabIndex = 5;
             this.minstep.Text = "Step(min)";
             // 
             // minStepTextBox
             // 
-            this.minStepTextBox.Location = new System.Drawing.Point(1502, 648);
+            this.minStepTextBox.Location = new System.Drawing.Point(1502, 572);
             this.minStepTextBox.Name = "minStepTextBox";
-            this.minStepTextBox.Size = new System.Drawing.Size(54, 25);
+            this.minStepTextBox.Size = new System.Drawing.Size(54, 23);
             this.minStepTextBox.TabIndex = 6;
             // 
             // Denomirator
             // 
             this.Denomirator.AutoSize = true;
-            this.Denomirator.Location = new System.Drawing.Point(1502, 687);
+            this.Denomirator.Location = new System.Drawing.Point(1502, 606);
             this.Denomirator.Name = "Denomirator";
-            this.Denomirator.Size = new System.Drawing.Size(82, 17);
+            this.Denomirator.Size = new System.Drawing.Size(74, 15);
             this.Denomirator.TabIndex = 5;
             this.Denomirator.Text = "Denomirator";
             // 
             // denominatorTextBox
             // 
-            this.denominatorTextBox.Location = new System.Drawing.Point(1502, 707);
+            this.denominatorTextBox.Location = new System.Drawing.Point(1502, 624);
             this.denominatorTextBox.Name = "denominatorTextBox";
-            this.denominatorTextBox.Size = new System.Drawing.Size(54, 25);
+            this.denominatorTextBox.Size = new System.Drawing.Size(54, 23);
             this.denominatorTextBox.TabIndex = 6;
             // 
             // refreshButton
             // 
-            this.refreshButton.Location = new System.Drawing.Point(1362, 772);
+            this.refreshButton.Location = new System.Drawing.Point(1362, 681);
             this.refreshButton.Name = "refreshButton";
-            this.refreshButton.Size = new System.Drawing.Size(83, 25);
+            this.refreshButton.Size = new System.Drawing.Size(83, 22);
             this.refreshButton.TabIndex = 7;
             this.refreshButton.Text = "Refresh";
             this.refreshButton.UseVisualStyleBackColor = true;
@@ -242,17 +243,17 @@
             // timeLabel
             // 
             this.timeLabel.AutoSize = true;
-            this.timeLabel.Location = new System.Drawing.Point(1473, 745);
+            this.timeLabel.Location = new System.Drawing.Point(1473, 657);
             this.timeLabel.Name = "timeLabel";
-            this.timeLabel.Size = new System.Drawing.Size(46, 17);
+            this.timeLabel.Size = new System.Drawing.Size(42, 15);
             this.timeLabel.TabIndex = 8;
             this.timeLabel.Text = "Время";
             // 
             // dCoordinatesGraphButton
             // 
-            this.dCoordinatesGraphButton.Location = new System.Drawing.Point(1362, 804);
+            this.dCoordinatesGraphButton.Location = new System.Drawing.Point(1362, 709);
             this.dCoordinatesGraphButton.Name = "dCoordinatesGraphButton";
-            this.dCoordinatesGraphButton.Size = new System.Drawing.Size(83, 44);
+            this.dCoordinatesGraphButton.Size = new System.Drawing.Size(83, 39);
             this.dCoordinatesGraphButton.TabIndex = 7;
             this.dCoordinatesGraphButton.Text = "Разница координат";
             this.dCoordinatesGraphButton.UseVisualStyleBackColor = true;
@@ -260,9 +261,9 @@
             // 
             // dtGraphButton
             // 
-            this.dtGraphButton.Location = new System.Drawing.Point(1473, 804);
+            this.dtGraphButton.Location = new System.Drawing.Point(1473, 709);
             this.dtGraphButton.Name = "dtGraphButton";
-            this.dtGraphButton.Size = new System.Drawing.Size(83, 44);
+            this.dtGraphButton.Size = new System.Drawing.Size(83, 39);
             this.dtGraphButton.TabIndex = 4;
             this.dtGraphButton.Text = "Разница времени";
             this.dtGraphButton.UseVisualStyleBackColor = true;
@@ -271,26 +272,26 @@
             // errorLabel
             // 
             this.errorLabel.AutoSize = true;
-            this.errorLabel.Location = new System.Drawing.Point(1362, 745);
+            this.errorLabel.Location = new System.Drawing.Point(1362, 657);
             this.errorLabel.Name = "errorLabel";
-            this.errorLabel.Size = new System.Drawing.Size(57, 17);
+            this.errorLabel.Size = new System.Drawing.Size(53, 15);
             this.errorLabel.TabIndex = 9;
             this.errorLabel.Text = "Ошибка";
             // 
             // progressBar
             // 
-            this.progressBar.Location = new System.Drawing.Point(1346, 518);
+            this.progressBar.Location = new System.Drawing.Point(1346, 457);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(226, 26);
+            this.progressBar.Size = new System.Drawing.Size(226, 23);
             this.progressBar.TabIndex = 10;
             // 
             // dmRadioButton
             // 
             this.dmRadioButton.AutoSize = true;
             this.dmRadioButton.Checked = true;
-            this.dmRadioButton.Location = new System.Drawing.Point(6, 19);
+            this.dmRadioButton.Location = new System.Drawing.Point(6, 17);
             this.dmRadioButton.Name = "dmRadioButton";
-            this.dmRadioButton.Size = new System.Drawing.Size(54, 21);
+            this.dmRadioButton.Size = new System.Drawing.Size(51, 19);
             this.dmRadioButton.TabIndex = 11;
             this.dmRadioButton.TabStop = true;
             this.dmRadioButton.Text = "РДМ";
@@ -300,9 +301,9 @@
             // ddRadioButton
             // 
             this.ddRadioButton.AutoSize = true;
-            this.ddRadioButton.Location = new System.Drawing.Point(6, 40);
+            this.ddRadioButton.Location = new System.Drawing.Point(6, 35);
             this.ddRadioButton.Name = "ddRadioButton";
-            this.ddRadioButton.Size = new System.Drawing.Size(51, 21);
+            this.ddRadioButton.Size = new System.Drawing.Size(49, 19);
             this.ddRadioButton.TabIndex = 12;
             this.ddRadioButton.Text = "РДП";
             this.ddRadioButton.UseVisualStyleBackColor = true;
@@ -311,9 +312,9 @@
             // sumRadioButton
             // 
             this.sumRadioButton.AutoSize = true;
-            this.sumRadioButton.Location = new System.Drawing.Point(6, 60);
+            this.sumRadioButton.Location = new System.Drawing.Point(6, 53);
             this.sumRadioButton.Name = "sumRadioButton";
-            this.sumRadioButton.Size = new System.Drawing.Size(96, 21);
+            this.sumRadioButton.Size = new System.Drawing.Size(93, 19);
             this.sumRadioButton.TabIndex = 13;
             this.sumRadioButton.Text = "Суммарный";
             this.sumRadioButton.UseVisualStyleBackColor = true;
@@ -324,9 +325,9 @@
             this.methodGroupBox.Controls.Add(this.sumRadioButton);
             this.methodGroupBox.Controls.Add(this.dmRadioButton);
             this.methodGroupBox.Controls.Add(this.ddRadioButton);
-            this.methodGroupBox.Location = new System.Drawing.Point(1362, 562);
+            this.methodGroupBox.Location = new System.Drawing.Point(1362, 496);
             this.methodGroupBox.Name = "methodGroupBox";
-            this.methodGroupBox.Size = new System.Drawing.Size(101, 86);
+            this.methodGroupBox.Size = new System.Drawing.Size(101, 76);
             this.methodGroupBox.TabIndex = 14;
             this.methodGroupBox.TabStop = false;
             this.methodGroupBox.Text = "Method";
@@ -335,9 +336,9 @@
             // 
             this.groupBox1.Controls.Add(this.earthRadioButton);
             this.groupBox1.Controls.Add(this.spaceRadioButton);
-            this.groupBox1.Location = new System.Drawing.Point(1362, 661);
+            this.groupBox1.Location = new System.Drawing.Point(1362, 583);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(101, 73);
+            this.groupBox1.Size = new System.Drawing.Size(101, 64);
             this.groupBox1.TabIndex = 15;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Place";
@@ -345,9 +346,9 @@
             // earthRadioButton
             // 
             this.earthRadioButton.AutoSize = true;
-            this.earthRadioButton.Location = new System.Drawing.Point(7, 40);
+            this.earthRadioButton.Location = new System.Drawing.Point(7, 35);
             this.earthRadioButton.Name = "earthRadioButton";
-            this.earthRadioButton.Size = new System.Drawing.Size(56, 21);
+            this.earthRadioButton.Size = new System.Drawing.Size(52, 19);
             this.earthRadioButton.TabIndex = 1;
             this.earthRadioButton.Text = "Earth";
             this.earthRadioButton.UseVisualStyleBackColor = true;
@@ -357,9 +358,9 @@
             // 
             this.spaceRadioButton.AutoSize = true;
             this.spaceRadioButton.Checked = true;
-            this.spaceRadioButton.Location = new System.Drawing.Point(7, 18);
+            this.spaceRadioButton.Location = new System.Drawing.Point(7, 16);
             this.spaceRadioButton.Name = "spaceRadioButton";
-            this.spaceRadioButton.Size = new System.Drawing.Size(61, 21);
+            this.spaceRadioButton.Size = new System.Drawing.Size(56, 19);
             this.spaceRadioButton.TabIndex = 0;
             this.spaceRadioButton.TabStop = true;
             this.spaceRadioButton.Text = "Space";
@@ -369,9 +370,9 @@
             // stormRadioButton
             // 
             this.stormRadioButton.AutoSize = true;
-            this.stormRadioButton.Location = new System.Drawing.Point(7, 40);
+            this.stormRadioButton.Location = new System.Drawing.Point(7, 35);
             this.stormRadioButton.Name = "stormRadioButton";
-            this.stormRadioButton.Size = new System.Drawing.Size(79, 21);
+            this.stormRadioButton.Size = new System.Drawing.Size(76, 19);
             this.stormRadioButton.TabIndex = 1;
             this.stormRadioButton.Text = "Lightning";
             this.stormRadioButton.UseVisualStyleBackColor = true;
@@ -380,9 +381,9 @@
             // 
             this.glonassRadioButton.AutoSize = true;
             this.glonassRadioButton.Checked = true;
-            this.glonassRadioButton.Location = new System.Drawing.Point(7, 18);
+            this.glonassRadioButton.Location = new System.Drawing.Point(7, 16);
             this.glonassRadioButton.Name = "glonassRadioButton";
-            this.glonassRadioButton.Size = new System.Drawing.Size(72, 21);
+            this.glonassRadioButton.Size = new System.Drawing.Size(66, 19);
             this.glonassRadioButton.TabIndex = 0;
             this.glonassRadioButton.TabStop = true;
             this.glonassRadioButton.Text = "Glonass";
@@ -393,27 +394,38 @@
             // 
             this.systemGroupBox.Controls.Add(this.stormRadioButton);
             this.systemGroupBox.Controls.Add(this.glonassRadioButton);
-            this.systemGroupBox.Location = new System.Drawing.Point(1119, 572);
+            this.systemGroupBox.Location = new System.Drawing.Point(1119, 505);
             this.systemGroupBox.Name = "systemGroupBox";
-            this.systemGroupBox.Size = new System.Drawing.Size(101, 73);
+            this.systemGroupBox.Size = new System.Drawing.Size(101, 64);
             this.systemGroupBox.TabIndex = 15;
             this.systemGroupBox.TabStop = false;
             this.systemGroupBox.Text = "Place";
             // 
             // errorTextBox
             // 
-            this.errorTextBox.Location = new System.Drawing.Point(1244, 772);
+            this.errorTextBox.Location = new System.Drawing.Point(1244, 681);
             this.errorTextBox.Name = "errorTextBox";
-            this.errorTextBox.Size = new System.Drawing.Size(54, 25);
+            this.errorTextBox.Size = new System.Drawing.Size(54, 23);
             this.errorTextBox.TabIndex = 6;
             this.errorTextBox.Text = "0";
             this.errorTextBox.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(1109, 726);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(83, 22);
+            this.button1.TabIndex = 16;
+            this.button1.Text = "Refresh";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1584, 859);
+            this.ClientSize = new System.Drawing.Size(1584, 758);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.errorTextBox);
             this.Controls.Add(this.systemGroupBox);
             this.Controls.Add(this.groupBox1);
@@ -484,5 +496,6 @@
         private System.Windows.Forms.RadioButton glonassRadioButton;
         private System.Windows.Forms.GroupBox systemGroupBox;
         private System.Windows.Forms.TextBox errorTextBox;
+        private System.Windows.Forms.Button button1;
     }
 }

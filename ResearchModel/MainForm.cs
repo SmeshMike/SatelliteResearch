@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using static ResearchModel.MathStuff;
 using static ResearchModel.ProcessCoordinates;
+using static ResearchModel.Extensions;
 
 namespace ResearchModel
 {
@@ -270,19 +271,20 @@ namespace ResearchModel
             newSource.NameLabel.Text = "Предполагаемые координаты";
             progressBar.Visible = true;
             progressBar.Minimum = 0;
-            progressBar.Maximum = 200;
+
             progressBar.Value = 1;
             progressBar.Step = 1;
 
-            stepTextBox.Text = "262144";
+            stepTextBox.Text = "1024";
             minStepTextBox.Text = "0,015625";
-            denominatorTextBox.Text = "64";
+            denominatorTextBox.Text = "4";
 
             RefreshButtonClick(null, EventArgs.Empty);
         }
 
         private void RunButtonClick(object sender, EventArgs e)
         {
+            
             Stopwatch sp = new Stopwatch();
             sp.Start();
             newSource.Run();
@@ -305,8 +307,10 @@ namespace ResearchModel
             err = new Random().NextDouble() * i * 2 - i;
             Dt34 += err;
 
+            tmpSource = new RadioStation();
             while (!HookJeeves(delta, minDelta, denominator, function))
             {
+                
                 RefreshButtonClick(null, EventArgs.Empty);
             }
 
@@ -328,16 +332,211 @@ namespace ResearchModel
 
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (stormRadioButton.Checked)
+            {
+                if (type == FunctionType.sumEarth)
+                {
+                    SearcherStation1.X = 2911.589288 * 1000;
+                    SearcherStation1.Y = 21076.211455 * 1000;
+                    SearcherStation1.Z = 27428.013975 * 1000;
+                    SearcherStation1.Vx = 0.119659 * 1000;
+                    SearcherStation1.Vy = 0.133511 * 1000;
+                    SearcherStation1.Vz = 2.413740 * 1000;
+                    searcherStation1.xTextBox.Text = SearcherStation1.X.ToString();
+                    searcherStation1.yTextBox.Text = SearcherStation1.Y.ToString();
+                    searcherStation1.zTextBox.Text = SearcherStation1.Z.ToString();
+                    
+
+
+
+
+                    SearcherStation2.X = -2817.404310 * 1000;
+                    SearcherStation2.Y = -21060.364441 * 1000;
+                    SearcherStation2.Z = 27450.014111 * 1000;
+                    SearcherStation2.Vx = -0.110239 * 1000;
+                    SearcherStation2.Vy = -0.138972 * 1000;
+                    SearcherStation2.Vz = 2.409070 * 1000;
+
+                    searcherStation2.xTextBox.Text = SearcherStation2.X.ToString();
+                    searcherStation2.yTextBox.Text = SearcherStation2.Y.ToString();
+                    searcherStation2.zTextBox.Text = SearcherStation2.Z.ToString();
+                    
+                    TrueSource.X = 1986426.176356317;
+                    TrueSource.Y = 4004412.6912230053;
+                    TrueSource.Z = -4538247.46397313;
+                    trueSource.xTextBox.Text = TrueSource.X.ToString();
+                    trueSource.yTextBox.Text = TrueSource.Y.ToString();
+                    trueSource.zTextBox.Text = TrueSource.Z.ToString();
+
+                    NewSource.X = 1986426.176356317 - 5000;
+                    NewSource.Y = 4004412.6912230053 - 5000;
+                    NewSource.Z = -4538247.46397313 - 5000;
+                    newSource.xTextBox.Text = NewSource.X.ToString();
+                    newSource.yTextBox.Text = NewSource.Y.ToString();
+                    newSource.zTextBox.Text = NewSource.Z.ToString();
+
+                }
+                else if (type == FunctionType.sumSpace)
+                {
+                    SearcherStation1.X = 3639853.9609999997;
+                    SearcherStation1.Y = 8921804.635;
+                    SearcherStation1.Z = -2463549.466;
+                    SearcherStation1.Vx = -235.661;
+                    SearcherStation1.Vy = 6045.283;
+                    SearcherStation1.Vz = 4953.17;
+                    searcherStation1.xTextBox.Text = SearcherStation1.X.ToString();
+                    searcherStation1.yTextBox.Text = SearcherStation1.Y.ToString();
+                    searcherStation1.zTextBox.Text = SearcherStation1.Z.ToString();
+
+
+                    SearcherStation2.X = -3646032.795;
+                    SearcherStation2.Y = -8927601.529;
+                    SearcherStation2.Z = -2433225.547;
+                    SearcherStation2.Vx = 247.96099999999998;
+                    SearcherStation2.Vy = -6033.1460000000006;
+                    SearcherStation2.Vz = 4965.738;
+                    searcherStation2.xTextBox.Text = SearcherStation2.X.ToString();
+                    searcherStation2.yTextBox.Text = SearcherStation2.Y.ToString();
+                    searcherStation2.zTextBox.Text = SearcherStation2.Z.ToString();
+
+                    SearcherStation3.X = 42164135.243;
+                    SearcherStation3.Y = 13.411;
+                    SearcherStation3.Z = -53855.533;
+                    SearcherStation3.Vx = -0.005;
+                    SearcherStation3.Vy = 0.001;
+                    SearcherStation3.Vz = -3.62;
+                    searcherStation3.xTextBox.Text = SearcherStation3.X.ToString();
+                    searcherStation3.yTextBox.Text = SearcherStation3.Y.ToString();
+                    searcherStation3.zTextBox.Text = SearcherStation3.Z.ToString();
+
+                    TrueSource.X = 6034365.9541306281;
+                    TrueSource.Y = 1457231.9555445788;
+                    TrueSource.Z = 1428216.5659902152;
+                    trueSource.xTextBox.Text = TrueSource.X.ToString();
+                    trueSource.yTextBox.Text = TrueSource.Y.ToString();
+                    trueSource.zTextBox.Text = TrueSource.Z.ToString();
+
+                    NewSource.X = TrueSource.X - 5000;
+                    NewSource.Y = TrueSource.Y - 5000;
+                    NewSource.Z = TrueSource.Z - 5000;
+                    newSource.xTextBox.Text = NewSource.X.ToString();
+                    newSource.yTextBox.Text = NewSource.Y.ToString();
+                    newSource.zTextBox.Text = NewSource.Z.ToString();
+                }
+            }
+            else
+            {
+                if (type == FunctionType.sumEarth)
+                {
+                    SearcherStation1.X = 3050980.433;
+                    SearcherStation1.Y = 21166840.116;
+                    SearcherStation1.Z = 30014830.297000002;
+                    SearcherStation1.Vx = 121.42699999999999;
+                    SearcherStation1.Vy = 31.867;
+                    SearcherStation1.Vz = 2129.0589999999997;
+                    searcherStation1.xTextBox.Text = SearcherStation1.X.ToString();
+                    searcherStation1.yTextBox.Text = SearcherStation1.Y.ToString();
+                    searcherStation1.zTextBox.Text = SearcherStation1.Z.ToString();
+
+
+                    SearcherStation2.X = -2946854.585;
+                    SearcherStation2.Y = -21158099.944000002;
+                    SearcherStation2.Z = 30031391.82;
+                    SearcherStation2.Vx = -113.425;
+                    SearcherStation2.Vy = -38.827;
+                    SearcherStation2.Vz = 2124.197;
+                    searcherStation2.xTextBox.Text = SearcherStation2.X.ToString();
+                    searcherStation2.yTextBox.Text = SearcherStation2.Y.ToString();
+                    searcherStation2.zTextBox.Text = SearcherStation2.Z.ToString();
+
+                    TrueSource.X = 5826418.0915079154;
+                    TrueSource.Y = 2484117.6945833224;
+                    TrueSource.Z = 677430.07196854427;
+                    trueSource.xTextBox.Text = TrueSource.X.ToString();
+                    trueSource.yTextBox.Text = TrueSource.Y.ToString();
+                    trueSource.zTextBox.Text = TrueSource.Z.ToString();
+
+                    NewSource.X = TrueSource.X - 5000;
+                    NewSource.Y = TrueSource.Y - 5000;
+                    NewSource.Z = TrueSource.Z - 5000;
+                    newSource.xTextBox.Text = NewSource.X.ToString();
+                    newSource.yTextBox.Text = NewSource.Y.ToString();
+                    newSource.zTextBox.Text = NewSource.Z.ToString();
+                }
+                else if (type == FunctionType.sumSpace)
+                {
+                    SearcherStation1.X = 213004.652;
+                    SearcherStation1.Y = 10941934.4259;
+                    SearcherStation1.Z = -1154924.830;
+                    SearcherStation1.Vx = -2116.552;
+                    SearcherStation1.Vy = -4769.517;
+                    SearcherStation1.Vz = -5131.828;
+                    searcherStation1.xTextBox.Text = SearcherStation1.X.ToString();
+                    searcherStation1.yTextBox.Text = SearcherStation1.Y.ToString();
+                    searcherStation1.zTextBox.Text = SearcherStation1.Z.ToString();
+
+
+                    SearcherStation2.X = -210490.857;
+                    SearcherStation2.Y = -10938668.62;
+                    SearcherStation2.Z = -1185906.305;
+                    SearcherStation2.Vx = 2127.344;
+                    SearcherStation2.Vy = 4783.659;
+                    SearcherStation2.Vz = -5112.496;
+                    searcherStation2.xTextBox.Text = SearcherStation2.X.ToString();
+                    searcherStation2.yTextBox.Text = SearcherStation2.Y.ToString();
+                    searcherStation2.zTextBox.Text = SearcherStation2.Z.ToString();
+
+                    SearcherStation3.X = 42164147.087;
+                    SearcherStation3.Y = 26.495;
+                    SearcherStation3.Z = 43607.498;
+                    SearcherStation3.Vx = -0.004;
+                    SearcherStation3.Vy = -0.001;
+                    SearcherStation3.Vz = 4.292;
+                    searcherStation3.xTextBox.Text = SearcherStation3.X.ToString();
+                    searcherStation3.yTextBox.Text = SearcherStation3.Y.ToString();
+                    searcherStation3.zTextBox.Text = SearcherStation3.Z.ToString();
+
+                    TrueSource.X = 4832916.0136173125;
+                    TrueSource.Y = 4149599.7557129469;
+                    TrueSource.Z = 25390.405833661556;
+                    trueSource.xTextBox.Text = TrueSource.X.ToString();
+                    trueSource.yTextBox.Text = TrueSource.Y.ToString();
+                    trueSource.zTextBox.Text = TrueSource.Z.ToString();
+
+                    NewSource.X = 4832916.0136173125 - 5000;
+                    NewSource.Y = 4149599.7557129469 - 5000;
+                    NewSource.Z = 25390.405833661556 - 5000;
+                    newSource.xTextBox.Text = NewSource.X.ToString();
+                    newSource.yTextBox.Text = NewSource.Y.ToString();
+                    newSource.zTextBox.Text = NewSource.Z.ToString();
+                }
+            }
+        }
+
         private void DCoordinatesGraphButtonClick(object sender, EventArgs e)
         {
+            newSource.Run();
             List<double> points = new List<double>();
+            button1_Click(sender, e);
+
+
+
+
+
             F function = Initialization(type);
             FindSatelliteInaccuracy(delta, minDelta, denominator,function, points, progressBar);
-            ChartsForm form = new ChartsForm();
+            string satSystem = glonassRadioButton.Checked ? "GLONASS" : "Storm";
+            SaveToExcel(points, type + satSystem + "Coord");
+            var form = new ChartsForm();
 
             form.Show();
 
             form.dtDifference.Series.Clear();
+
+            
+
             var series = new Series
             {
                     Name = "сам щит",
@@ -349,7 +548,7 @@ namespace ResearchModel
             form.dtDifference.Series.Add(series);
             for (int i = 0; i < points.Count; i++)
             {
-                form.dtDifference.Series[0].Points.AddXY(i*2, points[i]);
+                form.dtDifference.Series[0].Points.AddXY(i, points[i]);
             }
             form.Controls.Add(form.dtDifference);
             form.dtDifference.Show();
@@ -360,11 +559,24 @@ namespace ResearchModel
 
         private void DtGraphButton(object sender, EventArgs e)
         {
+            button1_Click(sender, e);
+
+            //newSource.Run();
             List<double> points = new List<double>();
             F function = Initialization(type);
-            FindDtInaccuracy(delta, minDelta, denominator, function, points, progressBar);
-            ChartsForm form = new ChartsForm();
+            if (type == FunctionType.ddSpace || type == FunctionType.ddEarth)
+                FindDwInaccuracy(delta, minDelta, denominator, function, points, progressBar);
+            else if (type == FunctionType.sumEarth || type == FunctionType.sumSpace)
+            {
+                FindSumInaccuracy(delta, minDelta, denominator, function, points, progressBar);
+            }
+            else
+                FindDtInaccuracy(delta, minDelta, denominator, function, points, progressBar);
 
+            string satSystem = glonassRadioButton.Checked ? "GLONASS" : "Storm";
+            SaveToExcel(points, type+ satSystem + "D");
+            ChartsForm form = new ChartsForm();
+            
             form.Show();
 
             form.dtDifference.Series.Clear();
@@ -379,7 +591,7 @@ namespace ResearchModel
             form.dtDifference.Series.Add(series);
             for (int i = 0; i < points.Count; i++)
             {
-                form.dtDifference.Series[0].Points.AddXY(i*2, points[i]);
+                form.dtDifference.Series[0].Points.AddXY(i, points[i]);
             }
             form.Controls.Add(form.dtDifference);
             form.dtDifference.Show();

@@ -63,12 +63,12 @@ namespace ResearchModel
                 case 2:
                     for (var j = 0; j < 3; j += 2)
                     {
-                        var x = allSatelliteStats[j / 2, i, 0];
-                        var y = allSatelliteStats[j / 2, i, 1];
-                        var z = allSatelliteStats[j / 2, i, 2];
-                        var vx = allSatelliteStats[j / 2, i, 3];
-                        var vy = allSatelliteStats[j / 2, i, 4];
-                        var vz = allSatelliteStats[j / 2, i, 5 ];
+                        var x = allSatelliteStats[j, i, 0];
+                        var y = allSatelliteStats[j, i, 1];
+                        var z = allSatelliteStats[j, i, 2];
+                        var vx = allSatelliteStats[j, i, 3];
+                        var vy = allSatelliteStats[j, i, 4];
+                        var vz = allSatelliteStats[j, i, 5 ];
                         Coordinate[j / 2, 0] = x;
                         Coordinate[j / 2, 1] = y;
                         Coordinate[j / 2, 2] = z;
@@ -82,12 +82,12 @@ namespace ResearchModel
                 case 3:
                     for (var j = 0; j < 5; j+=2)
                     {
-                        var x = allSatelliteStats[j / 2, i, 0];
-                        var y = allSatelliteStats[j / 2, i, 1];
-                        var z = allSatelliteStats[j / 2, i, 2];
-                        var vx = allSatelliteStats[j / 2, i, 3];
-                        var vy = allSatelliteStats[j / 2, i, 4];
-                        var vz = allSatelliteStats[j / 2, i, 5];
+                        var x = allSatelliteStats[j, i, 0];
+                        var y = allSatelliteStats[j, i, 1];
+                        var z = allSatelliteStats[j, i, 2];
+                        var vx = allSatelliteStats[j, i, 3];
+                        var vy = allSatelliteStats[j , i, 4];
+                        var vz = allSatelliteStats[j, i, 5];
                         Coordinate[j / 2, 0] = x;
                         Coordinate[j / 2, 1] = y;
                         Coordinate[j / 2, 2] = z;
