@@ -5,6 +5,36 @@ namespace ResearchModel
 {
     public partial class RadioStation : UserControl
     {
+        protected bool Equals(RadioStation other)
+        {
+            return Equals(components, other.components) && Equals(xTextBox, other.xTextBox) && Equals(yTextBox, other.yTextBox) && Equals(zTextBox, other.zTextBox) && Equals(nameLabel, other.nameLabel) && Equals(xLabel, other.xLabel) && Equals(yLabel, other.yLabel) && Equals(zLabel, other.zLabel) && Equals(coordinates, other.coordinates) && Equals(velocity, other.velocity) && Equals(frequency, other.frequency);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((RadioStation) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = new HashCode();
+            hashCode.Add(components);
+            hashCode.Add(xTextBox);
+            hashCode.Add(yTextBox);
+            hashCode.Add(zTextBox);
+            hashCode.Add(nameLabel);
+            hashCode.Add(xLabel);
+            hashCode.Add(yLabel);
+            hashCode.Add(zLabel);
+            hashCode.Add(coordinates);
+            hashCode.Add(velocity);
+            hashCode.Add(frequency);
+            return hashCode.ToHashCode();
+        }
+
         const double c = 300000000;
         const double w0 = 6000000000;
         public Label NameLabel
