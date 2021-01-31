@@ -151,12 +151,7 @@ namespace ResearchModel
             trueSource.yTextBox.Text = y.ToString();
             trueSource.zTextBox.Text = z.ToString();
             trueSource.Run();
-            ////if (newSource.xTextBox.Text == "")
-            //newSource.xTextBox.Text = (ProcessCoordinates.x - 2500).ToString();
-            ////if (newSource.yTextBox.Text == "")
-            //newSource.yTextBox.Text = (ProcessCoordinates.y + 5000).ToString();
-            ////if (newSource.zTextBox.Text == "")
-            //newSource.zTextBox.Text = (ProcessCoordinates.z - 1500).ToString();
+
             newSource.xTextBox.Text = (x-5000).ToString();
             newSource.yTextBox.Text = (y-5000).ToString();
             newSource.zTextBox.Text = (z-5000).ToString();
