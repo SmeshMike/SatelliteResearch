@@ -521,6 +521,12 @@ namespace ResearchModel
             List<double> firstResults = new List<double>();
             const double r = 6370000;
 
+            double backColor;
+            if (type == FunctionType.dmSpace)
+                backColor = 100000000000000000;
+            else
+                backColor = 0.000000000001;
+
             trueSource.X = r * Math.Sin(Math.PI * 0 / 180) * Math.Cos(Math.PI * 0 / 180);
             trueSource.Y = r * Math.Sin(Math.PI * 0 / 180) * Math.Cos(Math.PI * 0 / 180);
             trueSource.Z = r * Math.Cos(Math.PI * 0 / 180);
@@ -538,7 +544,7 @@ namespace ResearchModel
                     if((fi<=rightFi&&fi>=leftFi)&&(teta<=upperTeta&&teta>=bottomTeta))
                         firstResults.Add(t);
                     else
-                        firstResults.Add((double)255);
+                        firstResults.Add(backColor);
                 }
             }
 
