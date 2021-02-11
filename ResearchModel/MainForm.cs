@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using static ResearchModel.MathStuff;
@@ -508,6 +509,46 @@ namespace ResearchModel
                     newSource.zTextBox.Text = NewSource.Z.ToString();
                 }
             }
+        }
+
+        private void DrawMapButton_Click(object sender, EventArgs e)
+        {
+            Bitmap bMap = new Bitmap(2799, 1412);
+            // Initialize random number generator
+            Random rRand = new Random();
+            // Loop variables
+            int iX;
+            int iY;
+            byte iIntense;
+            var heatMapDrawer = new HeatMapDrawer();
+            var heatPoints = new List<HeatMapDrawer.HeatPoint>();
+
+
+            //for (int i = 0; i < 500; i++)
+            //{
+            //    // Pick random locations and intensity
+            //    iX = rRand.Next(0, 200);
+            //    iY = rRand.Next(0, 200);
+            //    iIntense = (byte)rRand.Next(0, 120);
+            //    // Add heat point to heat points list
+            //    heatPoints.Add(new HeatMapDrawer.HeatPoint(iX, iY, iIntense));
+            //}
+            // Add heat point to heat points list
+
+            for (int x = 0; x < 2799 ; x++)
+            {
+                for (int y =0; y < 1412; y++)
+                {
+
+                    iIntense = Convert.ToByte(12*x/ 2798);
+                    heatPoints.Add(new HeatMapDrawer.HeatPoint(x , y, iIntense));
+                }
+            }
+            // Call CreateIntensityMask, give it the memory bitmap, and store the result back in the memory bitmap
+            bMap = heatMapDrawer.CreateIntensityMask(bMap, heatPoints);
+            // Colorize the memory bitmap and assign it as the picture boxes image
+            bMap = heatMapDrawer.Colorize(bMap, 255);
+            bMap.Save("../../../../Heat.jpg", ImageFormat.Jpeg);
         }
 
         private void DCoordinatesGraphButtonClick(object sender, EventArgs e)

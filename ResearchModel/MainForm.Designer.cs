@@ -59,6 +59,7 @@
             this.systemGroupBox = new System.Windows.Forms.GroupBox();
             this.errorTextBox = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.DrawMapButton = new System.Windows.Forms.Button();
             this.methodGroupBox.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.systemGroupBox.SuspendLayout();
@@ -420,11 +421,22 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // DrawMapButton
+            // 
+            this.DrawMapButton.Location = new System.Drawing.Point(1244, 726);
+            this.DrawMapButton.Name = "DrawMapButton";
+            this.DrawMapButton.Size = new System.Drawing.Size(75, 23);
+            this.DrawMapButton.TabIndex = 17;
+            this.DrawMapButton.Text = "Draw Map";
+            this.DrawMapButton.UseVisualStyleBackColor = true;
+            this.DrawMapButton.Click += new System.EventHandler(this.DrawMapButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1584, 758);
+            this.Controls.Add(this.DrawMapButton);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.errorTextBox);
             this.Controls.Add(this.systemGroupBox);
@@ -497,5 +509,6 @@
         private System.Windows.Forms.GroupBox systemGroupBox;
         private System.Windows.Forms.TextBox errorTextBox;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button DrawMapButton;
     }
 }

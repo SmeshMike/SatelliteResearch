@@ -11,7 +11,7 @@ namespace ResearchModel
     {
         private static double[,] _coef;
         public static double x, y, z;
-        public static double X {get Coordinate[] }
+        //public static double X {get Coordinate[]; }
         private static double[,,] allSatelliteStats;
         public static double[,] Coordinate { get; set; }
 
