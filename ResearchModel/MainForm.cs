@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using NPOI.SS.Formula.Functions;
 using static ResearchModel.MathStuff;
 using static ResearchModel.ProcessCoordinates;
 using static ResearchModel.Extensions;
@@ -513,42 +516,89 @@ namespace ResearchModel
 
         private void DrawMapButton_Click(object sender, EventArgs e)
         {
-            Bitmap bMap = new Bitmap(2799, 1412);
-            // Initialize random number generator
-            Random rRand = new Random();
-            // Loop variables
-            int iX;
-            int iY;
+
+            Bitmap startMap = new Bitmap("../../../../WorldMap.jpg");
+            Bitmap heat = new Bitmap(startMap.Width, startMap.Height, PixelFormat.Format32bppArgb);
             byte iIntense;
-            var heatMapDrawer = new HeatMapDrawer();
-            var heatPoints = new List<HeatMapDrawer.HeatPoint>();
+            RadioStation rs = new RadioStation();
+            List<double> firstResults = new List<double>();
+            double r = 6370000;
 
+            trueSource.X = r * Math.Sin(Math.PI * 0 / 180) * Math.Cos(Math.PI * 0 / 180);
+            trueSource.Y = r * Math.Sin(Math.PI * 0 / 180) * Math.Cos(Math.PI * 0 / 180);
+            trueSource.Z = r * Math.Cos(Math.PI * 0 / 180);
+            F function = Initialization(type);
 
-            //for (int i = 0; i < 500; i++)
-            //{
-            //    // Pick random locations and intensity
-            //    iX = rRand.Next(0, 200);
-            //    iY = rRand.Next(0, 200);
-            //    iIntense = (byte)rRand.Next(0, 120);
-            //    // Add heat point to heat points list
-            //    heatPoints.Add(new HeatMapDrawer.HeatPoint(iX, iY, iIntense));
-            //}
-            // Add heat point to heat points list
-
-            for (int x = 0; x < 2799 ; x++)
+            for (double fi = -180; fi <= 180 ; fi+=(double)360/3508)
             {
-                for (int y =0; y < 1412; y++)
+                for (double teta = 90; teta >= -90; teta -= (double)180 / 2480)
                 {
+                    rs.X = r * Math.Sin(Math.PI * teta / 180) * Math.Cos(Math.PI * fi / 180);
+                    rs.Y = r * Math.Sin(Math.PI * fi / 180) * Math.Cos(Math.PI * teta / 180);
+                    rs.Z = r * Math.Cos(Math.PI * teta / 180);
 
-                    iIntense = Convert.ToByte(12*x/ 2798);
-                    heatPoints.Add(new HeatMapDrawer.HeatPoint(x , y, iIntense));
+                    var t = function(rs);
+                    firstResults.Add(t);
                 }
             }
-            // Call CreateIntensityMask, give it the memory bitmap, and store the result back in the memory bitmap
-            bMap = heatMapDrawer.CreateIntensityMask(bMap, heatPoints);
-            // Colorize the memory bitmap and assign it as the picture boxes image
-            bMap = heatMapDrawer.Colorize(bMap, 255);
-            bMap.Save("../../../../Heat.jpg", ImageFormat.Jpeg);
+            var max = firstResults.Max();
+            var min = firstResults.Min();
+            var i = 0;
+            Color color = Color.White;
+            for (int x = 0; x < 3508; x ++)
+            {
+                for (int y = 0; y < 2480; y++)
+                {
+                    iIntense = Convert.ToByte(250 * Math.Tanh(500*firstResults[i] / max));
+
+                    color = Color.FromArgb(255, Convert.ToByte(255 - iIntense), Convert.ToByte(255 - iIntense), Convert.ToByte(255 - iIntense));
+                    // Render current heat point on draw surface
+                    
+                    if(min == firstResults[i])
+                        color =Color.Green;
+
+                    heat.SetPixel(x, y, color);
+                    i++;
+                }
+            }
+
+
+
+            // for the matrix the range is 0.0 - 1.0
+            float alphaNorm = (float)180 / 255.0F;
+            using (Bitmap image1 = startMap)
+            {
+                using (Bitmap image2 = heat)
+                {
+                    // just change the alpha
+                    ColorMatrix matrix = new ColorMatrix(new float[][]{
+                            new float[] {1F, 0, 0, 0, 0},
+                            new float[] {0, 1F, 0, 0, 0},
+                            new float[] {0, 0, 1F, 0, 0},
+                            new float[] {0, 0, 0, alphaNorm, 0},
+                            new float[] {0, 0, 0, 0, 1F}});
+
+                    ImageAttributes imageAttributes = new ImageAttributes();
+                    imageAttributes.SetColorMatrix(matrix);
+
+                    using (Graphics g = Graphics.FromImage(image1))
+                    {
+                        g.CompositingMode = CompositingMode.SourceOver;
+                        g.CompositingQuality = CompositingQuality.HighQuality;
+
+                        g.DrawImage(image2,
+                                new Rectangle(0, 0, image1.Width, image1.Height),
+                                0,
+                                0,
+                                image2.Width,
+                                image2.Height,
+                                GraphicsUnit.Pixel,
+                                imageAttributes);
+                    }
+                }
+                image1.Save("../../../../Heat.jpg", ImageFormat.Jpeg);
+            }
+            
         }
 
         private void DCoordinatesGraphButtonClick(object sender, EventArgs e)

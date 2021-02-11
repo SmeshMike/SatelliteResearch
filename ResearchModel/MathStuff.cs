@@ -98,8 +98,12 @@ namespace ResearchModel
         }
 
 
-        private static double DdSpaceF(RadioStation source)
+        public static double DdSpaceF(RadioStation source)
         {
+            var v1 = V(1, source);
+            var v2 = V(2, source);
+            var v3 = V(3, source);
+            var v4 = V(4, source);
             var tmp1 = Math.Pow((V(1, source) - V(2, source)) / (c + V(1, source)) - Dw12 / W1, 2);
             var tmp2 = Math.Pow((V(1, source) - V(3, source)) / (c + V(1, source)) - Dw13 / W1, 2);
             var tmp3 = Math.Pow((V(1, source) - V(4, source)) / (c + V(1, source)) - Dw14 / W1, 2);
