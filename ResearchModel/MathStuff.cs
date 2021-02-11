@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
-using SatelliteResearch;
-using static ResearchModel.Extensions;
 
 namespace ResearchModel
 {
     public static class MathStuff
     {
-
         public enum FunctionType : byte
         {
             dmSpace =0,
@@ -100,17 +95,10 @@ namespace ResearchModel
 
         public static double DdSpaceF(RadioStation source)
         {
-            var v1 = V(1, source);
-            var v2 = V(2, source);
-            var v3 = V(3, source);
-            var v4 = V(4, source);
             var tmp1 = Math.Pow((V(1, source) - V(2, source)) / (c + V(1, source)) - Dw12 / W1, 2);
             var tmp2 = Math.Pow((V(1, source) - V(3, source)) / (c + V(1, source)) - Dw13 / W1, 2);
             var tmp3 = Math.Pow((V(1, source) - V(4, source)) / (c + V(1, source)) - Dw14 / W1, 2);
-           // var tmp4 = Math.Pow((V(2, source) - V(3, source)) / (c + V(2, source)) - Dw23 / W2, 2);
-            //var tmp5 = Math.Pow((V(2, source) - V(3, source)) / (c + V(2, source)) - Dw24 / W2, 2);
-            //var tmp6 = Math.Pow((V(3, source) - V(4, source)) / (c + V(3, source)) - Dw34 / W3, 2);
-            return tmp1 + tmp2 + tmp3;// + tmp4 + tmp5 + tmp6;  
+            return tmp1 + tmp2 + tmp3;
         }
 
         private static double SumSpaceF(RadioStation source)
@@ -287,12 +275,7 @@ namespace ResearchModel
 
         public static bool HookJeeves(double delta, double minDelta, double denominator, F function )
         {
-            //return ExecuteWithTimeLimit(TimeSpan.FromSeconds(30), () =>
-            //        {
 
-
-
-            
             Array.Copy(NewSource.coordinates, tmpSource.coordinates, 3);
 
             while (delta >= minDelta)
@@ -319,8 +302,6 @@ namespace ResearchModel
             }
 
             return true;
-            //}
-            //);
         }
 
         public static void FindDtInaccuracy(double delta, double minDelta, double denominator,F function, List<double> inaccuracyArr, ProgressBar pb)

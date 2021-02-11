@@ -326,11 +326,6 @@ namespace ResearchModel
             RefreshButtonClick(sender, e);
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
             if (stormRadioButton.Checked)
@@ -346,9 +341,7 @@ namespace ResearchModel
                     searcherStation1.xTextBox.Text = SearcherStation1.X.ToString();
                     searcherStation1.yTextBox.Text = SearcherStation1.Y.ToString();
                     searcherStation1.zTextBox.Text = SearcherStation1.Z.ToString();
-                    
-
-
+  
 
 
                     SearcherStation2.X = -2817.404310 * 1000;
@@ -516,13 +509,17 @@ namespace ResearchModel
 
         private void DrawMapButton_Click(object sender, EventArgs e)
         {
-
+            var leftFi = Convert.ToDouble(leftFiTextBox.Text);
+            var rightFi = Convert.ToDouble(rightFiTextBox.Text);
+            var upperTeta = Convert.ToDouble(upperTetaTextBox.Text);
+            var bottomTeta = Convert.ToDouble(bottomTetaTextBox.Text);
+            var brightness = Convert.ToInt32(brightnessCoefTextBox.Text);
             Bitmap startMap = new Bitmap("../../../../WorldMap.jpg");
             Bitmap heat = new Bitmap(startMap.Width, startMap.Height, PixelFormat.Format32bppArgb);
             byte iIntense;
             RadioStation rs = new RadioStation();
             List<double> firstResults = new List<double>();
-            double r = 6370000;
+            const double r = 6370000;
 
             trueSource.X = r * Math.Sin(Math.PI * 0 / 180) * Math.Cos(Math.PI * 0 / 180);
             trueSource.Y = r * Math.Sin(Math.PI * 0 / 180) * Math.Cos(Math.PI * 0 / 180);
@@ -531,37 +528,43 @@ namespace ResearchModel
 
             for (double fi = -180; fi <= 180 ; fi+=(double)360/3508)
             {
-                for (double teta = 90; teta >= -90; teta -= (double)180 / 2480)
+                for (double teta = 90; teta >= -90; teta -= (double)180/2480)
                 {
                     rs.X = r * Math.Sin(Math.PI * teta / 180) * Math.Cos(Math.PI * fi / 180);
                     rs.Y = r * Math.Sin(Math.PI * fi / 180) * Math.Cos(Math.PI * teta / 180);
                     rs.Z = r * Math.Cos(Math.PI * teta / 180);
-
+                    
                     var t = function(rs);
-                    firstResults.Add(t);
+                    if((fi<=rightFi&&fi>=leftFi)&&(teta<=upperTeta&&teta>=bottomTeta))
+                        firstResults.Add(t);
+                    else
+                        firstResults.Add((double)255);
                 }
             }
+
             var max = firstResults.Max();
             var min = firstResults.Min();
             var i = 0;
-            Color color = Color.White;
+            int tmpX = 0, tmpY = 0;
+
             for (int x = 0; x < 3508; x ++)
             {
                 for (int y = 0; y < 2480; y++)
                 {
-                    iIntense = Convert.ToByte(250 * Math.Tanh(500*firstResults[i] / max));
-
-                    color = Color.FromArgb(255, Convert.ToByte(255 - iIntense), Convert.ToByte(255 - iIntense), Convert.ToByte(255 - iIntense));
-                    // Render current heat point on draw surface
-                    
-                    if(min == firstResults[i])
-                        color =Color.Green;
+                    iIntense = Convert.ToByte(250 * Math.Tanh(brightness * firstResults[i] / max));
+                    var color = Color.FromArgb(255, Convert.ToByte(255 - iIntense), Convert.ToByte(255 - iIntense), Convert.ToByte(255 - iIntense));
+                    if (min == firstResults[i])
+                    {
+                        tmpX = x;
+                        tmpY = y;
+                    }
 
                     heat.SetPixel(x, y, color);
                     i++;
                 }
             }
 
+            //RunButtonClick(sender, e);
 
 
             // for the matrix the range is 0.0 - 1.0
@@ -571,31 +574,52 @@ namespace ResearchModel
                 using (Bitmap image2 = heat)
                 {
                     // just change the alpha
-                    ColorMatrix matrix = new ColorMatrix(new float[][]{
-                            new float[] {1F, 0, 0, 0, 0},
-                            new float[] {0, 1F, 0, 0, 0},
-                            new float[] {0, 0, 1F, 0, 0},
-                            new float[] {0, 0, 0, alphaNorm, 0},
-                            new float[] {0, 0, 0, 0, 1F}});
+                    ColorMatrix matrix = new ColorMatrix(new[]
+                    {
+                            new[] {1F, 0, 0, 0, 0},
+                            new[] {0, 1F, 0, 0, 0},
+                            new[] {0, 0, 1F, 0, 0},
+                            new[] {0, 0, 0, alphaNorm, 0},
+                            new[] {0, 0, 0, 0, 1F}});
 
                     ImageAttributes imageAttributes = new ImageAttributes();
                     imageAttributes.SetColorMatrix(matrix);
 
-                    using (Graphics g = Graphics.FromImage(image1))
-                    {
-                        g.CompositingMode = CompositingMode.SourceOver;
-                        g.CompositingQuality = CompositingQuality.HighQuality;
+                    using Graphics g = Graphics.FromImage(image1);
+                    g.CompositingMode = CompositingMode.SourceOver;
+                    g.CompositingQuality = CompositingQuality.HighQuality;
 
-                        g.DrawImage(image2,
-                                new Rectangle(0, 0, image1.Width, image1.Height),
-                                0,
-                                0,
-                                image2.Width,
-                                image2.Height,
-                                GraphicsUnit.Pixel,
-                                imageAttributes);
-                    }
+                    g.DrawImage(image2,
+                        new Rectangle(0, 0, image1.Width, image1.Height),
+                        0,
+                        0,
+                        image2.Width,
+                        image2.Height,
+                        GraphicsUnit.Pixel,
+                        imageAttributes);
                 }
+                image1.SetPixel(3508/2,2480/2,Color.Red);
+                image1.SetPixel(3508 / 2 - 1, 2480 / 2, Color.Red);
+                image1.SetPixel(3508 / 2+1, 2480 / 2, Color.Red);
+                image1.SetPixel(3508 / 2, 2480 / 2 + 1, Color.Red);
+                image1.SetPixel(3508 / 2, 2480 / 2 - 1, Color.Red);
+                image1.SetPixel(3508 / 2 - 2, 2480 / 2, Color.Red);
+                image1.SetPixel(3508 / 2 + 2, 2480 / 2, Color.Red);
+                image1.SetPixel(3508 / 2, 2480 / 2 + 2, Color.Red);
+                image1.SetPixel(3508 / 2, 2480 / 2 - 2, Color.Red);
+                image1.SetPixel(3508 / 2 - 2, 2480 / 2+1, Color.Red);
+                image1.SetPixel(3508 / 2 + 2, 2480 / 2-1, Color.Red);
+                image1.SetPixel(3508 / 2+1, 2480 / 2 + 2, Color.Red);
+                image1.SetPixel(3508 / 2-1, 2480 / 2 - 2, Color.Red);
+                image1.SetPixel(tmpX, tmpY, Color.Green);
+                if(tmpX>0)
+                    image1.SetPixel(tmpX-1, tmpY, Color.Green);
+                if (tmpX < 3508)
+                    image1.SetPixel(tmpX+1, tmpY, Color.Green);
+                if (tmpY < 2480)
+                    image1.SetPixel(tmpX, tmpY+1, Color.Green);
+                if (tmpY > 0)
+                    image1.SetPixel(tmpX, tmpY-1, Color.Green);
                 image1.Save("../../../../Heat.jpg", ImageFormat.Jpeg);
             }
             
