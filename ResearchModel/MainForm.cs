@@ -157,6 +157,8 @@ namespace ResearchModel
             trueSource.zTextBox.Text = z.ToString();
             trueSource.Run();
 
+            ProcessCoordinates();
+            
             newSource.xTextBox.Text = (x-5000).ToString();
             newSource.yTextBox.Text = (y-5000).ToString();
             newSource.zTextBox.Text = (z-5000).ToString();
@@ -261,14 +263,14 @@ namespace ResearchModel
 
         private void euclideanRadioButton_CheckedChanged(object sender, EventArgs e)
         {
-            SphericalCoordinaesGroupBox.Enabled = false;
+            trueSourceGroupBox.Enabled = false;
             trueSource.Enabled = true;
             ProcessCoordinates();
         }
 
         private void sphericalRadioButton_CheckedChanged(object sender, EventArgs e)
         {
-            SphericalCoordinaesGroupBox.Enabled = true;
+            trueSourceGroupBox.Enabled = true;
             trueSource.Enabled = false;
             ProcessCoordinates();
         }
@@ -297,7 +299,7 @@ namespace ResearchModel
 
             stepTextBox.Text = "1024";
             minStepTextBox.Text = "0,015625";
-            denominatorTextBox.Text = "4";
+            denominatorTextBox.Text = "2";
 
             RefreshButtonClick(null, EventArgs.Empty);
         }
@@ -334,11 +336,12 @@ namespace ResearchModel
                 RefreshButtonClick(null, EventArgs.Empty);
             }
 
+            ProcessCoordinates();
             newSource.xTextBox.Text = Convert.ToDouble(newSource.X).ToString();
             newSource.yTextBox.Text = Convert.ToDouble(newSource.Y).ToString();
             newSource.zTextBox.Text = Convert.ToDouble(newSource.Z).ToString();
-            longtitudeTextBox.Text = Math.Atan(newSource.Y / newSource.X).ToString();
-            latitudeTextBox.Text = Math.Atan(Math.Sqrt(newSource.Y* newSource.Y + newSource.X* newSource.X)/newSource.Z).ToString();
+            longtitudeNewTextBox.Text = newSource.X == 0 ? (newSource.Y > 0 ? 90 : -90).ToString() :( Math.Atan(newSource.Y / newSource.X) / Math.PI * 180).ToString();
+            latitudeNewTextBox.Text = newSource.Y * newSource.Y + newSource.X * newSource.X == 0 ? (newSource.Z > 0 ? 90 : -90).ToString() :(Math.Atan(newSource.Z / Math.Sqrt(newSource.Y * newSource.Y + newSource.X * newSource.X)) / Math.PI * 180).ToString();
             var time = sp.Elapsed;
             timeLabel.Text = $"{time.Minutes:00}:{time.Seconds:00}.{time.Milliseconds:00}";
             errorLabel.Text = Convert.ToInt32(GetSourceDifference()).ToString();
@@ -364,9 +367,6 @@ namespace ResearchModel
                 backColor = 100000000000000000;
             else
                 backColor = 0.000000000001;
-            
-            
-            ProcessCoordinates();
 
             F function = Initialization(type);
 
@@ -374,8 +374,8 @@ namespace ResearchModel
             {
                 for (double teta = 90; teta >= -90; teta -= (double)180/2480)
                 {
-                    rs.X = r * Math.Sin(Math.PI * teta / 180) * Math.Cos(Math.PI * fi / 180);
-                    rs.Y = r * Math.Sin(Math.PI * fi / 180) * Math.Sin(Math.PI * teta / 180);
+                    rs.X = r * Math.Cos(Math.PI * teta / 180) * Math.Cos(Math.PI * fi / 180);
+                    rs.Y = r * Math.Cos(Math.PI * teta / 180) * Math.Sin(Math.PI * fi / 180);
                     rs.Z = r * Math.Sin(Math.PI * teta / 180);
 
                     var t = function(rs);
@@ -409,8 +409,8 @@ namespace ResearchModel
             }
 
 
-            var longtitude = Convert.ToDouble(longtitudeTextBox.Text);
-            var latitude = Convert.ToDouble(latitudeTextBox.Text);
+            var longtitude = Convert.ToDouble(longtitudeTrueTextBox.Text);
+            var latitude = Convert.ToDouble(latitudeTrueTextBox.Text);
             var lX = Convert.ToInt32((double)(3508 / (double)360) * longtitude + 3508 / 2);
             var lY = Convert.ToInt32(2480 / 2 - (double)(2480 / (double)180) * latitude);
 
@@ -707,6 +707,11 @@ namespace ResearchModel
             form.dtDifference.Show();
         }
 
+        private void processCoordButton_Click(object sender, EventArgs e)
+        {
+            ProcessCoordinates();
+        }
+
         private void DtGraphButton(object sender, EventArgs e)
         {
             SumMethodsRefreshClick(sender, e);
@@ -752,18 +757,24 @@ namespace ResearchModel
                 trueSource.X = Convert.ToDouble(trueSource.xTextBox.Text);
                 trueSource.Y = Convert.ToDouble(trueSource.yTextBox.Text);
                 trueSource.Z = Convert.ToDouble(trueSource.zTextBox.Text);
-                longtitudeTextBox.Text = trueSource.X == 0 ? 0.ToString(): Math.Atan(trueSource.Y / trueSource.X).ToString();
-                latitudeTextBox.Text =  trueSource.Z== 0 ? 0.ToString() : Math.Atan(Math.Sqrt(trueSource.Y * trueSource.Y + trueSource.X * trueSource.X) / trueSource.Z).ToString();
+                longtitudeTrueTextBox.Text = trueSource.X == 0 ? (trueSource.Y > 0 ? 90 : -90).ToString(): (Math.Atan(trueSource.Y / trueSource.X)/Math.PI*180).ToString();
+                latitudeTrueTextBox.Text = trueSource.Y * trueSource.Y + trueSource.X * trueSource.X == 0 ? (trueSource.Z > 0 ? 90 : -90).ToString() : (Math.Atan(trueSource.Z/Math.Sqrt(trueSource.Y * trueSource.Y + trueSource.X * trueSource.X)) / Math.PI * 180).ToString();
+                newSource.xTextBox.Text = (x - 5000).ToString();
+                newSource.yTextBox.Text = (y - 5000).ToString();
+                newSource.zTextBox.Text = (z - 5000).ToString();
             }
             else if (sphericalRadioButton.Checked)
             {
                 double r = 6370000;
-                trueSource.X = r * Math.Sin(Math.PI * Convert.ToDouble(latitudeTextBox.Text) / 180) * Math.Cos(Math.PI * Convert.ToDouble(longtitudeTextBox.Text) / 180);
-                trueSource.Y = r * Math.Sin(Math.PI * Convert.ToDouble(latitudeTextBox.Text) / 180) * Math.Sin(Math.PI * Convert.ToDouble(longtitudeTextBox.Text) / 180);
-                trueSource.Z = r * Math.Sin(Math.PI * Convert.ToDouble(latitudeTextBox.Text) / 180);
+                trueSource.X = r * Math.Cos(Math.PI * Convert.ToDouble(latitudeTrueTextBox.Text) / 180) * Math.Cos(Math.PI * Convert.ToDouble(longtitudeTrueTextBox.Text) / 180);
+                trueSource.Y = r * Math.Cos(Math.PI * Convert.ToDouble(latitudeTrueTextBox.Text) / 180) * Math.Sin(Math.PI * Convert.ToDouble(longtitudeTrueTextBox.Text) / 180);
+                trueSource.Z = r * Math.Sin(Math.PI * Convert.ToDouble(latitudeTrueTextBox.Text) / 180);
                 trueSource.xTextBox.Text = trueSource.X.ToString();
                 trueSource.yTextBox.Text = trueSource.Y.ToString();
                 trueSource.zTextBox.Text = trueSource.Z.ToString();
+                newSource.xTextBox.Text = (trueSource.X - 5000).ToString();
+                newSource.yTextBox.Text = (trueSource.Y - 5000).ToString();
+                newSource.zTextBox.Text = (trueSource.Z - 5000).ToString();
             }
 
         }

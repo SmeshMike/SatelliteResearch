@@ -127,7 +127,7 @@ namespace ResearchModel
         {
             double tmp = 6370000;
             Random rand = new Random();
-            z = rand.NextDouble()* tmp - 4582194;
+            z = rand.NextDouble() ;
             tmp = Math.Sqrt(tmp * tmp - z * z);
             y = rand.NextDouble()* tmp;
             x = Math.Sqrt(tmp * tmp - y * y);

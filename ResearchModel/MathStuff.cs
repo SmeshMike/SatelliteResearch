@@ -58,7 +58,13 @@ namespace ResearchModel
 
         public static double GetSourceDifference()
         {
-            var tmp = Math.Sqrt(Math.Pow(NewSource.X - TrueSource.X, 2) + Math.Pow(NewSource.Y - TrueSource.Y, 2) + Math.Pow(NewSource.Z - TrueSource.Z, 2));
+            var longtitudeTrue = TrueSource.X == 0 ? (TrueSource.Y > 0 ? 90 : -90) : (Math.Atan(TrueSource.Y / TrueSource.X) / Math.PI * 180);
+            var latitudeTrue = TrueSource.Y * TrueSource.Y + TrueSource.X * TrueSource.X == 0 ? (TrueSource.Z > 0 ? 90 : -90) : (Math.Atan(TrueSource.Z / Math.Sqrt(TrueSource.Y * TrueSource.Y + TrueSource.X * TrueSource.X)) / Math.PI * 180);
+            var longtitudeNew = NewSource.X == 0 ? (NewSource.Y > 0 ? 90 : -90) : (Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180);
+            var latitudeNew= NewSource.Y * NewSource.Y + NewSource.X * NewSource.X == 0 ? (NewSource.Z > 0 ? 90 : -90) : (Math.Atan(NewSource.Z / Math.Sqrt(NewSource.Y * NewSource.Y + NewSource.X * NewSource.X)) / Math.PI * 180);
+            var d = Math.Acos((TrueSource.X*NewSource.X+ TrueSource.Y * NewSource.Y+ TrueSource.Z * NewSource.Z)/(Math.Sqrt(TrueSource.X* TrueSource.X + TrueSource.Y * TrueSource.Y+ TrueSource.Z * TrueSource.Z)* Math.Sqrt(NewSource.X * NewSource.X + NewSource.Y * NewSource.Y + NewSource.Z * NewSource.Z)));
+            var tmp = d * 6370000;
+            //var tmp = Math.Sqrt(Math.Pow(NewSource.X - TrueSource.X, 2) + Math.Pow(NewSource.Y - TrueSource.Y, 2) + Math.Pow(NewSource.Z - TrueSource.Z, 2));
             return tmp;
         }
 
