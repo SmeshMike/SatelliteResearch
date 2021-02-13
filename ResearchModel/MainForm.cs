@@ -28,6 +28,7 @@ namespace ResearchModel
 
         }
 
+        #region RefreshButtonClick
         private void RefreshButtonClick(object sender, EventArgs e)
         {
             newSource.xTextBox.Text = "0";
@@ -160,6 +161,8 @@ namespace ResearchModel
             newSource.yTextBox.Text = (y-5000).ToString();
             newSource.zTextBox.Text = (z-5000).ToString();
         }
+        #endregion
+
         private void ddRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             if (earthRadioButton.Checked && ddRadioButton.Checked)
@@ -251,6 +254,24 @@ namespace ResearchModel
                 type = FunctionType.sumEarth;
             }
         }
+        private void glonassRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            RefreshButtonClick(sender, e);
+        }
+
+        private void euclideanRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            SphericalCoordinaesGroupBox.Enabled = false;
+            trueSource.Enabled = true;
+            ProcessCoordinates();
+        }
+
+        private void sphericalRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            SphericalCoordinaesGroupBox.Enabled = true;
+            trueSource.Enabled = false;
+            ProcessCoordinates();
+        }
 
         public MainForm()
         {
@@ -316,17 +337,161 @@ namespace ResearchModel
             newSource.xTextBox.Text = Convert.ToDouble(newSource.X).ToString();
             newSource.yTextBox.Text = Convert.ToDouble(newSource.Y).ToString();
             newSource.zTextBox.Text = Convert.ToDouble(newSource.Z).ToString();
+            longtitudeTextBox.Text = Math.Atan(newSource.Y / newSource.X).ToString();
+            latitudeTextBox.Text = Math.Atan(Math.Sqrt(newSource.Y* newSource.Y + newSource.X* newSource.X)/newSource.Z).ToString();
             var time = sp.Elapsed;
             timeLabel.Text = $"{time.Minutes:00}:{time.Seconds:00}.{time.Milliseconds:00}";
             errorLabel.Text = Convert.ToInt32(GetSourceDifference()).ToString();
         }
 
-        private void glonassRadioButton_CheckedChanged(object sender, EventArgs e)
+        
+        private void DrawMapButton_Click(object sender, EventArgs e)
         {
-            RefreshButtonClick(sender, e);
+            var leftFi = Convert.ToDouble(leftFiTextBox.Text);
+            var rightFi = Convert.ToDouble(rightFiTextBox.Text);
+            var upperTeta = Convert.ToDouble(upperTetaTextBox.Text);
+            var bottomTeta = Convert.ToDouble(bottomTetaTextBox.Text);
+            var brightness = Convert.ToInt32(brightnessCoefTextBox.Text);
+            Bitmap startMap = new Bitmap("../../../../WorldMap.jpg");
+            Bitmap heat = new Bitmap(startMap.Width, startMap.Height, PixelFormat.Format32bppArgb);
+            byte iIntense;
+            RadioStation rs = new RadioStation();
+            List<double> firstResults = new List<double>();
+            const double r = 6370000;
+
+            double backColor;
+            if (type == FunctionType.dmSpace)
+                backColor = 100000000000000000;
+            else
+                backColor = 0.000000000001;
+            
+            
+            ProcessCoordinates();
+
+            F function = Initialization(type);
+
+            for (double fi = -180; fi <= 180 ; fi+=(double)360/3508)
+            {
+                for (double teta = 90; teta >= -90; teta -= (double)180/2480)
+                {
+                    rs.X = r * Math.Sin(Math.PI * teta / 180) * Math.Cos(Math.PI * fi / 180);
+                    rs.Y = r * Math.Sin(Math.PI * fi / 180) * Math.Sin(Math.PI * teta / 180);
+                    rs.Z = r * Math.Sin(Math.PI * teta / 180);
+
+                    var t = function(rs);
+                    if((fi<=rightFi&&fi>=leftFi)&&(teta<=upperTeta&&teta>=bottomTeta))
+                        firstResults.Add(t);
+                    else
+                        firstResults.Add(backColor);
+                }
+            }
+
+            var max = firstResults.Max();
+            var min = firstResults.Min();
+            var i = 0;
+            int tmpX = 0, tmpY = 0;
+
+            for (int x = 0; x < 3508; x ++)
+            {
+                for (int y = 0; y < 2480; y++)
+                {
+                    iIntense = Convert.ToByte(250 * Math.Tanh(brightness * firstResults[i] / max));
+                    var color = Color.FromArgb(255, Convert.ToByte(255 - iIntense), Convert.ToByte(255 - iIntense), Convert.ToByte(255 - iIntense));
+                    if (min == firstResults[i])
+                    {
+                        tmpX = x;
+                        tmpY = y;
+                    }
+
+                    heat.SetPixel(x, y, color);
+                    i++;
+                }
+            }
+
+
+            var longtitude = Convert.ToDouble(longtitudeTextBox.Text);
+            var latitude = Convert.ToDouble(latitudeTextBox.Text);
+            var lX = Convert.ToInt32((double)(3508 / (double)360) * longtitude + 3508 / 2);
+            var lY = Convert.ToInt32(2480 / 2 - (double)(2480 / (double)180) * latitude);
+
+
+
+
+            // for the matrix the range is 0.0 - 1.0
+            float alphaNorm = (float)180 / 255.0F;
+            using (Bitmap image1 = startMap)
+            {
+                using (Bitmap image2 = heat)
+                {
+                    // just change the alpha
+                    ColorMatrix matrix = new ColorMatrix(new[]
+                    {
+                            new[] {1F, 0, 0, 0, 0},
+                            new[] {0, 1F, 0, 0, 0},
+                            new[] {0, 0, 1F, 0, 0},
+                            new[] {0, 0, 0, alphaNorm, 0},
+                            new[] {0, 0, 0, 0, 1F}});
+
+                    ImageAttributes imageAttributes = new ImageAttributes();
+                    imageAttributes.SetColorMatrix(matrix);
+
+                    using Graphics g = Graphics.FromImage(image1);
+                    g.CompositingMode = CompositingMode.SourceOver;
+                    g.CompositingQuality = CompositingQuality.HighQuality;
+
+                    g.DrawImage(image2,
+                        new Rectangle(0, 0, image1.Width, image1.Height),
+                        0,
+                        0,
+                        image2.Width,
+                        image2.Height,
+                        GraphicsUnit.Pixel,
+                        imageAttributes);
+                }
+
+                image1.SetPixel(lX, lY, Color.Red);
+                if (lX > 0)
+                    image1.SetPixel(lX - 1, lY, Color.Red);
+                if(lX < 3507)
+                    image1.SetPixel(lX +1, lY, Color.Red);
+                if (lY < 2479)
+                    image1.SetPixel(lX, lY + 1, Color.Red);
+                if (lY > 0)
+                    image1.SetPixel(lX, lY - 1, Color.Red);
+                if (lX > 1)
+                    image1.SetPixel(lX- 2, lY, Color.Red);
+                if (lY < 3506)
+                    image1.SetPixel(lX + 2, lY, Color.Red);
+                if (lY < 2478)
+                    image1.SetPixel(lX, lY + 2, Color.Red);
+                if (lY > 1)
+                    image1.SetPixel(lX, lY - 2, Color.Red);
+                if (lX > 1 && lY < 2479)
+                    image1.SetPixel(lX - 2, lY+1, Color.Red);
+                if (lY > 0 && lX < 3506)
+                    image1.SetPixel(lX+ 2, lY-1, Color.Red);
+                if (lY < 2478 && lX < 3507)
+                    image1.SetPixel(lX+1, lY+ 2, Color.Red);
+                if (lY > 1 && lX > 0)
+                    image1.SetPixel(lX-1, lY - 2, Color.Red);
+
+                image1.SetPixel(tmpX, tmpY, Color.Green);
+
+                if(tmpX>0)
+                    image1.SetPixel(tmpX-1, tmpY, Color.Green);
+                if (tmpX < 3507)
+                    image1.SetPixel(tmpX+1, tmpY, Color.Green);
+                if (tmpY < 2479)
+                    image1.SetPixel(tmpX, tmpY+1, Color.Green);
+                if (tmpY > 0)
+                    image1.SetPixel(tmpX, tmpY-1, Color.Green);
+                image1.Save("../../../../Heat.jpg", ImageFormat.Jpeg);
+            }
+            
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        #region SumMethodsRefreshClick
+        private void SumMethodsRefreshClick(object sender, EventArgs e)
         {
             if (stormRadioButton.Checked)
             {
@@ -341,7 +506,7 @@ namespace ResearchModel
                     searcherStation1.xTextBox.Text = SearcherStation1.X.ToString();
                     searcherStation1.yTextBox.Text = SearcherStation1.Y.ToString();
                     searcherStation1.zTextBox.Text = SearcherStation1.Z.ToString();
-  
+
 
 
                     SearcherStation2.X = -2817.404310 * 1000;
@@ -354,7 +519,7 @@ namespace ResearchModel
                     searcherStation2.xTextBox.Text = SearcherStation2.X.ToString();
                     searcherStation2.yTextBox.Text = SearcherStation2.Y.ToString();
                     searcherStation2.zTextBox.Text = SearcherStation2.Z.ToString();
-                    
+
                     TrueSource.X = 1986426.176356317;
                     TrueSource.Y = 4004412.6912230053;
                     TrueSource.Z = -4538247.46397313;
@@ -506,140 +671,15 @@ namespace ResearchModel
                 }
             }
         }
+        #endregion
 
-        private void DrawMapButton_Click(object sender, EventArgs e)
-        {
-            var leftFi = Convert.ToDouble(leftFiTextBox.Text);
-            var rightFi = Convert.ToDouble(rightFiTextBox.Text);
-            var upperTeta = Convert.ToDouble(upperTetaTextBox.Text);
-            var bottomTeta = Convert.ToDouble(bottomTetaTextBox.Text);
-            var brightness = Convert.ToInt32(brightnessCoefTextBox.Text);
-            Bitmap startMap = new Bitmap("../../../../WorldMap.jpg");
-            Bitmap heat = new Bitmap(startMap.Width, startMap.Height, PixelFormat.Format32bppArgb);
-            byte iIntense;
-            RadioStation rs = new RadioStation();
-            List<double> firstResults = new List<double>();
-            const double r = 6370000;
-
-            double backColor;
-            if (type == FunctionType.dmSpace)
-                backColor = 100000000000000000;
-            else
-                backColor = 0.000000000001;
-
-            trueSource.X = r * Math.Sin(Math.PI * 0 / 180) * Math.Cos(Math.PI * 0 / 180);
-            trueSource.Y = r * Math.Sin(Math.PI * 0 / 180) * Math.Cos(Math.PI * 0 / 180);
-            trueSource.Z = r * Math.Cos(Math.PI * 0 / 180);
-            F function = Initialization(type);
-
-            for (double fi = -180; fi <= 180 ; fi+=(double)360/3508)
-            {
-                for (double teta = 90; teta >= -90; teta -= (double)180/2480)
-                {
-                    rs.X = r * Math.Sin(Math.PI * teta / 180) * Math.Cos(Math.PI * fi / 180);
-                    rs.Y = r * Math.Sin(Math.PI * fi / 180) * Math.Cos(Math.PI * teta / 180);
-                    rs.Z = r * Math.Cos(Math.PI * teta / 180);
-                    
-                    var t = function(rs);
-                    if((fi<=rightFi&&fi>=leftFi)&&(teta<=upperTeta&&teta>=bottomTeta))
-                        firstResults.Add(t);
-                    else
-                        firstResults.Add(backColor);
-                }
-            }
-
-            var max = firstResults.Max();
-            var min = firstResults.Min();
-            var i = 0;
-            int tmpX = 0, tmpY = 0;
-
-            for (int x = 0; x < 3508; x ++)
-            {
-                for (int y = 0; y < 2480; y++)
-                {
-                    iIntense = Convert.ToByte(250 * Math.Tanh(brightness * firstResults[i] / max));
-                    var color = Color.FromArgb(255, Convert.ToByte(255 - iIntense), Convert.ToByte(255 - iIntense), Convert.ToByte(255 - iIntense));
-                    if (min == firstResults[i])
-                    {
-                        tmpX = x;
-                        tmpY = y;
-                    }
-
-                    heat.SetPixel(x, y, color);
-                    i++;
-                }
-            }
-
-            //RunButtonClick(sender, e);
-
-
-            // for the matrix the range is 0.0 - 1.0
-            float alphaNorm = (float)180 / 255.0F;
-            using (Bitmap image1 = startMap)
-            {
-                using (Bitmap image2 = heat)
-                {
-                    // just change the alpha
-                    ColorMatrix matrix = new ColorMatrix(new[]
-                    {
-                            new[] {1F, 0, 0, 0, 0},
-                            new[] {0, 1F, 0, 0, 0},
-                            new[] {0, 0, 1F, 0, 0},
-                            new[] {0, 0, 0, alphaNorm, 0},
-                            new[] {0, 0, 0, 0, 1F}});
-
-                    ImageAttributes imageAttributes = new ImageAttributes();
-                    imageAttributes.SetColorMatrix(matrix);
-
-                    using Graphics g = Graphics.FromImage(image1);
-                    g.CompositingMode = CompositingMode.SourceOver;
-                    g.CompositingQuality = CompositingQuality.HighQuality;
-
-                    g.DrawImage(image2,
-                        new Rectangle(0, 0, image1.Width, image1.Height),
-                        0,
-                        0,
-                        image2.Width,
-                        image2.Height,
-                        GraphicsUnit.Pixel,
-                        imageAttributes);
-                }
-                image1.SetPixel(3508/2,2480/2,Color.Red);
-                image1.SetPixel(3508 / 2 - 1, 2480 / 2, Color.Red);
-                image1.SetPixel(3508 / 2+1, 2480 / 2, Color.Red);
-                image1.SetPixel(3508 / 2, 2480 / 2 + 1, Color.Red);
-                image1.SetPixel(3508 / 2, 2480 / 2 - 1, Color.Red);
-                image1.SetPixel(3508 / 2 - 2, 2480 / 2, Color.Red);
-                image1.SetPixel(3508 / 2 + 2, 2480 / 2, Color.Red);
-                image1.SetPixel(3508 / 2, 2480 / 2 + 2, Color.Red);
-                image1.SetPixel(3508 / 2, 2480 / 2 - 2, Color.Red);
-                image1.SetPixel(3508 / 2 - 2, 2480 / 2+1, Color.Red);
-                image1.SetPixel(3508 / 2 + 2, 2480 / 2-1, Color.Red);
-                image1.SetPixel(3508 / 2+1, 2480 / 2 + 2, Color.Red);
-                image1.SetPixel(3508 / 2-1, 2480 / 2 - 2, Color.Red);
-                image1.SetPixel(tmpX, tmpY, Color.Green);
-                if(tmpX>0)
-                    image1.SetPixel(tmpX-1, tmpY, Color.Green);
-                if (tmpX < 3508)
-                    image1.SetPixel(tmpX+1, tmpY, Color.Green);
-                if (tmpY < 2480)
-                    image1.SetPixel(tmpX, tmpY+1, Color.Green);
-                if (tmpY > 0)
-                    image1.SetPixel(tmpX, tmpY-1, Color.Green);
-                image1.Save("../../../../Heat.jpg", ImageFormat.Jpeg);
-            }
-            
-        }
+        
 
         private void DCoordinatesGraphButtonClick(object sender, EventArgs e)
         {
             newSource.Run();
             List<double> points = new List<double>();
-            button1_Click(sender, e);
-
-
-
-
+            SumMethodsRefreshClick(sender, e);
 
             F function = Initialization(type);
             FindSatelliteInaccuracy(delta, minDelta, denominator,function, points, progressBar);
@@ -648,10 +688,7 @@ namespace ResearchModel
             var form = new ChartsForm();
 
             form.Show();
-
             form.dtDifference.Series.Clear();
-
-            
 
             var series = new Series
             {
@@ -668,14 +705,11 @@ namespace ResearchModel
             }
             form.Controls.Add(form.dtDifference);
             form.dtDifference.Show();
-
-
-
         }
 
         private void DtGraphButton(object sender, EventArgs e)
         {
-            button1_Click(sender, e);
+            SumMethodsRefreshClick(sender, e);
 
             //newSource.Run();
             List<double> points = new List<double>();
@@ -683,9 +717,7 @@ namespace ResearchModel
             if (type == FunctionType.ddSpace || type == FunctionType.ddEarth)
                 FindDwInaccuracy(delta, minDelta, denominator, function, points, progressBar);
             else if (type == FunctionType.sumEarth || type == FunctionType.sumSpace)
-            {
                 FindSumInaccuracy(delta, minDelta, denominator, function, points, progressBar);
-            }
             else
                 FindDtInaccuracy(delta, minDelta, denominator, function, points, progressBar);
 
@@ -713,6 +745,28 @@ namespace ResearchModel
             form.dtDifference.Show();
         }
 
+        void ProcessCoordinates()
+        {
+            if (euclideanRadioButton.Checked)
+            {
+                trueSource.X = Convert.ToDouble(trueSource.xTextBox.Text);
+                trueSource.Y = Convert.ToDouble(trueSource.yTextBox.Text);
+                trueSource.Z = Convert.ToDouble(trueSource.zTextBox.Text);
+                longtitudeTextBox.Text = trueSource.X == 0 ? 0.ToString(): Math.Atan(trueSource.Y / trueSource.X).ToString();
+                latitudeTextBox.Text =  trueSource.Z== 0 ? 0.ToString() : Math.Atan(Math.Sqrt(trueSource.Y * trueSource.Y + trueSource.X * trueSource.X) / trueSource.Z).ToString();
+            }
+            else if (sphericalRadioButton.Checked)
+            {
+                double r = 6370000;
+                trueSource.X = r * Math.Sin(Math.PI * Convert.ToDouble(latitudeTextBox.Text) / 180) * Math.Cos(Math.PI * Convert.ToDouble(longtitudeTextBox.Text) / 180);
+                trueSource.Y = r * Math.Sin(Math.PI * Convert.ToDouble(latitudeTextBox.Text) / 180) * Math.Sin(Math.PI * Convert.ToDouble(longtitudeTextBox.Text) / 180);
+                trueSource.Z = r * Math.Sin(Math.PI * Convert.ToDouble(latitudeTextBox.Text) / 180);
+                trueSource.xTextBox.Text = trueSource.X.ToString();
+                trueSource.yTextBox.Text = trueSource.Y.ToString();
+                trueSource.zTextBox.Text = trueSource.Z.ToString();
+            }
+
+        }
 
 
     }
