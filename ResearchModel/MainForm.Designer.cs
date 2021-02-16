@@ -593,6 +593,7 @@
             this.trueSourceGroupBox.Controls.Add(this.label4);
             this.trueSourceGroupBox.Controls.Add(this.latitudeTrueTextBox);
             this.trueSourceGroupBox.Controls.Add(this.longtitudeTrueTextBox);
+            this.trueSourceGroupBox.Enabled = false;
             this.trueSourceGroupBox.Location = new System.Drawing.Point(502, 299);
             this.trueSourceGroupBox.Name = "trueSourceGroupBox";
             this.trueSourceGroupBox.Size = new System.Drawing.Size(239, 72);
