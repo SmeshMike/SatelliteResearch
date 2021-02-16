@@ -149,19 +149,49 @@ namespace ResearchModel
                 tmp = new RadioStation(Coordinate[3, 0], Coordinate[3, 1], Coordinate[3, 2], Coordinate[3, 3], Coordinate[3, 4], Coordinate[3, 5]);
                 searcherStation4.Run(tmp);
             }
+            double r = 6370000;
 
-            GenerateSource();
+            if (euclideanRadioButton.Checked)
+            {
+                GenerateSource();
 
-            trueSource.xTextBox.Text = x.ToString();
-            trueSource.yTextBox.Text = y.ToString();
-            trueSource.zTextBox.Text = z.ToString();
-            trueSource.Run();
+                trueSource.xTextBox.Text = x.ToString();
+                trueSource.yTextBox.Text = y.ToString();
+                trueSource.zTextBox.Text = z.ToString();
+                trueSource.Run();
 
-            ProcessCoordinates();
-            
-            newSource.xTextBox.Text = (x-5000).ToString();
-            newSource.yTextBox.Text = (y-5000).ToString();
-            newSource.zTextBox.Text = (z-5000).ToString();
+
+                longtitudeTrueTextBox.Text = trueSource.X == 0
+                    ? (trueSource.Y > 0 ? 90 : -90).ToString()
+                    : (trueSource.X > 0
+                        ? Math.Round(Math.Atan(trueSource.Y / trueSource.X) / Math.PI * 180, 7)
+                        : (Math.Atan(trueSource.Y / trueSource.X) / Math.PI * 180 > 0 ? -90 - Math.Atan(trueSource.Y / trueSource.X) / Math.PI * 180 : 90 - Math.Atan(trueSource.Y / trueSource.X) / Math.PI * 180))
+                    .ToString();
+                latitudeTrueTextBox.Text = trueSource.Y * trueSource.Y + trueSource.X * trueSource.X == 0
+                    ? (trueSource.Z > 0 ? 90 : -90).ToString()
+                    : Math.Round(Math.Atan(trueSource.Z / Math.Sqrt(trueSource.Y * trueSource.Y + trueSource.X * trueSource.X)) / Math.PI * 180, 7).ToString();
+            }
+            else
+            {
+                Random rand = new Random();
+
+                longtitudeTrueTextBox.Text = Math.Round(rand.NextDouble() * 360 - 180,7).ToString();
+                latitudeTrueTextBox.Text = Math.Round(rand.NextDouble() * 180 - 90, 7).ToString();
+
+                trueSource.X = r * Math.Cos(Math.PI * Convert.ToDouble(latitudeTrueTextBox.Text) / 180) * Math.Cos(Math.PI * Convert.ToDouble(longtitudeTrueTextBox.Text) / 180);
+                trueSource.Y = r * Math.Cos(Math.PI * Convert.ToDouble(latitudeTrueTextBox.Text) / 180) * Math.Sin(Math.PI * Convert.ToDouble(longtitudeTrueTextBox.Text) / 180);
+                trueSource.Z = r * Math.Sin(Math.PI * Convert.ToDouble(latitudeTrueTextBox.Text) / 180);
+                trueSource.xTextBox.Text = trueSource.X.ToString();
+                trueSource.yTextBox.Text = trueSource.Y.ToString();
+                trueSource.zTextBox.Text = trueSource.Z.ToString();
+                trueSource.Run();
+            }
+
+
+            newSource.xTextBox.Text = (x - 5000).ToString();
+            newSource.yTextBox.Text = (y - 5000).ToString();
+            newSource.zTextBox.Text = (z - 5000).ToString();
+            newSource.Run();
         }
         #endregion
 
@@ -306,27 +336,55 @@ namespace ResearchModel
 
         private void RunButtonClick(object sender, EventArgs e)
         {
-            
             Stopwatch sp = new Stopwatch();
             sp.Start();
-            newSource.Run();
+
+            double r = 6370000;
+
+            if (euclideanRadioButton.Checked)
+            {
+                trueSource.Run();
+
+                longtitudeTrueTextBox.Text = trueSource.X == 0
+                    ? (trueSource.Y > 0 ? 90 : -90).ToString()
+                    : (trueSource.X > 0
+                        ? Math.Round(Math.Atan(trueSource.Y / trueSource.X) / Math.PI * 180, 7)
+                        : (Math.Atan(trueSource.Y / trueSource.X) / Math.PI * 180 > 0 ? -90 - Math.Atan(trueSource.Y / trueSource.X) / Math.PI * 180 : 90 - Math.Atan(trueSource.Y / trueSource.X) / Math.PI * 180))
+                    .ToString();
+                latitudeTrueTextBox.Text = trueSource.Y * trueSource.Y + trueSource.X * trueSource.X == 0
+                    ? (trueSource.Z > 0 ? 90 : -90).ToString()
+                    : Math.Round(Math.Atan(trueSource.Z / Math.Sqrt(trueSource.Y * trueSource.Y + trueSource.X * trueSource.X)) / Math.PI * 180, 7).ToString();
+            }
+            else
+            {
+                trueSource.X = r * Math.Cos(Math.PI * Convert.ToDouble(latitudeTrueTextBox.Text) / 180) * Math.Cos(Math.PI * Convert.ToDouble(longtitudeTrueTextBox.Text) / 180);
+                trueSource.Y = r * Math.Cos(Math.PI * Convert.ToDouble(latitudeTrueTextBox.Text) / 180) * Math.Sin(Math.PI * Convert.ToDouble(longtitudeTrueTextBox.Text) / 180);
+                trueSource.Z = r * Math.Sin(Math.PI * Convert.ToDouble(latitudeTrueTextBox.Text) / 180);
+                trueSource.xTextBox.Text = trueSource.X.ToString();
+                trueSource.yTextBox.Text = trueSource.Y.ToString();
+                trueSource.zTextBox.Text = trueSource.Z.ToString();
+                trueSource.Run();
+            }
+
+
+
             delta = Convert.ToDouble(stepTextBox.Text.Replace('.', ','));
             minDelta = Convert.ToDouble(minStepTextBox.Text);
             denominator = Convert.ToDouble(denominatorTextBox.Text);
             F function = Initialization(type);
 
-            var i = Convert.ToDouble(errorTextBox.Text);
-            var err = new Random().NextDouble() * i * 2 - i;
+            var errorAbs = Convert.ToDouble(errorTextBox.Text);
+            var err = new Random().NextDouble() * errorAbs * 2 - errorAbs;
             Dt12 += err;
-            err = new Random().NextDouble() * i * 2 - i;
+            err = new Random().NextDouble() * errorAbs * 2 - errorAbs;
             Dt13 += err;
-            err = new Random().NextDouble() * i * 2 - i;
+            err = new Random().NextDouble() * errorAbs * 2 - errorAbs;
             Dt14 += err;
-            err = new Random().NextDouble() * i * 2 - i;
+            err = new Random().NextDouble() * errorAbs * 2 - errorAbs;
             Dt23  += err;
-            err = new Random().NextDouble() * i * 2 - i;
+            err = new Random().NextDouble() * errorAbs * 2 - errorAbs;
             Dt24 += err;
-            err = new Random().NextDouble() * i * 2 - i;
+            err = new Random().NextDouble() * errorAbs * 2 - errorAbs;
             Dt34 += err;
 
             tmpSource = new RadioStation();
@@ -336,15 +394,15 @@ namespace ResearchModel
                 RefreshButtonClick(null, EventArgs.Empty);
             }
 
-            ProcessCoordinates();
+            //ProcessCoordinates();
             newSource.xTextBox.Text = Convert.ToDouble(newSource.X).ToString();
             newSource.yTextBox.Text = Convert.ToDouble(newSource.Y).ToString();
             newSource.zTextBox.Text = Convert.ToDouble(newSource.Z).ToString();
-            longtitudeNewTextBox.Text = newSource.X == 0 ? (newSource.Y > 0 ? 90 : -90).ToString() :( Math.Atan(newSource.Y / newSource.X) / Math.PI * 180).ToString();
-            latitudeNewTextBox.Text = newSource.Y * newSource.Y + newSource.X * newSource.X == 0 ? (newSource.Z > 0 ? 90 : -90).ToString() :(Math.Atan(newSource.Z / Math.Sqrt(newSource.Y * newSource.Y + newSource.X * newSource.X)) / Math.PI * 180).ToString();
+            longtitudeNewTextBox.Text = newSource.X == 0 ? (newSource.Y > 0 ? 90 : -90).ToString() :(newSource.X > 0 ? Math.Round(Math.Atan(newSource.Y / newSource.X) / Math.PI * 180,7) : (Math.Round(Math.Atan(newSource.Y / newSource.X) / Math.PI * 180,7)> 0 ? Math.Round(-180 + Math.Atan(newSource.Y / newSource.X) / Math.PI * 180,7) : Math.Round(180 + Math.Atan(newSource.Y / newSource.X) / Math.PI * 180,7)) ).ToString();
+            latitudeNewTextBox.Text = newSource.Y * newSource.Y + newSource.X * newSource.X == 0 ? (newSource.Z > 0 ? 90 : -90).ToString() :(Math.Round(Math.Atan(newSource.Z / Math.Sqrt(newSource.Y * newSource.Y + newSource.X * newSource.X)) / Math.PI * 180,7)).ToString();
             var time = sp.Elapsed;
             timeLabel.Text = $"{time.Minutes:00}:{time.Seconds:00}.{time.Milliseconds:00}";
-            errorLabel.Text = Convert.ToInt32(GetSourceDifference()).ToString();
+            errorLabel.Text = Math.Round(GetSourceDifference(),2).ToString();
         }
 
         
@@ -355,12 +413,7 @@ namespace ResearchModel
             var upperTeta = Convert.ToDouble(upperTetaTextBox.Text);
             var bottomTeta = Convert.ToDouble(bottomTetaTextBox.Text);
             var brightness = Convert.ToInt32(brightnessCoefTextBox.Text);
-            Bitmap startMap = new Bitmap("../../../../WorldMap.jpg");
-            Bitmap heat = new Bitmap(startMap.Width, startMap.Height, PixelFormat.Format32bppArgb);
-            byte iIntense;
-            RadioStation rs = new RadioStation();
-            List<double> firstResults = new List<double>();
-            const double r = 6370000;
+            
 
             double backColor;
             if (type == FunctionType.dmSpace)
@@ -370,124 +423,20 @@ namespace ResearchModel
 
             F function = Initialization(type);
 
-            for (double fi = -180; fi <= 180 ; fi+=(double)360/3508)
-            {
-                for (double teta = 90; teta >= -90; teta -= (double)180/2480)
-                {
-                    rs.X = r * Math.Cos(Math.PI * teta / 180) * Math.Cos(Math.PI * fi / 180);
-                    rs.Y = r * Math.Cos(Math.PI * teta / 180) * Math.Sin(Math.PI * fi / 180);
-                    rs.Z = r * Math.Sin(Math.PI * teta / 180);
 
-                    var t = function(rs);
-                    if((fi<=rightFi&&fi>=leftFi)&&(teta<=upperTeta&&teta>=bottomTeta))
-                        firstResults.Add(t);
-                    else
-                        firstResults.Add(backColor);
-                }
-            }
 
-            var max = firstResults.Max();
-            var min = firstResults.Min();
-            var i = 0;
-            int tmpX = 0, tmpY = 0;
-
-            for (int x = 0; x < 3508; x ++)
-            {
-                for (int y = 0; y < 2480; y++)
-                {
-                    iIntense = Convert.ToByte(250 * Math.Tanh(brightness * firstResults[i] / max));
-                    var color = Color.FromArgb(255, Convert.ToByte(255 - iIntense), Convert.ToByte(255 - iIntense), Convert.ToByte(255 - iIntense));
-                    if (min == firstResults[i])
-                    {
-                        tmpX = x;
-                        tmpY = y;
-                    }
-
-                    heat.SetPixel(x, y, color);
-                    i++;
-                }
-            }
+            var errorAbs = Convert.ToInt32(errorTextBox.Text);
 
 
             var longtitude = Convert.ToDouble(longtitudeTrueTextBox.Text);
             var latitude = Convert.ToDouble(latitudeTrueTextBox.Text);
-            var lX = Convert.ToInt32((double)(3508 / (double)360) * longtitude + 3508 / 2);
-            var lY = Convert.ToInt32(2480 / 2 - (double)(2480 / (double)180) * latitude);
 
 
+            if (errorAbs == 0)
+                DrawClearMap( leftFi, rightFi, upperTeta, bottomTeta, brightness, longtitude, latitude, backColor, function);
+            else
+                DrawErroredMap(errorAbs, leftFi, rightFi, upperTeta, bottomTeta, brightness, longtitude, latitude, backColor, function);
 
-
-            // for the matrix the range is 0.0 - 1.0
-            float alphaNorm = (float)180 / 255.0F;
-            using (Bitmap image1 = startMap)
-            {
-                using (Bitmap image2 = heat)
-                {
-                    // just change the alpha
-                    ColorMatrix matrix = new ColorMatrix(new[]
-                    {
-                            new[] {1F, 0, 0, 0, 0},
-                            new[] {0, 1F, 0, 0, 0},
-                            new[] {0, 0, 1F, 0, 0},
-                            new[] {0, 0, 0, alphaNorm, 0},
-                            new[] {0, 0, 0, 0, 1F}});
-
-                    ImageAttributes imageAttributes = new ImageAttributes();
-                    imageAttributes.SetColorMatrix(matrix);
-
-                    using Graphics g = Graphics.FromImage(image1);
-                    g.CompositingMode = CompositingMode.SourceOver;
-                    g.CompositingQuality = CompositingQuality.HighQuality;
-
-                    g.DrawImage(image2,
-                        new Rectangle(0, 0, image1.Width, image1.Height),
-                        0,
-                        0,
-                        image2.Width,
-                        image2.Height,
-                        GraphicsUnit.Pixel,
-                        imageAttributes);
-                }
-
-                image1.SetPixel(lX, lY, Color.Red);
-                if (lX > 0)
-                    image1.SetPixel(lX - 1, lY, Color.Red);
-                if(lX < 3507)
-                    image1.SetPixel(lX +1, lY, Color.Red);
-                if (lY < 2479)
-                    image1.SetPixel(lX, lY + 1, Color.Red);
-                if (lY > 0)
-                    image1.SetPixel(lX, lY - 1, Color.Red);
-                if (lX > 1)
-                    image1.SetPixel(lX- 2, lY, Color.Red);
-                if (lY < 3506)
-                    image1.SetPixel(lX + 2, lY, Color.Red);
-                if (lY < 2478)
-                    image1.SetPixel(lX, lY + 2, Color.Red);
-                if (lY > 1)
-                    image1.SetPixel(lX, lY - 2, Color.Red);
-                if (lX > 1 && lY < 2479)
-                    image1.SetPixel(lX - 2, lY+1, Color.Red);
-                if (lY > 0 && lX < 3506)
-                    image1.SetPixel(lX+ 2, lY-1, Color.Red);
-                if (lY < 2478 && lX < 3507)
-                    image1.SetPixel(lX+1, lY+ 2, Color.Red);
-                if (lY > 1 && lX > 0)
-                    image1.SetPixel(lX-1, lY - 2, Color.Red);
-
-                image1.SetPixel(tmpX, tmpY, Color.Green);
-
-                if(tmpX>0)
-                    image1.SetPixel(tmpX-1, tmpY, Color.Green);
-                if (tmpX < 3507)
-                    image1.SetPixel(tmpX+1, tmpY, Color.Green);
-                if (tmpY < 2479)
-                    image1.SetPixel(tmpX, tmpY+1, Color.Green);
-                if (tmpY > 0)
-                    image1.SetPixel(tmpX, tmpY-1, Color.Green);
-                image1.Save("../../../../Heat.jpg", ImageFormat.Jpeg);
-            }
-            
         }
 
         #region SumMethodsRefreshClick
@@ -757,8 +706,8 @@ namespace ResearchModel
                 trueSource.X = Convert.ToDouble(trueSource.xTextBox.Text);
                 trueSource.Y = Convert.ToDouble(trueSource.yTextBox.Text);
                 trueSource.Z = Convert.ToDouble(trueSource.zTextBox.Text);
-                longtitudeTrueTextBox.Text = trueSource.X == 0 ? (trueSource.Y > 0 ? 90 : -90).ToString(): (Math.Atan(trueSource.Y / trueSource.X)/Math.PI*180).ToString();
-                latitudeTrueTextBox.Text = trueSource.Y * trueSource.Y + trueSource.X * trueSource.X == 0 ? (trueSource.Z > 0 ? 90 : -90).ToString() : (Math.Atan(trueSource.Z/Math.Sqrt(trueSource.Y * trueSource.Y + trueSource.X * trueSource.X)) / Math.PI * 180).ToString();
+                longtitudeNewTextBox.Text = newSource.X == 0 ? (newSource.Y > 0 ? 90 : -90).ToString() : (newSource.X > 0 ? Math.Round(Math.Atan(newSource.Y / newSource.X) / Math.PI * 180,7) : (Math.Atan(newSource.Y / newSource.X) / Math.PI * 180 > 0 ? Math.Round(-90 - Math.Atan(newSource.Y / newSource.X) / Math.PI * 180,7) : Math.Round(90 - Math.Atan(newSource.Y / newSource.X) / Math.PI * 180,7))).ToString();
+                latitudeNewTextBox.Text = newSource.Y * newSource.Y + newSource.X * newSource.X == 0 ? (newSource.Z > 0 ? 90 : -90).ToString() : (Math.Round(Math.Atan(newSource.Z / Math.Sqrt(newSource.Y * newSource.Y + newSource.X * newSource.X)) / Math.PI * 180,7)).ToString();
                 newSource.xTextBox.Text = (x - 5000).ToString();
                 newSource.yTextBox.Text = (y - 5000).ToString();
                 newSource.zTextBox.Text = (z - 5000).ToString();
