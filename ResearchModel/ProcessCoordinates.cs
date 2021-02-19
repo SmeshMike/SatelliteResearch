@@ -102,6 +102,7 @@ namespace ResearchModel
                 case 4:
                     for (var j = 0; j < 4; ++j)
                     {
+                        ///////////////////////////////////////////////
                         var x = allSatelliteStats[j, i, 0];
                         var y = allSatelliteStats[j, i, 1];
                         var z = allSatelliteStats[j, i, 2];
