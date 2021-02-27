@@ -500,7 +500,7 @@ namespace ResearchModel
             tmp4.Run(SearcherStation4);
 
             int iCount = 100;
-            int jCount = 1000;
+            int jCount = 100;
             pb.Maximum = iCount;
             Random rand = new Random();
             tmpSource = new RadioStation();
@@ -545,7 +545,7 @@ namespace ResearchModel
 
             var i = 0;
             int iter = 0;
-            int trueX = 0, trueY = 0;
+            int methodX = 0, methodY = 0;
             for (double fi = -180; fi <= 180; fi += (double)360 / startMap.Width)
             {
                 for (double teta = 90; teta >= -90; teta -= (double)180 / startMap.Height)
@@ -572,25 +572,24 @@ namespace ResearchModel
             var clearMin = clearResults.Min();
 
             i = 0;
-            int clearTmpX = 0, clearTmpY = 0;
+            int mapX = 0, mapY = 0;
 
             for (int x = 0; x < startMap.Width; x++)
             {
                 for (int y = 0; y < startMap.Height; y++)
                 {
                     iIntense = Convert.ToByte(255 * Math.Tanh(brightness * clearResults[i] / clearMax));
-                    // var color = Color.FromArgb(255-iIntense, Convert.ToByte(255), Convert.ToByte(iIntense), Convert.ToByte(iIntense));
                     var color = Color.FromArgb(255 - iIntense, Convert.ToByte(255-iIntense), Convert.ToByte(0), Convert.ToByte(0));
                     if (clearMin == clearResults[i])
                     {
-                        clearTmpX = x;
-                        clearTmpY = y;
+                        mapX = x;
+                        mapY = y;
                     }
 
                     if (iter == i)
                     {
-                        trueX = x;
-                        trueY = y;
+                        methodX = x;
+                        methodY = y;
                     }
 
                     clearHeat.SetPixel(x, y, color);
@@ -598,8 +597,8 @@ namespace ResearchModel
                 }
             }
 
-            var lX = Convert.ToInt32((double)(startMap.Width / (double)360) * longtitude + startMap.Width / 2);
-            var lY = Convert.ToInt32(startMap.Height / 2 - (double)(startMap.Height / (double)180) * latitude);
+            var sourceX = Convert.ToInt32((double)(startMap.Width / (double)360) * longtitude + startMap.Width / 2);
+            var sourceY = Convert.ToInt32(startMap.Height / 2 - (double)(startMap.Height / (double)180) * latitude);
 
             // for the matrix the range is 0.0 - 1.0
             float alphaNorm = (float)180 / 255.0F;
@@ -634,53 +633,23 @@ namespace ResearchModel
                         GraphicsUnit.Pixel,
                         imageAttributes);
                 }
-                image1.SetPixel(lX, lY, Color.Green);
-                if (lX > 0)
-                    image1.SetPixel(lX - 1, lY, Color.Green);
-                if (lX < startMap.Width - 1)
-                    image1.SetPixel(lX + 1, lY, Color.Green);
-                if (lY < startMap.Height - 1)
-                    image1.SetPixel(lX, lY + 1, Color.Green);
-                if (lY > 0)
-                    image1.SetPixel(lX, lY - 1, Color.Green);
-                if (lX > 1)
-                    image1.SetPixel(lX - 2, lY, Color.Green);
-                if (lY < startMap.Width - 2)
-                    image1.SetPixel(lX + 2, lY, Color.Green);
-                if (lY < startMap.Height - 2)
-                    image1.SetPixel(lX, lY + 2, Color.Green);
-                if (lY > 1)
-                    image1.SetPixel(lX, lY - 2, Color.Green);
-                if (lX > 1 && lY < startMap.Height - 1)
-                    image1.SetPixel(lX - 2, lY + 1, Color.Green);
-                if (lY > 0 && lX < startMap.Width - 2)
-                    image1.SetPixel(lX + 2, lY - 1, Color.Green);
-                if (lY < startMap.Height - 2 && lX < startMap.Width - 1)
-                    image1.SetPixel(lX + 1, lY + 2, Color.Green);
-                if (lY > 1 && lX > 0)
-                    image1.SetPixel(lX - 1, lY - 2, Color.Green);
 
-                image1.SetPixel(clearTmpX, clearTmpY, Color.Yellow);
-
-                if (clearTmpX > 0)
-                    image1.SetPixel(clearTmpX - 1, clearTmpY, Color.Yellow);
-                if (clearTmpX < startMap.Width - 1)
-                    image1.SetPixel(clearTmpX + 1, clearTmpY, Color.Yellow);
-                if (clearTmpY < startMap.Height - 1)
-                    image1.SetPixel(clearTmpX, clearTmpY + 1, Color.Yellow);
-                if (clearTmpY > 0)
-                    image1.SetPixel(clearTmpX, clearTmpY - 1, Color.Yellow);
-
-                image1.SetPixel(trueX, trueY, Color.Purple);
-
-                if (trueX > 0)
-                    image1.SetPixel(trueX - 1, trueY, Color.Purple);
-                if (trueX < startMap.Width - 1)
-                    image1.SetPixel(trueX + 1, trueY, Color.Purple);
-                if (trueY < startMap.Height - 1)
-                    image1.SetPixel(trueX, trueY + 1, Color.Purple);
-                if (trueY > 0)
-                    image1.SetPixel(trueX, trueY - 1, Color.Purple);
+                using (var g = Graphics.FromImage(image1))
+                {
+                    using (Brush bruh = new SolidBrush(Color.DarkBlue))
+                    {
+                        g.FillEllipse(bruh, sourceX-6, sourceY-6, 12, 12);
+                    }
+                    
+                    using (Brush bruh = new SolidBrush(Color.ForestGreen))
+                    {
+                        g.FillEllipse(bruh, methodX - 4, methodY - 4, 8, 8);
+                    }
+                    using (Brush bruh = new SolidBrush(Color.Yellow))
+                    {
+                        g.FillEllipse(bruh, mapX - 2, mapY - 2, 4, 4);
+                    }
+                }
 
                 image1.Save("../../../../Heat.jpg", ImageFormat.Jpeg);
             }
@@ -712,8 +681,8 @@ namespace ResearchModel
             var trueLatitude = NewSource.Y * NewSource.Y + NewSource.X * NewSource.X == 0 ? (NewSource.Z > 0 ? 90 : -90) : (Math.Round(Math.Atan(NewSource.Z / Math.Sqrt(NewSource.Y * NewSource.Y + NewSource.X * NewSource.X)) / Math.PI * 180, 7));
 
             var i = 0;
-            int iter = 0;
-            int trueX = 0, trueY = 0;
+            int clearIter = 0, erroredIter=0;
+            int clearMethodX = 0, clearMethodY = 0, erroredMethodX =0, erroredMethodY = 0;
 
             for (double fi = -180; fi <= 180; fi += (double)360 / startMap.Width)
             {
@@ -723,59 +692,89 @@ namespace ResearchModel
                     rs.Y = r * Math.Cos(Math.PI * teta / 180) * Math.Sin(Math.PI * fi / 180);
                     rs.Z = r * Math.Sin(Math.PI * teta / 180);
 
+                    if (trueLongtitude < fi + (double)360 / startMap.Width && trueLongtitude > fi - (double)360 / startMap.Width && trueLatitude < teta + (double)180 / startMap.Height &&
+                        trueLatitude > teta - (double)180 / startMap.Height)
+                    {
+                        clearIter = i;
+                    }
                     var t = function(rs);
                     if ((fi <= rightFi && fi >= leftFi) && (teta <= upperTeta && teta >= bottomTeta))
                         clearResults.Add(t);
                     else
                         clearResults.Add(backColor);
-                    AddInaccuracy(SearcherStation1, tmp1, rand, errorAbs);
-                    AddInaccuracy(SearcherStation2, tmp2, rand, errorAbs);
-                    AddInaccuracy(SearcherStation3, tmp3, rand, errorAbs);
-                    AddInaccuracy(SearcherStation4, tmp4, rand, errorAbs);
 
-                    if (trueLongtitude < fi + (double)360 / startMap.Width && trueLongtitude > fi - (double)360 / startMap.Width && trueLatitude < teta + (double)180 / startMap.Height &&
-                        trueLatitude > teta - (double)180 / startMap.Height)
-                    {
-                        iter = i;
-                    }
                     i++;
+                }
+            }
+            AddInaccuracy(SearcherStation1, tmp1, rand, errorAbs);
+            AddInaccuracy(SearcherStation2, tmp2, rand, errorAbs);
+            AddInaccuracy(SearcherStation3, tmp3, rand, errorAbs);
+            AddInaccuracy(SearcherStation4, tmp4, rand, errorAbs);
+            HookJeeves(1024, 0.015625, 2, function);
+            var erroredLongtitude = NewSource.X == 0 ? (NewSource.Y > 0 ? 90 : -90) : (NewSource.X > 0 ? Math.Round(Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180, 7) : (Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180 > 0 ? Math.Round(-90 - Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180, 7) : Math.Round(90 - Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180, 7)));
+            var erroredLatitude = NewSource.Y * NewSource.Y + NewSource.X * NewSource.X == 0 ? (NewSource.Z > 0 ? 90 : -90) : (Math.Round(Math.Atan(NewSource.Z / Math.Sqrt(NewSource.Y * NewSource.Y + NewSource.X * NewSource.X)) / Math.PI * 180, 7));
+            i = 0;
+            for (double fi = -180; fi <= 180; fi += (double)360 / startMap.Width)
+            {
+                for (double teta = 90; teta >= -90; teta -= (double)180 / startMap.Height)
+                {
                     rs.X = r * Math.Cos(Math.PI * teta / 180) * Math.Cos(Math.PI * fi / 180);
                     rs.Y = r * Math.Cos(Math.PI * teta / 180) * Math.Sin(Math.PI * fi / 180);
                     rs.Z = r * Math.Sin(Math.PI * teta / 180);
 
-                    t = function(rs);
+
+                    if (erroredLongtitude < fi + (double)360 / startMap.Width && erroredLongtitude > fi - (double)360 / startMap.Width && erroredLatitude < teta + (double)180 / startMap.Height &&
+                        erroredLatitude > teta - (double)180 / startMap.Height)
+                    {
+                        erroredIter = i;
+                    }
+                    i++;
+
+                    var t = function(rs);
                     if ((fi <= rightFi && fi >= leftFi) && (teta <= upperTeta && teta >= bottomTeta))
                         erroredResults.Add(t);
                     else
                         erroredResults.Add(backColor);
 
-
-                    Array.Copy(tmp1.coordinates, SearcherStation1.coordinates, 3);
-                    Array.Copy(tmp2.coordinates, SearcherStation2.coordinates, 3);
-                    Array.Copy(tmp3.coordinates, SearcherStation3.coordinates, 3);
-                    Array.Copy(tmp4.coordinates, SearcherStation4.coordinates, 3);
                 }
             }
+
+            Array.Copy(tmp1.coordinates, SearcherStation1.coordinates, 3);
+            Array.Copy(tmp2.coordinates, SearcherStation2.coordinates, 3);
+            Array.Copy(tmp3.coordinates, SearcherStation3.coordinates, 3);
+            Array.Copy(tmp4.coordinates, SearcherStation4.coordinates, 3);
 
             var clearMax = clearResults.Max();
             var clearMin = clearResults.Min();
             var erroredMax = erroredResults.Max();
             var erroredrMin = erroredResults.Min();
             i = 0;
-            int clearTmpX = 0, clearTmpY = 0, erroredTmpX = 0, erroredTmpY = 0;
+            int clearMapX = 0, clearMapY = 0, erroredMapX = 0, erroredMapY = 0;
 
             for (int x = 0; x < startMap.Width; x++)
             {
                 for (int y = 0; y < startMap.Height; y++)
                 {
+
+                    if (clearIter == i)
+                    {
+                        clearMethodX = x;
+                        clearMethodY = y;
+                    }
+                    if (erroredIter == i)
+                    {
+                        erroredMethodX = x;
+                        erroredMethodY = y;
+                    }
+
                     iIntense = Convert.ToByte(255 * Math.Tanh(brightness * clearResults[i] / clearMax));
 
                     var color = Color.FromArgb(255 - iIntense, Convert.ToByte(255 - iIntense), Convert.ToByte(0), Convert.ToByte(0));
                     //var color = Color.FromArgb(255, Convert.ToByte(255), Convert.ToByte(iIntense), Convert.ToByte(iIntense));
                     if (clearMin == clearResults[i])
                     {
-                        clearTmpX = x;
-                        clearTmpY = y;
+                        clearMapX = x;
+                        clearMapY = y;
                     }
 
                     clearHeat.SetPixel(x, y, color);
@@ -784,23 +783,17 @@ namespace ResearchModel
                     color = Color.FromArgb(255-iIntense, Convert.ToByte(0), Convert.ToByte(0), Convert.ToByte(255 - iIntense));
                     if (erroredrMin == erroredResults[i])
                     {
-                        erroredTmpX = x;
-                        erroredTmpY = y;
-                    }
-
-                    if (iter == i)
-                    {
-                        trueX = x;
-                        trueY = y;
+                        erroredMapX = x;
+                        erroredMapY = y;
                     }
 
                     erroredHeat.SetPixel(x, y, color);
                     i++;
                 }
             }
-            
-            var lX = Convert.ToInt32((double)(startMap.Width / (double)360) * longtitude + startMap.Width / 2);
-            var lY = Convert.ToInt32(startMap.Height / 2 - (double)(startMap.Height / (double)180) * latitude);
+
+            var sourceX = Convert.ToInt32((double)(startMap.Width / (double)360) * longtitude + startMap.Width / 2);
+            var sourceY = Convert.ToInt32(startMap.Height / 2 - (double)(startMap.Height / (double)180) * latitude);
 
             // for the matrix the range is 0.0 - 1.0
             float alphaNorm = (float)127 / 255.0F;
@@ -871,65 +864,30 @@ namespace ResearchModel
                         imageAttributes);
                 }
 
-                image1.SetPixel(lX, lY, Color.White);
-                if (lX > 0)
-                    image1.SetPixel(lX - 1, lY, Color.White);
-                if (lX < image1.Width - 1)
-                    image1.SetPixel(lX + 1, lY, Color.White);
-                if (lY < image1.Height - 1)
-                    image1.SetPixel(lX, lY + 1, Color.White);
-                if (lY > 0)
-                    image1.SetPixel(lX, lY - 1, Color.White);
-                if (lX > 1)
-                    image1.SetPixel(lX - 2, lY, Color.White);
-                if (lY < image1.Width - 2)
-                    image1.SetPixel(lX + 2, lY, Color.White);
-                if (lY < image1.Height - 2)
-                    image1.SetPixel(lX, lY + 2, Color.White);
-                if (lY > 1)
-                    image1.SetPixel(lX, lY - 2, Color.White);
-                if (lX > 1 && lY < image1.Height - 1)
-                    image1.SetPixel(lX - 2, lY + 1, Color.White);
-                if (lY > 0 && lX < image1.Width - 2)
-                    image1.SetPixel(lX + 2, lY - 1, Color.White);
-                if (lY < image1.Height - 2 && lX < image1.Width - 1)
-                    image1.SetPixel(lX + 1, lY + 2, Color.White);
-                if (lY > 1 && lX > 0)
-                    image1.SetPixel(lX - 1, lY - 2, Color.White);
+                using (var g = Graphics.FromImage(image1))
+                {
+                    using (Brush bruh = new SolidBrush(Color.White))
+                    {
+                        g.FillEllipse(bruh, sourceX - 6, sourceY - 6, 12, 12);
+                    }
 
-                image1.SetPixel(clearTmpX, clearTmpY, Color.GreenYellow);
-
-                if (clearTmpX > 0)
-                    image1.SetPixel(clearTmpX - 1, clearTmpY, Color.GreenYellow);
-                if (clearTmpX < image1.Width - 1)
-                    image1.SetPixel(clearTmpX + 1, clearTmpY, Color.GreenYellow);
-                if (clearTmpY < image1.Height - 1)
-                    image1.SetPixel(clearTmpX, clearTmpY + 1, Color.GreenYellow);
-                if (clearTmpY > 0)
-                    image1.SetPixel(clearTmpX, clearTmpY - 1, Color.GreenYellow);
-
-                image1.SetPixel(erroredTmpX, erroredTmpY, Color.Aqua);
-
-                if (erroredTmpX > 0)
-                    image1.SetPixel(erroredTmpX - 1, erroredTmpY, Color.Aqua);
-                if (erroredTmpX < image1.Width - 1)
-                    image1.SetPixel(erroredTmpX + 1, erroredTmpY, Color.Aqua);
-                if (erroredTmpY < image1.Height - 1)
-                    image1.SetPixel(erroredTmpX, erroredTmpY + 1, Color.Aqua);
-                if (erroredTmpY > 0)
-                    image1.SetPixel(erroredTmpX, erroredTmpY - 1, Color.Aqua);
-
-
-                image1.SetPixel(trueX, trueY, Color.Purple);
-
-                if (trueX > 0)
-                    image1.SetPixel(trueX - 1, trueY, Color.Purple);
-                if (trueX < image1.Width - 1)
-                    image1.SetPixel(trueX + 1, trueY, Color.Purple);
-                if (trueY < image1.Height - 1)
-                    image1.SetPixel(trueX, trueY + 1, Color.Purple);
-                if (trueY > 0)
-                    image1.SetPixel(trueX, trueY - 1, Color.Purple);
+                    using (Brush bruh = new SolidBrush(Color.Green))
+                    {
+                        g.FillEllipse(bruh, clearMethodX - 4, clearMethodY - 4, 8, 8);
+                    }
+                    using (Brush bruh = new SolidBrush(Color.Chocolate))
+                    {
+                        g.FillEllipse(bruh, erroredMethodX - 4, erroredMethodY - 4, 8, 8);
+                    }
+                    using (Brush bruh = new SolidBrush(Color.Yellow))
+                    {
+                        g.FillEllipse(bruh, clearMapX - 2, clearMapY - 2, 4, 4);
+                    }
+                    using (Brush bruh = new SolidBrush(Color.Aqua))
+                    {
+                        g.FillEllipse(bruh, erroredMapX - 2, erroredMapY - 2, 4, 4);
+                    }
+                }
 
 
                 image1.Save("../../../../Heat.jpg", ImageFormat.Jpeg);

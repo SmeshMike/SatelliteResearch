@@ -360,3 +360,5 @@ ResearchModel/bin/Debug/netcoreapp3.1/
 xTests/bin/Debug/netcoreapp3.1/
 
 Heat.jpg
+
+*.xlsx
