@@ -500,7 +500,7 @@ namespace ResearchModel
             tmp4.Run(SearcherStation4);
 
             int iCount = 100;
-            int jCount = 1000;
+            int jCount = 100;
             pb.Maximum = iCount;
             Random rand = new Random();
             tmpSource = new RadioStation();
