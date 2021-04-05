@@ -85,6 +85,7 @@
             this.label11 = new System.Windows.Forms.Label();
             this.latitudeNewTextBox = new System.Windows.Forms.TextBox();
             this.longtitudeNewTextBox = new System.Windows.Forms.TextBox();
+            this.heightMapButton = new System.Windows.Forms.RadioButton();
             this.methodGroupBox.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.systemGroupBox.SuspendLayout();
@@ -578,11 +579,12 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.heightMapButton);
             this.groupBox2.Controls.Add(this.sphericalRadioButton);
             this.groupBox2.Controls.Add(this.euclideanRadioButton);
             this.groupBox2.Location = new System.Drawing.Point(533, 31);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(101, 64);
+            this.groupBox2.Size = new System.Drawing.Size(101, 77);
             this.groupBox2.TabIndex = 15;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Coord type";
@@ -691,6 +693,16 @@
             this.longtitudeNewTextBox.Size = new System.Drawing.Size(110, 23);
             this.longtitudeNewTextBox.TabIndex = 0;
             this.longtitudeNewTextBox.Text = "0";
+            // 
+            // heightMapButton
+            // 
+            this.heightMapButton.AutoSize = true;
+            this.heightMapButton.Location = new System.Drawing.Point(7, 53);
+            this.heightMapButton.Name = "heightMapButton";
+            this.heightMapButton.Size = new System.Drawing.Size(88, 19);
+            this.heightMapButton.TabIndex = 2;
+            this.heightMapButton.Text = "Height Map";
+            this.heightMapButton.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -817,5 +829,6 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TextBox latitudeNewTextBox;
         private System.Windows.Forms.TextBox longtitudeNewTextBox;
+        private System.Windows.Forms.RadioButton heightMapButton;
     }
 }
