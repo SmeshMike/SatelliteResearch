@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
@@ -17,15 +18,16 @@ namespace ResearchModel
 
     public partial class MainForm : Form
     {
+        private ProcessStartInfo _start;
 
-        private double delta, minDelta, denominator;
+        private double _delta, _minDelta, _denominator;
 
-        private FunctionType type;
+        private FunctionType _type;
 
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-
+            _start = new ProcessStartInfo();
         }
 
         #region RefreshButtonClick
@@ -36,7 +38,7 @@ namespace ResearchModel
             newSource.zTextBox.Text = "0";
 
 
-            if (stormRadioButton.Checked && (type == FunctionType.ddSpace || type == FunctionType.dmSpace))
+            if (stormRadioButton.Checked && (_type == FunctionType.ddSpace || _type == FunctionType.dmSpace))
             {
                 var tmp = GetStormCoordinates(4);
 
@@ -64,7 +66,7 @@ namespace ResearchModel
                 searcherStation4.Run(tmp[3]);
 
             }
-            else if (type == FunctionType.ddEarth || type == FunctionType.dmEarth || type == FunctionType.sumSpace)
+            else if (_type == FunctionType.ddEarth || _type == FunctionType.dmEarth || _type == FunctionType.sumSpace)
             {
                 var tmp = GetStormCoordinates(3);
 
@@ -91,7 +93,7 @@ namespace ResearchModel
                 searcherStation4.zTextBox.Text = (0).ToString();
 
             }
-            else if (type == FunctionType.sumEarth)
+            else if (_type == FunctionType.sumEarth)
             {
                 var tmp = GetStormCoordinates(2);
 
@@ -201,13 +203,13 @@ namespace ResearchModel
             {
                 searcherStation3.Enabled = true;
                 searcherStation4.Enabled = false;
-                type = FunctionType.ddEarth;
+                _type = FunctionType.ddEarth;
             }
             else if (ddRadioButton.Checked)
             {
                 searcherStation3.Enabled = true;
                 searcherStation4.Enabled = true;
-                type = FunctionType.ddSpace;
+                _type = FunctionType.ddSpace;
             }
         }
 
@@ -217,13 +219,13 @@ namespace ResearchModel
             {
                 searcherStation3.Enabled = true;
                 searcherStation4.Enabled = false;
-                type = FunctionType.dmEarth;
+                _type = FunctionType.dmEarth;
             }
             else if (dmRadioButton.Checked)
             {
                 searcherStation3.Enabled = true;
                 searcherStation4.Enabled = true;
-                type = FunctionType.dmSpace;
+                _type = FunctionType.dmSpace;
             }
         }
 
@@ -233,13 +235,13 @@ namespace ResearchModel
             {
                 searcherStation3.Enabled = false;
                 searcherStation4.Enabled = false;
-                type = FunctionType.sumEarth;
+                _type = FunctionType.sumEarth;
             }
             else if(sumRadioButton.Checked)
             {
                 searcherStation3.Enabled = true;
                 searcherStation4.Enabled = false;
-                type = FunctionType.sumSpace;
+                _type = FunctionType.sumSpace;
             }
         }
 
@@ -249,19 +251,19 @@ namespace ResearchModel
             {
                 searcherStation3.Enabled = true;
                 searcherStation4.Enabled = true;
-                type = FunctionType.ddSpace;
+                _type = FunctionType.ddSpace;
             }
             else if(dmRadioButton.Checked && spaceRadioButton.Checked)
             {
                 searcherStation3.Enabled = true;
                 searcherStation4.Enabled = true;
-                type = FunctionType.dmSpace;
+                _type = FunctionType.dmSpace;
             }
             else if(spaceRadioButton.Checked)
             {
                 searcherStation3.Enabled = true;
                 searcherStation4.Enabled = false;
-                type = FunctionType.sumSpace;
+                _type = FunctionType.sumSpace;
             }
         }
 
@@ -271,19 +273,19 @@ namespace ResearchModel
             {
                 searcherStation3.Enabled = true;
                 searcherStation4.Enabled = false;
-                type = FunctionType.ddEarth;
+                _type = FunctionType.ddEarth;
             }
             else if (dmRadioButton.Checked && earthRadioButton.Checked)
             {
                 searcherStation3.Enabled = true;
                 searcherStation4.Enabled = false;
-                type = FunctionType.dmEarth;
+                _type = FunctionType.dmEarth;
             }
             else if (earthRadioButton.Checked)
             {
                 searcherStation3.Enabled = false;
                 searcherStation4.Enabled = false;
-                type = FunctionType.sumEarth;
+                _type = FunctionType.sumEarth;
             }
         }
         private void glonassRadioButton_CheckedChanged(object sender, EventArgs e)
@@ -340,7 +342,7 @@ namespace ResearchModel
             sp.Start();
 
             double r = 6370000;
-
+            string temp="";
             if (euclideanRadioButton.Checked)
             {
                 trueSource.Run();
@@ -355,6 +357,56 @@ namespace ResearchModel
                     ? (trueSource.Z > 0 ? 90 : -90).ToString()
                     : Math.Round(Math.Atan(trueSource.Z / Math.Sqrt(trueSource.Y * trueSource.Y + trueSource.X * trueSource.X)) / Math.PI * 180, 7).ToString();
             }
+            else if(heightMapButton.Checked)
+            {
+                using (Process myProcess = new Process())
+                {
+                    myProcess.StartInfo.FileName = @"C:\Users\Mishanya - PC\AppData\Local\Programs\Python\Python39\python.exe";
+                    myProcess.StartInfo.Arguments = $"\"D:\\VS Pojects\\SatelliteResearch\\hello.py\"";
+                    myProcess.StartInfo.UseShellExecute = false; // Do not use OS shell
+                    myProcess.StartInfo.CreateNoWindow = true; // We don't need new window
+                    myProcess.StartInfo.RedirectStandardInput = true;
+                    myProcess.StartInfo.RedirectStandardOutput = true; // Any output, generated by application will be redirected back
+                    myProcess.StartInfo.RedirectStandardError = true; // Any error in standard output will be redirected back (for example exceptions)
+                    myProcess.StartInfo.LoadUserProfile = true;
+
+                    myProcess.Start();
+
+                    StreamWriter myStreamWriter = myProcess.StandardInput;
+
+                    // Prompt the user for input text lines to sort.
+                    // Write each line to the StandardInput stream of
+                    // the sort command.
+                    String inputText;
+                    int numLines = 0;
+                    do
+                    {
+                        Console.WriteLine("Enter a line of text (or press the Enter key to stop):");
+
+                        inputText = Console.ReadLine();
+                        if (inputText.Length > 0)
+                        {
+                            numLines++;
+                            myStreamWriter.WriteLine(inputText);
+                        }
+
+                        //string stderr = myProcess.StandardError.ReadToEnd(); // Here are the exceptions from our Python script
+                        string result = myProcess.StandardOutput.ReadLine(); // Here is the result of StdOut(for example: print "test")
+                        Console.WriteLine(result);
+
+                    } while (inputText.Length > 0);
+
+
+                    // End the input stream to the sort command.
+                    // When the stream closes, the sort command
+                    // writes the sorted text lines to the
+                    // console.
+                    myStreamWriter.Close();
+
+                    // Wait for the sort process to write the sorted text lines.
+                    myProcess.WaitForExit();
+                }
+            }
             else
             {
                 trueSource.X = r * Math.Cos(Math.PI * Convert.ToDouble(latitudeTrueTextBox.Text) / 180) * Math.Cos(Math.PI * Convert.ToDouble(longtitudeTrueTextBox.Text) / 180);
@@ -368,10 +420,10 @@ namespace ResearchModel
 
 
 
-            delta = Convert.ToDouble(stepTextBox.Text.Replace('.', ','));
-            minDelta = Convert.ToDouble(minStepTextBox.Text);
-            denominator = Convert.ToDouble(denominatorTextBox.Text);
-            F function = Initialization(type);
+            _delta = Convert.ToDouble(stepTextBox.Text.Replace('.', ','));
+            _minDelta = Convert.ToDouble(minStepTextBox.Text);
+            _denominator = Convert.ToDouble(denominatorTextBox.Text);
+            F function = Initialization(_type);
 
             var errorAbs = Convert.ToDouble(errorTextBox.Text);
             var err = new Random().NextDouble() * errorAbs * 2 - errorAbs;
@@ -388,7 +440,7 @@ namespace ResearchModel
             Dt34 += err;
 
             tmpSource = new RadioStation();
-            while (!HookJeeves(delta, minDelta, denominator, function))
+            while (!HookJeeves(_delta, _minDelta, _denominator, function))
             {
                 
                 RefreshButtonClick(null, EventArgs.Empty);
@@ -403,6 +455,7 @@ namespace ResearchModel
             var time = sp.Elapsed;
             timeLabel.Text = $"{time.Minutes:00}:{time.Seconds:00}.{time.Milliseconds:00}";
             errorLabel.Text = Math.Round(GetSourceDifference(),2).ToString();
+            errorLabel.Text = temp;
         }
 
         
@@ -416,12 +469,12 @@ namespace ResearchModel
             
 
             double backColor;
-            if (type == FunctionType.dmSpace)
+            if (_type == FunctionType.dmSpace)
                 backColor = 100000000000000000;
             else
                 backColor = 0.000000000001;
 
-            F function = Initialization(type);
+            F function = Initialization(_type);
 
 
 
@@ -444,7 +497,7 @@ namespace ResearchModel
         {
             if (stormRadioButton.Checked)
             {
-                if (type == FunctionType.sumEarth)
+                if (_type == FunctionType.sumEarth)
                 {
                     SearcherStation1.X = 2911.589288 * 1000;
                     SearcherStation1.Y = 21076.211455 * 1000;
@@ -484,7 +537,7 @@ namespace ResearchModel
                     newSource.zTextBox.Text = NewSource.Z.ToString();
 
                 }
-                else if (type == FunctionType.sumSpace)
+                else if (_type == FunctionType.sumSpace)
                 {
                     SearcherStation1.X = 3639853.9609999997;
                     SearcherStation1.Y = 8921804.635;
@@ -534,7 +587,7 @@ namespace ResearchModel
             }
             else
             {
-                if (type == FunctionType.sumEarth)
+                if (_type == FunctionType.sumEarth)
                 {
                     SearcherStation1.X = 3050980.433;
                     SearcherStation1.Y = 21166840.116;
@@ -571,7 +624,7 @@ namespace ResearchModel
                     newSource.yTextBox.Text = NewSource.Y.ToString();
                     newSource.zTextBox.Text = NewSource.Z.ToString();
                 }
-                else if (type == FunctionType.sumSpace)
+                else if (_type == FunctionType.sumSpace)
                 {
                     SearcherStation1.X = 213004.652;
                     SearcherStation1.Y = 10941934.4259;
@@ -630,10 +683,10 @@ namespace ResearchModel
             List<double> points = new List<double>();
             SumMethodsRefreshClick(sender, e);
 
-            F function = Initialization(type);
-            FindSatelliteInaccuracy(delta, minDelta, denominator,function, points, progressBar);
+            F function = Initialization(_type);
+            FindSatelliteInaccuracy(_delta, _minDelta, _denominator,function, points, progressBar);
             string satSystem = glonassRadioButton.Checked ? "GLONASS" : "Storm";
-            SaveToExcel(points, type + satSystem + "Coord");
+            SaveToExcel(points, _type + satSystem + "Coord");
             var form = new ChartsForm();
 
             form.Show();
@@ -667,16 +720,16 @@ namespace ResearchModel
 
             //newSource.Run();
             List<double> points = new List<double>();
-            F function = Initialization(type);
-            if (type == FunctionType.ddSpace || type == FunctionType.ddEarth)
-                FindDwInaccuracy(delta, minDelta, denominator, function, points, progressBar);
-            else if (type == FunctionType.sumEarth || type == FunctionType.sumSpace)
-                FindSumInaccuracy(delta, minDelta, denominator, function, points, progressBar);
+            F function = Initialization(_type);
+            if (_type == FunctionType.ddSpace || _type == FunctionType.ddEarth)
+                FindDwInaccuracy(_delta, _minDelta, _denominator, function, points, progressBar);
+            else if (_type == FunctionType.sumEarth || _type == FunctionType.sumSpace)
+                FindSumInaccuracy(_delta, _minDelta, _denominator, function, points, progressBar);
             else
-                FindDtInaccuracy(delta, minDelta, denominator, function, points, progressBar);
+                FindDtInaccuracy(_delta, _minDelta, _denominator, function, points, progressBar);
 
             string satSystem = glonassRadioButton.Checked ? "GLONASS" : "Storm";
-            SaveToExcel(points, type+ satSystem + "D");
+            SaveToExcel(points, _type+ satSystem + "D");
             ChartsForm form = new ChartsForm();
             
             form.Show();
