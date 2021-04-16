@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,12 @@ namespace ResearchModel
     public class ProcessCoordinates
     {
         private static double[,] _coef;
-        public static double x, y, z;
+        public static double X { get; set; }
+        public static double Y { get; set; }
+        public static double Z { get; set; }
+
+        public static Process CoordProcess { get; set; }
+
         //public static double X {get Coordinate[]; }
         private static double[,,] allSatelliteStats;
         public static double[,] Coordinate { get; set; }
@@ -126,12 +132,49 @@ namespace ResearchModel
         }
         public static void GenerateSource()
         {
-            double tmp = 6370000;
+            double tmp = 63781370;
             Random rand = new Random();
-            z = rand.NextDouble() ;
-            tmp = Math.Sqrt(tmp * tmp - z * z);
-            y = rand.NextDouble()* tmp;
-            x = Math.Sqrt(tmp * tmp - y * y);
+            Z = rand.NextDouble() * tmp;
+            tmp = Math.Sqrt(tmp * tmp - Z * Z);
+            Y = rand.NextDouble()* tmp;
+            X = Math.Sqrt(tmp * tmp - Y * Y);
+        }
+
+        public static void GenerateSourceWithElevationMap()
+        {
+            Random random = new Random();
+            int picWidth = 43200;
+            int picLength = 21600;
+
+            var lat = random.Next(21601);
+            var lon = random.Next(43201);
+            double latD = 0;
+            double lonD = 0;
+
+
+            StreamWriter myStreamWriter = CoordProcess.StandardInput;
+
+            string inputText= $"{lat} {lon}";
+            if (lat == picLength / 2)
+                latD = 0;
+            else
+                latD = (double) (picLength / 2 - lat) / (picLength / 2) * 90;
+            if (lon == picWidth / 2)
+                lonD = 0;
+            else
+                lonD = (double) (lon - picWidth / 2) / (picWidth / 2) * 180;
+
+            var r = 63781370;
+            myStreamWriter.WriteLine(inputText);
+            
+            var result = Convert.ToInt32(CoordProcess.StandardOutput.ReadLine());
+            r += result;
+
+            X = r * Math.Cos(Math.PI * Convert.ToDouble(latD) / 180) * Math.Cos(Math.PI * Convert.ToDouble(lonD) / 180);
+            Y = r * Math.Cos(Math.PI * Convert.ToDouble(latD) / 180) * Math.Sin(Math.PI * Convert.ToDouble(lonD) / 180);
+            Z = r * Math.Sin(Math.PI * Convert.ToDouble(latD) / 180);
+
+            // Wait for the sort process to write the sorted text lines.
         }
 
         public static void GenerateGlonassSatellites(short n)
@@ -143,12 +186,12 @@ namespace ResearchModel
 
             Random random = new Random();
 
-            x = random.NextDouble() * 2 * r - r;
-            Coordinate[0, 0] = x;
-            y =  Math.Sqrt(r * r - x * x);
-            Coordinate[0, 1] = y;
-            z = Convert.ToDouble(((-_coef[0, 0] * x - _coef[0, 1] * y) / _coef[0, 2]));
-            Coordinate[0, 2] = z;
+            X = random.NextDouble() * 2 * r - r;
+            Coordinate[0, 0] = X;
+            Y =  Math.Sqrt(r * r - X * X);
+            Coordinate[0, 1] = Y;
+            Z = Convert.ToDouble(((-_coef[0, 0] * X - _coef[0, 1] * Y) / _coef[0, 2]));
+            Coordinate[0, 2] = Z;
             Coordinate[0, 3] = new Random().NextDouble() * 5000;
             Coordinate[0, 4] = new Random().NextDouble() * 5000;
             Coordinate[0, 5] = new Random().NextDouble() * 5000;
@@ -157,16 +200,16 @@ namespace ResearchModel
             {
                 do
                 {
-                    x = random.NextDouble()*2*r- r;
-                    y = Math.Sqrt(r * r - x * x);
-                    z = Convert.ToDouble((long) ((-_coef[i - 1, 0] * x - _coef[i - 1, 1] * y) / _coef[i - 1, 2]));
+                    X = random.NextDouble()*2*r- r;
+                    Y = Math.Sqrt(r * r - X * X);
+                    Z = Convert.ToDouble((long) ((-_coef[i - 1, 0] * X - _coef[i - 1, 1] * Y) / _coef[i - 1, 2]));
 
-                } while (Math.Sqrt((Coordinate[i - 1, 0] - x) * (Coordinate[i - 1, 0] - x)) < 1000000 || Math.Sqrt((Coordinate[i - 1, 1] - y) * (Coordinate[i - 1, 1] - y)) < 1000000
-                                                                                                      || Math.Sqrt((Coordinate[i - 1, 2] - z) * (Coordinate[i - 1, 2] - z)) < 1000000);
+                } while (Math.Sqrt((Coordinate[i - 1, 0] - X) * (Coordinate[i - 1, 0] - X)) < 1000000 || Math.Sqrt((Coordinate[i - 1, 1] - Y) * (Coordinate[i - 1, 1] - Y)) < 1000000
+                                                                                                      || Math.Sqrt((Coordinate[i - 1, 2] - Z) * (Coordinate[i - 1, 2] - Z)) < 1000000);
 
-                Coordinate[i, 0] = x;
-                Coordinate[i, 1] = y;
-                Coordinate[i, 2] = z;
+                Coordinate[i, 0] = X;
+                Coordinate[i, 1] = Y;
+                Coordinate[i, 2] = Z;
                 Coordinate[i, 3] = new Random().NextDouble() * 5000;
                 Coordinate[i, 4] = new Random().NextDouble() * 5000;
                 Coordinate[i, 5] = new Random().NextDouble() * 5000;

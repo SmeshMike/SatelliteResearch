@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
+using static ResearchModel.TreadControl;
 using System.Windows.Forms;
 
 namespace ResearchModel
@@ -18,11 +21,16 @@ namespace ResearchModel
             dmEarth = 3,
             ddEarth = 4,
             sumEarth = 5,
+            dmEarthWithMap = 6,
+            ddEarthWithMap = 7,
+            sumEarthWithMap = 8,
         }
 
         const double w0 = 6000000000;
         const double c = 300000000;
-        const double rE = 6370000;
+        const double rE = 63781370;
+
+        private static StreamWriter myStreamWriter;
 
         public static RadioStation tmpSource;
         public static RadioStation SearcherStation1 { get; set; }
@@ -36,6 +44,8 @@ namespace ResearchModel
         public static RadioStation NewSource { get; set; }
 
         public static RadioStation TrueSource { get; set; }
+
+        public static Process MathProcess { get; set; }
 
         public static double Dt12 { get; set; }
         public static double Dt13 { get; set; }
@@ -60,6 +70,13 @@ namespace ResearchModel
 
         public delegate double F(RadioStation source);
 
+        public static double GetSimpleSourceDifference()
+        {
+
+            var tmp = Math.Sqrt((TrueSource.X - NewSource.X)* (TrueSource.X - NewSource.X) + (TrueSource.Y - NewSource.Y) * (TrueSource.Y - NewSource.Y) + (TrueSource.Z - NewSource.Z) * (TrueSource.Z - NewSource.Z));
+            return tmp;
+        }
+
         public static double GetSourceDifference()
         {
             var longtitudeTrue = TrueSource.X == 0 ? (TrueSource.Y > 0 ? 90 : -90) : (Math.Atan(TrueSource.Y / TrueSource.X) / Math.PI * 180);
@@ -67,12 +84,12 @@ namespace ResearchModel
             var longtitudeNew = NewSource.X == 0 ? (NewSource.Y > 0 ? 90 : -90) : (Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180);
             var latitudeNew= NewSource.Y * NewSource.Y + NewSource.X * NewSource.X == 0 ? (NewSource.Z > 0 ? 90 : -90) : (Math.Atan(NewSource.Z / Math.Sqrt(NewSource.Y * NewSource.Y + NewSource.X * NewSource.X)) / Math.PI * 180);
 
-            double r = 6370000;
+            double r = 63781370;
             var d = Math.Acos(Math.Round((TrueSource.X*NewSource.X+ TrueSource.Y * NewSource.Y+ TrueSource.Z * NewSource.Z)/(Math.Sqrt(TrueSource.X* TrueSource.X + TrueSource.Y * TrueSource.Y+ TrueSource.Z * TrueSource.Z)* Math.Sqrt(NewSource.X * NewSource.X + NewSource.Y * NewSource.Y + NewSource.Z * NewSource.Z)),15));
             var k = Math.Round((TrueSource.X * NewSource.X + TrueSource.Y * NewSource.Y + TrueSource.Z * NewSource.Z) / (r * r), 15);
             var kk = Math.Acos(k);
             //var d = Math.Acos(Math.Round((TrueSource.X * NewSource.X + TrueSource.Y * NewSource.Y + TrueSource.Z * NewSource.Z) / (r*r),15));
-            var tmp = d * 6370000;
+            var tmp = d * 63781370;
             //var tmp = Math.Sqrt(Math.Pow(NewSource.X - TrueSource.X, 2) + Math.Pow(NewSource.Y - TrueSource.Y, 2) + Math.Pow(NewSource.Z - TrueSource.Z, 2));
             return tmp;
         }
@@ -143,6 +160,22 @@ namespace ResearchModel
             return tmp1 + tmp2 + tmp3 + tmp4;
         }
 
+        private static double DmEarthWithMapF(RadioStation source)
+        {
+
+            var tmp1 = Math.Pow(Math.Sqrt(Math.Pow((SearcherStation1.X - source.X), 2) + Math.Pow((SearcherStation1.Y - source.Y), 2) + Math.Pow((SearcherStation1.Z - source.Z), 2))
+                                - Math.Sqrt(Math.Pow((SearcherStation2.X - source.X), 2) + Math.Pow((SearcherStation2.Y - source.Y), 2) + Math.Pow((SearcherStation2.Z - source.Z), 2)) - Dt12, 2);
+            var tmp2 = Math.Pow(Math.Sqrt(Math.Pow((SearcherStation1.X - source.X), 2) + Math.Pow((SearcherStation1.Y - source.Y), 2) + Math.Pow((SearcherStation1.Z - source.Z), 2))
+                                - Math.Sqrt(Math.Pow((SearcherStation3.X - source.X), 2) + Math.Pow((SearcherStation3.Y - source.Y), 2) + Math.Pow((SearcherStation3.Z - source.Z), 2)) - Dt13, 2);
+            var tmp3 = Math.Pow(Math.Sqrt(Math.Pow((SearcherStation2.X - source.X), 2) + Math.Pow((SearcherStation2.Y - source.Y), 2) + Math.Pow((SearcherStation2.Z - source.Z), 2))
+                                - Math.Sqrt(Math.Pow((SearcherStation3.X - source.X), 2) + Math.Pow((SearcherStation3.Y - source.Y), 2) + Math.Pow((SearcherStation3.Z - source.Z), 2)) - Dt23, 2);
+
+            var r = RadiusChange(source, MathProcess);
+
+            var tmp4 = Math.Pow(r - Math.Sqrt(source.X * source.X + source.Y * source.Y + source.Z * source.Z), 2);
+
+            return tmp1 + tmp2 + tmp3 + tmp4;
+        }
 
         private static double DdEarthF(RadioStation source)
         {
@@ -153,12 +186,36 @@ namespace ResearchModel
             return tmp1 + tmp2 /*+ tmp3*/ + tmp4;
         }
 
+
+        private static double DdEarthWithMapF(RadioStation source)
+        {
+            var tmp1 = Math.Pow((V(1, source) - V(2, source)) / (c + V(1, source)) - Dw12 / W1, 2);
+            var tmp2 = Math.Pow((V(1, source) - V(3, source)) / (c + V(1, source)) - Dw13 / W1, 2);
+            var tmp3 = Math.Pow((V(2, source) - V(3, source)) / (c + V(2, source)) - Dw23 / W2, 2);
+            var r = RadiusChange(source, MathProcess);
+            var tmp4 = Math.Pow(r - Math.Sqrt(source.X * source.X + source.Y * source.Y + source.Z * source.Z), 2);
+            return tmp1 + tmp2 /*+ tmp3*/ + tmp4;
+        }
+
         private static double SumEarthF(RadioStation source)
         {
+
             var tmp1 = Math.Pow((V(1, source) - V(2, source)) / (c + V(1, source)) - Dw12 / W1, 2);
             var tmp2 = Math.Pow(Math.Sqrt(Math.Pow((SearcherStation1.X - source.X), 2) + Math.Pow((SearcherStation1.Y - source.Y), 2) + Math.Pow((SearcherStation1.Z - source.Z), 2))
                                 - Math.Sqrt(Math.Pow((SearcherStation2.X - source.X), 2) + Math.Pow((SearcherStation2.Y - source.Y), 2) + Math.Pow((SearcherStation2.Z - source.Z), 2)) - Dt12, 2);
             var tmp3 = Math.Pow(rE - Math.Sqrt(source.X * source.X + source.Y * source.Y + source.Z * source.Z), 2);
+            return tmp1 + tmp2 + tmp3;
+        }
+
+        private static double SumEarthWithMapF(RadioStation source)
+        {
+
+            var tmp1 = Math.Pow((V(1, source) - V(2, source)) / (c + V(1, source)) - Dw12 / W1, 2);
+            var tmp2 = Math.Pow(Math.Sqrt(Math.Pow((SearcherStation1.X - source.X), 2) + Math.Pow((SearcherStation1.Y - source.Y), 2) + Math.Pow((SearcherStation1.Z - source.Z), 2))
+                                - Math.Sqrt(Math.Pow((SearcherStation2.X - source.X), 2) + Math.Pow((SearcherStation2.Y - source.Y), 2) + Math.Pow((SearcherStation2.Z - source.Z), 2)) - Dt12, 2);
+
+            var r = RadiusChange(source, MathProcess);
+            var tmp3 = Math.Pow(r - Math.Sqrt(source.X * source.X + source.Y * source.Y + source.Z * source.Z), 2);
             return tmp1+tmp2+tmp3;
         }
 
@@ -171,7 +228,6 @@ namespace ResearchModel
 
         static void CheckNeighbourPoints(double delta, F function)
         {
-
             var tmpF = function(NewSource);
             double f;
             //Parallel.For(0, 3, (i) =>
@@ -268,6 +324,30 @@ namespace ResearchModel
                     Dw12 = (V(1, TrueSource) - V(2, TrueSource)) * w0 / c;
                     W1 = (1 + (V(1, TrueSource)) / c) * w0;
                     break;
+                case (FunctionType)6:
+                    function = DmEarthWithMapF;
+                    Dt12 = Math.Sqrt(Math.Pow((SearcherStation1.X - TrueSource.X), 2) + Math.Pow((SearcherStation1.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation1.Z - TrueSource.Z), 2)) -
+                           Math.Sqrt(Math.Pow((SearcherStation2.X - TrueSource.X), 2) + Math.Pow((SearcherStation2.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation2.Z - TrueSource.Z), 2));
+                    Dt13 = Math.Sqrt(Math.Pow((SearcherStation1.X - TrueSource.X), 2) + Math.Pow((SearcherStation1.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation1.Z - TrueSource.Z), 2)) -
+                           Math.Sqrt(Math.Pow((SearcherStation3.X - TrueSource.X), 2) + Math.Pow((SearcherStation3.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation3.Z - TrueSource.Z), 2));
+                    Dt23 = Math.Sqrt(Math.Pow((SearcherStation2.X - TrueSource.X), 2) + Math.Pow((SearcherStation2.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation2.Z - TrueSource.Z), 2)) -
+                           Math.Sqrt(Math.Pow((SearcherStation3.X - TrueSource.X), 2) + Math.Pow((SearcherStation3.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation3.Z - TrueSource.Z), 2));
+                    break;
+                case (FunctionType)7:
+                    function = DdEarthWithMapF;
+                    Dw12 = (V(1, TrueSource) - V(2, TrueSource)) * w0 / c;
+                    Dw13 = (V(1, TrueSource) - V(3, TrueSource)) * w0 / c;
+                    Dw23 = (V(2, TrueSource) - V(3, TrueSource)) * w0 / c;
+                    W1 = (1 + (V(1, TrueSource)) / c) * w0;
+                    W2 = (1 + (V(2, TrueSource)) / c) * w0;
+                    break;
+                case (FunctionType)8:
+                    function = SumEarthWithMapF;
+                    Dt12 = Math.Sqrt(Math.Pow((SearcherStation1.X - TrueSource.X), 2) + Math.Pow((SearcherStation1.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation1.Z - TrueSource.Z), 2)) -
+                           Math.Sqrt(Math.Pow((SearcherStation2.X - TrueSource.X), 2) + Math.Pow((SearcherStation2.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation2.Z - TrueSource.Z), 2));
+                    Dw12 = (V(1, TrueSource) - V(2, TrueSource)) * w0 / c;
+                    W1 = (1 + (V(1, TrueSource)) / c) * w0;
+                    break;
                 default:
                     function = DmSpaceF;
                     Dt12 = Math.Sqrt(Math.Pow((SearcherStation1.X - TrueSource.X), 2) + Math.Pow((SearcherStation1.Y - TrueSource.Y), 2) + Math.Pow((SearcherStation1.Z - TrueSource.Z), 2)) -
@@ -288,35 +368,35 @@ namespace ResearchModel
             return function;
         }
 
-        public static bool HookJeeves(double delta, double minDelta, double denominator, F function )
+        public static bool HookJeeves(double delta, double minDelta, double denominator, F function)
         {
-
-            Array.Copy(NewSource.coordinates, tmpSource.coordinates, 3);
-
-            while (delta >= minDelta)
+            return ExecuteWithTimeLimit(TimeSpan.FromSeconds(8), () =>
             {
-                CheckNeighbourPoints(delta, function);
-                if (tmpSource == NewSource)
-                    delta /= denominator;
-                else
+                Array.Copy(NewSource.coordinates, tmpSource.coordinates, 3);
+
+                while (delta >= minDelta)
                 {
-                    var f1 = function(NewSource);
-                    NewSource.X = 2 * NewSource.X - tmpSource.X;
-                    NewSource.Y = 2 * NewSource.Y - tmpSource.Y;
-                    NewSource.Z = 2 * NewSource.Z - tmpSource.Z;
-                    var f2 = function(NewSource);
-                    if (f2 >= f1)
+                    CheckNeighbourPoints(delta, function);
+                    if (tmpSource == NewSource)
+                        delta /= denominator;
+                    else
                     {
-                        NewSource.X = (NewSource.X + tmpSource.X) / 2;
-                        NewSource.Y = (NewSource.Y + tmpSource.Y) / 2;
-                        NewSource.Z = (NewSource.Z + tmpSource.Z) / 2;
+                        var f1 = function(NewSource);
+                        NewSource.X = 2 * NewSource.X - tmpSource.X;
+                        NewSource.Y = 2 * NewSource.Y - tmpSource.Y;
+                        NewSource.Z = 2 * NewSource.Z - tmpSource.Z;
+                        var f2 = function(NewSource);
+                        if (f2 >= f1)
+                        {
+                            NewSource.X = (NewSource.X + tmpSource.X) / 2;
+                            NewSource.Y = (NewSource.Y + tmpSource.Y) / 2;
+                            NewSource.Z = (NewSource.Z + tmpSource.Z) / 2;
+                        }
+
+                        Array.Copy(NewSource.coordinates, tmpSource.coordinates, 3);
                     }
-
-                    Array.Copy(NewSource.coordinates, tmpSource.coordinates, 3);
                 }
-            }
-
-            return true;
+            });
         }
 
         public static void FindDtInaccuracy(double delta, double minDelta, double denominator,F function, List<double> inaccuracyArr, ProgressBar pb)
@@ -324,7 +404,7 @@ namespace ResearchModel
             pb.Value = 0;
             double inaccuracy = 0;
             int iCount = 100;
-            int jCount = 1000;
+            int jCount = 100;
             pb.Maximum = iCount;
             Random rand = new Random();
 
@@ -424,7 +504,7 @@ namespace ResearchModel
             pb.Value = 0;
             double inaccuracy = 0;
             int iCount = 100;
-            int jCount = 1000;
+            int jCount = 100;
             pb.Maximum = iCount;
             Random rand = new Random();
 
@@ -537,7 +617,7 @@ namespace ResearchModel
             byte iIntense;
             RadioStation rs = new RadioStation();
             List<double> clearResults = new List<double>();
-            const double r = 6370000;
+            const double r = 63781370;
             tmpSource = new RadioStation();
             HookJeeves(1024, 0.015625, 2, function);
             var trueLongtitude = NewSource.X == 0 ? (NewSource.Y > 0 ? 90 : -90) : (NewSource.X > 0 ? Math.Round(Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180, 7) : (Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180 > 0 ? Math.Round(-90 - Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180, 7) : Math.Round(90 - Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180, 7)));
@@ -674,7 +754,7 @@ namespace ResearchModel
             RadioStation rs = new RadioStation();
             List<double> clearResults = new List<double>();
             List<double> erroredResults = new List<double>();
-            const double r = 6370000;
+            const double r = 63781370;
             tmpSource = new RadioStation();
             HookJeeves(1024, 0.015625, 2, function);
             var trueLongtitude = NewSource.X == 0 ? (NewSource.Y > 0 ? 90 : -90) : (NewSource.X > 0 ? Math.Round(Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180, 7) : (Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180 > 0 ? Math.Round(-90 - Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180, 7) : Math.Round(90 - Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180, 7)));
@@ -892,6 +972,60 @@ namespace ResearchModel
 
                 image1.Save("../../../../Heat.jpg", ImageFormat.Jpeg);
             }
+        }
+
+        private static int RadiusChange(RadioStation source, Process myProcess)
+        {
+            int picWidth = 43200;
+            int picLength = 21600;
+
+            myStreamWriter = MathProcess.StandardInput;
+
+            var lon = source.X == 0 ? (source.Y > 0 ? 90 : -90) : (source.X > 0 ? Math.Round(Math.Atan(source.Y / source.X) / Math.PI * 180, 7) : (Math.Atan(source.Y / source.X) / Math.PI * 180 > 0 ? Math.Round(-90 - Math.Atan(source.Y / source.X) / Math.PI * 180, 7) : Math.Round(90 - Math.Atan(source.Y / source.X) / Math.PI * 180, 7)));
+            var lat = source.Y * source.Y + source.X * source.X == 0 ? (source.Z > 0 ? 90 : -90) : (Math.Round(Math.Atan(source.Z / Math.Sqrt(source.Y * source.Y + source.X * source.X)) / Math.PI * 180, 7));
+
+            int picLon = 0;
+            if (Math.Abs(lon) < 0.0001)
+                picLon = picWidth / 2;
+            else
+            {
+                picLon = lon > 0 ? Convert.ToInt32(lon / 90 * picWidth / 2 + picWidth / 2) : Convert.ToInt32(lon / 90 * picWidth / 2);
+            }
+
+            int picLat = 0;
+            if (Math.Abs(lat) < 0.0001)
+                picLat = picLength / 2;
+            else
+            {
+                picLat = lat > 0 ? Convert.ToInt32(lat / 180 * picLength / 2 + picLength / 2) : Convert.ToInt32(lat / 90 * picLength / 2);
+            }
+
+            if (picLat < 0)
+                picLat = 0;
+            if (picLat > picLength - 1)
+                picLat = picLength - 1;
+
+            if (picLon < 0)
+                picLon = 0;
+            if (picLon > picWidth - 1)
+                picLon = picWidth - 1;
+
+
+            string inputText = $"{picLat} {picLon}";
+            if (lat == picLength / 2)
+                lat = 0;
+            else
+                lat = lat < picLength / 2 ? (lat - picLength / 2) / (picLength / 2) * 90 : -(lat - picLength / 2) / (picLength / 2) * 90;
+            if (lon == picWidth / 2)
+                lon = 0;
+            else
+                lon = lon < picWidth / 2 ? (lon - picWidth / 2) / (picWidth / 2) * 90 : -(lon - picWidth / 2) / (picWidth / 2) * 90;
+
+            myStreamWriter.WriteLine(inputText);
+
+            var result = Convert.ToInt32(MathProcess.StandardOutput.ReadLine());
+
+            return Convert.ToInt32(rE+result);
         }
 
     }
