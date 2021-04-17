@@ -27,10 +27,10 @@ namespace ResearchModel
         private void MainForm_Load(object sender, EventArgs e)
         {
             myProcess = new Process();
-            myProcess.StartInfo.FileName = @"C:\Users\pravm\AppData\Local\Programs\Python\Python39\python.exe";
-            //myProcess.StartInfo.FileName = @"C:\Users\Mishanya - PC\AppData\Local\Programs\Python\Python39\python.exe";
-            myProcess.StartInfo.Arguments = "\"C:\\Repository\\SatelliteResearch\\GetElevation.py\"";
-            //myProcess.StartInfo.Arguments = "\"D:\\VS Pojects\\SatelliteResearch\\GetElevation.py\"";
+            //myProcess.StartInfo.FileName = @"C:\Users\pravm\AppData\Local\Programs\Python\Python39\python.exe";
+            myProcess.StartInfo.FileName = @"C:\Users\Mishanya - PC\AppData\Local\Programs\Python\Python39\python.exe";
+            //myProcess.StartInfo.Arguments = "\"C:\\Repository\\SatelliteResearch\\GetElevation.py\"";
+            myProcess.StartInfo.Arguments = "\"D:\\VS Pojects\\SatelliteResearch\\GetElevation.py\"";
             myProcess.StartInfo.UseShellExecute = false;// Do not use OS shell
             myProcess.StartInfo.CreateNoWindow = true;  // We don't need new window
             myProcess.StartInfo.RedirectStandardInput = true;
@@ -302,6 +302,7 @@ namespace ResearchModel
             if (ddRadioButton.Checked  && earthRadioButton.Checked)
             {
                 ElevationCheckBox.Enabled = true;
+                ElevExplCheckBox.Enabled = true;
                 searcherStation3.Enabled = true;
                 searcherStation4.Enabled = false;
                 _type = FunctionType.ddEarth;
@@ -311,6 +312,7 @@ namespace ResearchModel
                 searcherStation3.Enabled = true;
                 searcherStation4.Enabled = false;
                 ElevationCheckBox.Enabled = true;
+                ElevExplCheckBox.Enabled = true;
                 _type = FunctionType.dmEarth;
             }
             else if (sumRadioButton.Checked && earthRadioButton.Checked)
@@ -318,10 +320,13 @@ namespace ResearchModel
                 searcherStation3.Enabled = false;
                 searcherStation4.Enabled = false;
                 ElevationCheckBox.Enabled = true;
+                ElevExplCheckBox.Enabled = true;
                 _type = FunctionType.sumEarth;
             }
             else
             {
+                ElevExplCheckBox.Enabled = false;
+                ElevExplCheckBox.Checked = false;
                 ElevationCheckBox.Checked = false;
                 ElevationCheckBox.Enabled = false;
             }
@@ -370,11 +375,6 @@ namespace ResearchModel
         {
             trueSourceGroupBox.Enabled = true;
             trueSource.Enabled = false;
-            ProcessTextBoxesCoordinates();
-        }
-
-        private void processCoordButton_Click(object sender, EventArgs e)
-        {
             ProcessTextBoxesCoordinates();
         }
 
@@ -452,12 +452,10 @@ namespace ResearchModel
             newSource.xTextBox.Text = Convert.ToDouble(newSource.X).ToString();
             newSource.yTextBox.Text = Convert.ToDouble(newSource.Y).ToString();
             newSource.zTextBox.Text = Convert.ToDouble(newSource.Z).ToString();
-            longtitudeNewTextBox.Text = newSource.X == 0 ? (newSource.Y > 0 ? 90 : -90).ToString() : (newSource.X > 0 ? Math.Round(Math.Atan(newSource.Y / newSource.X) / Math.PI * 180, 7) : (Math.Atan(newSource.Y / newSource.X) / Math.PI * 180 > 0 ? Math.Round(-90 - Math.Atan(newSource.Y / newSource.X) / Math.PI * 180, 7) : Math.Round(90 - Math.Atan(newSource.Y / newSource.X) / Math.PI * 180, 7))).ToString();
+            //longtitudeNewTextBox.Text = newSource.X == 0 ? (newSource.Y > 0 ? 90 : -90).ToString() : (newSource.X > 0 ? Math.Round(Math.Atan(newSource.Y / newSource.X) / Math.PI * 180, 7) : (Math.Atan(newSource.Y / newSource.X) / Math.PI * 180 > 0 ? Math.Round(-90 - Math.Atan(newSource.Y / newSource.X) / Math.PI * 180, 7) : Math.Round(90 - Math.Atan(newSource.Y / newSource.X) / Math.PI * 180, 7))).ToString();
+            longtitudeNewTextBox.Text = newSource.X == 0 ? (newSource.Y > 0 ? 90 : -90).ToString() : (newSource.X > 0 ? Math.Round(Math.Atan(newSource.Y / newSource.X) / Math.PI * 180, 7) : (Math.Atan(newSource.Y / newSource.X) / Math.PI * 180 > 0 ? -180 + Math.Atan(newSource.Y / newSource.X) / Math.PI * 180 : 180 +  Math.Atan(newSource.Y / newSource.X) / Math.PI * 180)).ToString();
             latitudeNewTextBox.Text = newSource.Y * newSource.Y + newSource.X * newSource.X == 0 ? (newSource.Z > 0 ? 90 : -90).ToString() : (Math.Round(Math.Atan(newSource.Z / Math.Sqrt(newSource.Y * newSource.Y + newSource.X * newSource.X)) / Math.PI * 180, 7)).ToString();
-            //longtitudeTrueTextBox.Text = newSource.X == 0 ? (newSource.Y > 0 ? 90 : -90).ToString() : (newSource.X > 0 ? Math.Round(Math.Atan(newSource.Y / newSource.X) / Math.PI * 180, 7) : (Math.Atan(newSource.Y / newSource.X) / Math.PI * 180 > 0 ? -90 - Math.Atan(newSource.Y / newSource.X) / Math.PI * 180 : 90 - Math.Atan(newSource.Y / newSource.X) / Math.PI * 180)).ToString();
-            //latitudeTrueTextBox.Text = newSource.Y * newSource.Y + newSource.X * newSource.X == 0 ? (newSource.Z > 0 ? 90 : -90).ToString() : Math.Round(Math.Atan(newSource.Z / Math.Sqrt(newSource.Y * newSource.Y + newSource.X * newSource.X)) / Math.PI * 180, 7).ToString();
             //longtitudeNewTextBox.Text = newSource.X == 0 ? (newSource.Y > 0 ? 90 : -90).ToString() :(newSource.X > 0 ? Math.Round(Math.Atan(newSource.Y / newSource.X) / Math.PI * 180,7) : (Math.Round(Math.Atan(newSource.Y / newSource.X) / Math.PI * 180,7)> 0 ? Math.Round(-180 + Math.Atan(newSource.Y / newSource.X) / Math.PI * 180,7) : Math.Round(180 + Math.Atan(newSource.Y / newSource.X) / Math.PI * 180,7)) ).ToString();
-            //latitudeNewTextBox.Text = newSource.Y * newSource.Y + newSource.X * newSource.X == 0 ? (newSource.Z > 0 ? 90 : -90).ToString() :(Math.Round(Math.Atan(newSource.Z / Math.Sqrt(newSource.Y * newSource.Y + newSource.X * newSource.X)) / Math.PI * 180,7)).ToString();
             var time = sp.Elapsed;
             timeLabel.Text = $"{time.Minutes:00}:{time.Seconds:00}.{time.Milliseconds:00}";
             errorLabel.Text = Math.Round(GetSourceDifference(),2).ToString();
@@ -689,9 +687,10 @@ namespace ResearchModel
             SumMethodsRefreshClick(sender, e);
 
             F function = Initialization(_type);
+
             FindSatelliteInaccuracy(_delta, _minDelta, _denominator,function, points, progressBar);
             string satSystem = glonassRadioButton.Checked ? "GLONASS" : "Storm";
-            SaveToExcel(points, _type + satSystem + "Coord");
+            SaveToExcel(points, _type+"", satSystem, "Coord", ElevExplCheckBox.Checked);
             var form = new ChartsForm();
 
             form.Show();
@@ -723,15 +722,22 @@ namespace ResearchModel
             //newSource.Run();
             List<double> points = new List<double>();
             F function = Initialization(_type);
+
             if (_type == FunctionType.ddSpace || _type == FunctionType.ddEarth)
+            {
                 FindDwInaccuracy(_delta, _minDelta, _denominator, function, points, progressBar);
+            }
             else if (_type == FunctionType.sumEarth || _type == FunctionType.sumSpace)
+            {
                 FindSumInaccuracy(_delta, _minDelta, _denominator, function, points, progressBar);
+            }
             else
-                FindDtInaccuracy(_delta, _minDelta, _denominator, function, points, progressBar);
+            {
+               FindDtInaccuracy(_delta, _minDelta, _denominator, function, points, progressBar);
+            }
 
             string satSystem = glonassRadioButton.Checked ? "GLONASS" : "Storm";
-            SaveToExcel(points, _type+ satSystem + "D");
+            SaveToExcel(points, _type + "", satSystem, "D", ElevExplCheckBox.Checked);
             ChartsForm form = new ChartsForm();
             
             form.Show();
@@ -754,36 +760,6 @@ namespace ResearchModel
             form.dtDifference.Show();
         }
 
-        void ProcessCoordinates()
-        {
-            if (euclideanRadioButton.Checked)
-            {
-                trueSource.X = Convert.ToDouble(trueSource.xTextBox.Text);
-                trueSource.Y = Convert.ToDouble(trueSource.yTextBox.Text);
-                trueSource.Z = Convert.ToDouble(trueSource.zTextBox.Text);
-                longtitudeNewTextBox.Text = newSource.X == 0 ? (newSource.Y > 0 ? 90 : -90).ToString() : (newSource.X > 0 ? Math.Round(Math.Atan(newSource.Y / newSource.X) / Math.PI * 180,7) : (Math.Atan(newSource.Y / newSource.X) / Math.PI * 180 > 0 ? Math.Round(-90 - Math.Atan(newSource.Y / newSource.X) / Math.PI * 180,7) : Math.Round(90 - Math.Atan(newSource.Y / newSource.X) / Math.PI * 180,7))).ToString();
-                latitudeNewTextBox.Text = newSource.Y * newSource.Y + newSource.X * newSource.X == 0 ? (newSource.Z > 0 ? 90 : -90).ToString() : (Math.Round(Math.Atan(newSource.Z / Math.Sqrt(newSource.Y * newSource.Y + newSource.X * newSource.X)) / Math.PI * 180,7)).ToString();
-                newSource.xTextBox.Text = (X - 5000).ToString();
-                newSource.yTextBox.Text = (Y - 5000).ToString();
-                newSource.zTextBox.Text = (Z - 5000).ToString();
-            }
-            else if (sphericalRadioButton.Checked)
-            {
-                double r = 63781370;
-                trueSource.X = r * Math.Cos(Math.PI * Convert.ToDouble(latitudeTrueTextBox.Text) / 180) * Math.Cos(Math.PI * Convert.ToDouble(longtitudeTrueTextBox.Text) / 180);
-                trueSource.Y = r * Math.Cos(Math.PI * Convert.ToDouble(latitudeTrueTextBox.Text) / 180) * Math.Sin(Math.PI * Convert.ToDouble(longtitudeTrueTextBox.Text) / 180);
-                trueSource.Z = r * Math.Sin(Math.PI * Convert.ToDouble(latitudeTrueTextBox.Text) / 180);
-                trueSource.xTextBox.Text = trueSource.X.ToString();
-                trueSource.yTextBox.Text = trueSource.Y.ToString();
-                trueSource.zTextBox.Text = trueSource.Z.ToString();
-
-            }
-
-            newSource.xTextBox.Text = (trueSource.X - 5000).ToString();
-            newSource.yTextBox.Text = (trueSource.Y - 5000).ToString();
-            newSource.zTextBox.Text = (trueSource.Z - 5000).ToString();
-
-        }
 
         void ProcessTextBoxesCoordinates()
         {
@@ -795,7 +771,7 @@ namespace ResearchModel
                 trueSource.zTextBox.Text = Z.ToString();
                 trueSource.Run();
 
-                longtitudeTrueTextBox.Text = trueSource.X == 0 ? (trueSource.Y > 0 ? 90 : -90).ToString() : (trueSource.X > 0 ? Math.Round(Math.Atan(trueSource.Y / trueSource.X) / Math.PI * 180, 7) : (Math.Atan(trueSource.Y / trueSource.X) / Math.PI * 180 > 0 ? -90 - Math.Atan(trueSource.Y / trueSource.X) / Math.PI * 180 : 90 - Math.Atan(trueSource.Y / trueSource.X) / Math.PI * 180)).ToString();
+                longtitudeTrueTextBox.Text = trueSource.X == 0 ? (trueSource.Y > 0 ? 90 : -90).ToString() : (trueSource.X > 0 ? Math.Round(Math.Atan(trueSource.Y / trueSource.X) / Math.PI * 180, 7) : (Math.Atan(trueSource.Y / trueSource.X) / Math.PI * 180 > 0 ? -180 + Math.Atan(trueSource.Y / trueSource.X) / Math.PI * 180 : 180 + Math.Atan(trueSource.Y / trueSource.X) / Math.PI * 180)).ToString();
                 latitudeTrueTextBox.Text = trueSource.Y * trueSource.Y + trueSource.X * trueSource.X == 0 ? (trueSource.Z > 0 ? 90 : -90).ToString() : Math.Round(Math.Atan(trueSource.Z / Math.Sqrt(trueSource.Y * trueSource.Y + trueSource.X * trueSource.X)) / Math.PI * 180, 7).ToString();
             }
             else

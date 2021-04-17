@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
-using NPOI.HSSF.Util;
+using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
-using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
 using Action = System.Action;
 
@@ -28,33 +26,140 @@ namespace ResearchModel
             }
         }
 
-        public static void SaveToExcel(List<double> data,string fileName)
+        public static void SaveToExcel(List<double> data,string funcType, string satSystem, string explType, bool heightExplr)
         {
-            var newFile = $@"..\..\..\..\{fileName}.xlsx";
+            int shift = 0;
+            var filename = "";
+            if (funcType.Contains("dm"))
+                filename = "DM";
+            else if(funcType.Contains("dd"))
+                filename = "DD";
+            else
+                filename = "SUM";
 
-            using (var fs = new FileStream(newFile, FileMode.Create, FileAccess.Write))
+            var newFile = $@"..\..\..\..\{filename}.xls";
+            FileStream fs;
+            if (!System.IO.File.Exists(newFile))
             {
+                fs = new FileStream(newFile, FileMode.Create, FileAccess.Write);
+                IWorkbook tmpWorkbook = new HSSFWorkbook();
+                ISheet tmpSheet = tmpWorkbook.CreateSheet("Sheet");
+                var row = tmpSheet.CreateRow(1);
+                var cellX = row.CreateCell(1);
+                tmpWorkbook.Write(fs);
+                fs.Close();
+            }
 
-                IWorkbook workbook = new XSSFWorkbook();
-
-                ISheet sheet1 = workbook.CreateSheet("Sheet1");
-
+            HSSFWorkbook hssfwb;
+            int columnX = 0;
+            using (fs = new FileStream(newFile, FileMode.Open, FileAccess.Read))
+            {
+                fs.Position = 0;
                 
-                
-                for (int rowIndex = 0; rowIndex < data.Count; rowIndex++)
+                hssfwb = new HSSFWorkbook(fs);
+                fs.Close();
+            }
+
+            ISheet sheet;//= hssfwb.GetSheet(0);
+
+                if (filename == "DM")
                 {
-                    var row = sheet1.CreateRow(rowIndex);
-                    var cellX = row.CreateCell(0);
+                    if (satSystem == "GLONASS")
+                    {
+                        switch (funcType)
+                        {
+                            case "dmSpace":
+                                columnX = 1;
+                                break;
+                            case "dmEarth":
+                                columnX = 11;
+                                break;
+                        }
+                    }
+                    else if (satSystem == "Storm")
+                    {
+                        switch (funcType)
+                        {
+                            case "dmSpace":
+                                columnX = 31;
+                                break;
+                            case "dmEarth":
+                                columnX = 41;
+                                break;
+                        }
+                    }
+                    if (explType == "D")
+                        columnX += 60;
+                }
+                else if (filename == "SUM")
+                {
+                    if (explType == "D")
+                    {
+                        switch (funcType)
+                        {
+                            case "sumEarth":
+                                columnX = 1;
+                                break;
+                            case "sumSpace":
+                                columnX = 31;
+                                break;
+                        }
+                    }
+                    else if (satSystem == "Coord")
+                    {
+                        switch (funcType)
+                        {
+                            case "sumEarth":
+                                columnX = 11;
+                                break;
+                            case "sumSpace":
+                                columnX = 41;
+                                break;
+                        }
+                    }
+                    if (satSystem == "Storm")
+                        columnX += 60;
+                }
+
+                bool newSheet = true;
+
+                var columnY = columnX + 1;
+                try
+                {
+                    sheet = hssfwb.GetSheet("Sheet");
+                    if (sheet.GetRow(5) != null)
+                        newSheet = false;
+                }
+                catch (Exception)
+                {
+                    newSheet = true;
+                    sheet = hssfwb.CreateSheet("Sheet");
+                    var row = newSheet ? sheet.CreateRow(1) : sheet.GetRow(1);
+                    var cellX = row.CreateCell(columnX);
+                    cellX.SetCellValue(satSystem);
+                    row = newSheet ? sheet.CreateRow(2) : sheet.GetRow(2);
+
+                    cellX = row.GetCell(columnX) != null ? row.GetCell(columnX) : row.CreateCell(columnX);
+                    cellX.SetCellValue(explType);
+                }
+
+
+                for (int rowIndex = 5; rowIndex < data.Count + 5; rowIndex++)
+                {
+                    var row = newSheet ? sheet.CreateRow(rowIndex) : sheet.GetRow(rowIndex);
+                    var cellX = row.GetCell(columnX) != null ? row.GetCell(columnX) : row.CreateCell(columnX);
                     cellX.SetCellValue(rowIndex);
 
-                    var cellY = row.CreateCell(1);
-                    cellY.SetCellValue(data[rowIndex]);
+                    var cellY = row.GetCell(columnY) != null ? row.GetCell(columnY) : row.CreateCell(columnY);
+                    cellY.SetCellValue(data[rowIndex - 5]);
                 }
-                sheet1.AutoSizeColumn(0);
-                sheet1.AutoSizeColumn(1);
-
-                workbook.Write(fs);
-            }
+                sheet.AutoSizeColumn(0);
+                sheet.AutoSizeColumn(1);
+                using ( fs = new FileStream(newFile, FileMode.Open, FileAccess.Write))
+                {
+                    hssfwb.Write(fs);
+                    fs.Close();
+                }
         }
     }
 }

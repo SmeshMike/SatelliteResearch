@@ -6,7 +6,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using static ResearchModel.TreadControl;
+using static ResearchModel.Extensions;
 using System.Windows.Forms;
 
 namespace ResearchModel
@@ -403,8 +403,8 @@ namespace ResearchModel
         {
             pb.Value = 0;
             double inaccuracy = 0;
-            int iCount = 100;
-            int jCount = 100;
+            int iCount = 10;
+            int jCount = 10;
             pb.Maximum = iCount;
             Random rand = new Random();
 
@@ -453,8 +453,8 @@ namespace ResearchModel
         {
             pb.Value = 0;
             double inaccuracy = 0;
-            int iCount = 100;
-            int jCount = 100;
+            int iCount = 10;
+            int jCount = 10;
             pb.Maximum = iCount;
             Random rand = new Random();
 
@@ -503,8 +503,8 @@ namespace ResearchModel
         {
             pb.Value = 0;
             double inaccuracy = 0;
-            int iCount = 100;
-            int jCount = 100;
+            int iCount = 10;
+            int jCount = 10;
             pb.Maximum = iCount;
             Random rand = new Random();
 
@@ -579,8 +579,8 @@ namespace ResearchModel
             RadioStation tmp4 = new RadioStation();
             tmp4.Run(SearcherStation4);
 
-            int iCount = 100;
-            int jCount = 100;
+            int iCount = 10;
+            int jCount = 10;
             pb.Maximum = iCount;
             Random rand = new Random();
             tmpSource = new RadioStation();
