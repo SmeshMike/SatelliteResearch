@@ -403,8 +403,8 @@ namespace ResearchModel
         {
             pb.Value = 0;
             double inaccuracy = 0;
-            int iCount = 10;
-            int jCount = 10;
+            int iCount = 100;
+            int jCount = 100;
             pb.Maximum = iCount;
             Random rand = new Random();
 
@@ -453,8 +453,8 @@ namespace ResearchModel
         {
             pb.Value = 0;
             double inaccuracy = 0;
-            int iCount = 10;
-            int jCount = 10;
+            int iCount = 100;
+            int jCount = 100;
             pb.Maximum = iCount;
             Random rand = new Random();
 
@@ -503,8 +503,8 @@ namespace ResearchModel
         {
             pb.Value = 0;
             double inaccuracy = 0;
-            int iCount = 10;
-            int jCount = 10;
+            int iCount = 100;
+            int jCount = 100;
             pb.Maximum = iCount;
             Random rand = new Random();
 
@@ -580,7 +580,7 @@ namespace ResearchModel
             tmp4.Run(SearcherStation4);
 
             int iCount = 10;
-            int jCount = 10;
+            int jCount = 100;
             pb.Maximum = iCount;
             Random rand = new Random();
             tmpSource = new RadioStation();

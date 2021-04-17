@@ -28,7 +28,6 @@ namespace ResearchModel
 
         public static void SaveToExcel(List<double> data,string funcType, string satSystem, string explType, bool heightExplr)
         {
-            int shift = 0;
             var filename = "";
             if (funcType.Contains("dm"))
                 filename = "DM";
@@ -93,30 +92,53 @@ namespace ResearchModel
                 }
                 else if (filename == "SUM")
                 {
-                    if (explType == "D")
+                    if (heightExplr)
                     {
+
                         switch (funcType)
                         {
+                            case "sumSpace":
+                                columnX = 21;
+                                break;
                             case "sumEarth":
                                 columnX = 1;
                                 break;
-                            case "sumSpace":
-                                columnX = 31;
-                                break;
-                        }
-                    }
-                    else if (satSystem == "Coord")
-                    {
-                        switch (funcType)
-                        {
-                            case "sumEarth":
+                            case "sumEarthWithMap":
                                 columnX = 11;
                                 break;
-                            case "sumSpace":
-                                columnX = 41;
-                                break;
+                        }
+                    
+                        if (satSystem == "Storm")
+                            columnX += 60;
+                    }
+                    else
+                    {
+                        if (explType == "D")
+                        {
+                            switch (funcType)
+                            {
+                                case "sumEarth":
+                                    columnX = 1;
+                                    break;
+                                case "sumSpace":
+                                    columnX = 31;
+                                    break;
+                            }
+                        }
+                        else if (satSystem == "Coord")
+                        {
+                            switch (funcType)
+                            {
+                                case "sumEarth":
+                                    columnX = 11;
+                                    break;
+                                case "sumSpace":
+                                    columnX = 41;
+                                    break;
+                            }
                         }
                     }
+
                     if (satSystem == "Storm")
                         columnX += 60;
                 }
@@ -148,7 +170,7 @@ namespace ResearchModel
                 {
                     var row = newSheet ? sheet.CreateRow(rowIndex) : sheet.GetRow(rowIndex);
                     var cellX = row.GetCell(columnX) != null ? row.GetCell(columnX) : row.CreateCell(columnX);
-                    cellX.SetCellValue(rowIndex);
+                    cellX.SetCellValue(rowIndex-5);
 
                     var cellY = row.GetCell(columnY) != null ? row.GetCell(columnY) : row.CreateCell(columnY);
                     cellY.SetCellValue(data[rowIndex - 5]);
