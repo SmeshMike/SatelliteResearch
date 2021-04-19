@@ -579,7 +579,11 @@ namespace ResearchModel
             RadioStation tmp4 = new RadioStation();
             tmp4.Run(SearcherStation4);
 
-            int iCount = 10;
+            double newSourceX = TrueSource.X - 5000;
+            double newSourceY = TrueSource.Y - 5000;
+            double newSourceZ = TrueSource.Z - 5000;
+
+            int iCount = 100;
             int jCount = 100;
             pb.Maximum = iCount;
             Random rand = new Random();
@@ -589,9 +593,9 @@ namespace ResearchModel
 
                 for (int j = 0; j < jCount; j++)
                 {
-                    NewSource.X = TrueSource.X - 5000;
-                    NewSource.Y = TrueSource.Y - 5000;
-                    NewSource.Z = TrueSource.Z - 5000;
+                    NewSource.X = newSourceX;
+                    NewSource.Y = newSourceY;
+                    NewSource.Z = newSourceZ;
                     AddInaccuracy(SearcherStation1, tmp1, rand, i);
                     AddInaccuracy(SearcherStation2, tmp2, rand, i);
                     AddInaccuracy(SearcherStation3, tmp3, rand, i);

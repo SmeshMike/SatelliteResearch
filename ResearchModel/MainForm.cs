@@ -406,7 +406,7 @@ namespace ResearchModel
             progressBar.Value = 1;
             progressBar.Step = 1;
 
-            stepTextBox.Text = "1024";
+            stepTextBox.Text = "4";
             minStepTextBox.Text = "0,015625";
             denominatorTextBox.Text = "2";
 
@@ -500,179 +500,207 @@ namespace ResearchModel
         {
             if (stormRadioButton.Checked)
             {
-                if (_type == FunctionType.sumEarth)
+                if (_type == FunctionType.sumEarthWithMap)
                 {
-                    SearcherStation1.X = 2911.589288 * 1000;
-                    SearcherStation1.Y = 21076.211455 * 1000;
-                    SearcherStation1.Z = 27428.013975 * 1000;
-                    SearcherStation1.Vx = 0.119659 * 1000;
-                    SearcherStation1.Vy = 0.133511 * 1000;
-                    SearcherStation1.Vz = 2.413740 * 1000;
+                    SearcherStation1.X = 19447171.057941005;
+                    SearcherStation1.Y = 16370214.96020079;
+                    SearcherStation1.Z = -9068364.7937681377;
+                    SearcherStation1.Vx = 2566.2295392557185;
+                    SearcherStation1.Vy = 4798.5432039939533;
+                    SearcherStation1.Vz = 3386.603525554111;
                     searcherStation1.xTextBox.Text = SearcherStation1.X.ToString();
                     searcherStation1.yTextBox.Text = SearcherStation1.Y.ToString();
                     searcherStation1.zTextBox.Text = SearcherStation1.Z.ToString();
 
 
 
-                    SearcherStation2.X = -2817.404310 * 1000;
-                    SearcherStation2.Y = -21060.364441 * 1000;
-                    SearcherStation2.Z = 27450.014111 * 1000;
-                    SearcherStation2.Vx = -0.110239 * 1000;
-                    SearcherStation2.Vy = -0.138972 * 1000;
-                    SearcherStation2.Vz = 2.409070 * 1000;
+                    SearcherStation2.X = -13691025.171648258;
+                    SearcherStation2.Y = 21418035.151462745;
+                    SearcherStation2.Z = 6384229;
+                    SearcherStation2.Vx = 3459.9453972000379;
+                    SearcherStation2.Vy = 3563.3585432373725;
+                    SearcherStation2.Vz = 3259.7034905383844;
 
                     searcherStation2.xTextBox.Text = SearcherStation2.X.ToString();
                     searcherStation2.yTextBox.Text = SearcherStation2.Y.ToString();
                     searcherStation2.zTextBox.Text = SearcherStation2.Z.ToString();
 
-                    TrueSource.X = 1986426.176356317;
-                    TrueSource.Y = 4004412.6912230053;
-                    TrueSource.Z = -4538247.46397313;
+                    TrueSource.X = -16053977.688941628;
+                    TrueSource.Y = -50052303.706932388;
+                    TrueSource.Z = -36126165.767610423;
+
+                    X = -16053977.688941628;
+                    Y = -50052303.706932388;
+                    Z = -36126165.767610423;
+
                     trueSource.xTextBox.Text = TrueSource.X.ToString();
                     trueSource.yTextBox.Text = TrueSource.Y.ToString();
                     trueSource.zTextBox.Text = TrueSource.Z.ToString();
+                    trueSource.Run();
 
-                    NewSource.X = 1986426.176356317 - 5000;
-                    NewSource.Y = 4004412.6912230053 - 5000;
-                    NewSource.Z = -4538247.46397313 - 5000;
+                    NewSource.X = X - 5000;
+                    NewSource.Y = Y - 5000;
+                    NewSource.Z = Z - 5000;
                     newSource.xTextBox.Text = NewSource.X.ToString();
                     newSource.yTextBox.Text = NewSource.Y.ToString();
                     newSource.zTextBox.Text = NewSource.Z.ToString();
-
+                    newSource.Run();
                 }
-                else if (_type == FunctionType.sumSpace)
+                else if(_type == FunctionType.sumSpace)
                 {
-                    SearcherStation1.X = 3639853.9609999997;
-                    SearcherStation1.Y = 8921804.635;
-                    SearcherStation1.Z = -2463549.466;
-                    SearcherStation1.Vx = -235.661;
-                    SearcherStation1.Vy = 6045.283;
-                    SearcherStation1.Vz = 4953.17;
+                    SearcherStation1.X = 3671454.545;
+                    SearcherStation1.Y = 7774481.823;
+                    SearcherStation1.Z = -3335449.6890000002;
+                    SearcherStation1.Vx = -107.26299999999999;
+                    SearcherStation1.Vy = 6714.665;
+                    SearcherStation1.Vz = 4714.327;
                     searcherStation1.xTextBox.Text = SearcherStation1.X.ToString();
                     searcherStation1.yTextBox.Text = SearcherStation1.Y.ToString();
                     searcherStation1.zTextBox.Text = SearcherStation1.Z.ToString();
 
 
-                    SearcherStation2.X = -3646032.795;
-                    SearcherStation2.Y = -8927601.529;
-                    SearcherStation2.Z = -2433225.547;
-                    SearcherStation2.Vx = 247.96099999999998;
-                    SearcherStation2.Vy = -6033.1460000000006;
-                    SearcherStation2.Vz = 4965.738;
+                    SearcherStation2.X = -3679770.187;
+                    SearcherStation2.Y = -7782445.936;
+                    SearcherStation2.Z = -3307596.9140000003;
+                    SearcherStation2.Vx = 1633.3500838993816;
+                    SearcherStation2.Vy = 4945.1015819539789;
+                    SearcherStation2.Vz = 1083.6350876296103;
                     searcherStation2.xTextBox.Text = SearcherStation2.X.ToString();
                     searcherStation2.yTextBox.Text = SearcherStation2.Y.ToString();
                     searcherStation2.zTextBox.Text = SearcherStation2.Z.ToString();
 
-                    SearcherStation3.X = 42164135.243;
-                    SearcherStation3.Y = 13.411;
-                    SearcherStation3.Z = -53855.533;
+                    SearcherStation3.X = 42164136.076000005;
+                    SearcherStation3.Y = 13.354;
+                    SearcherStation3.Z = -53199.236;
                     SearcherStation3.Vx = -0.005;
                     SearcherStation3.Vy = 0.001;
-                    SearcherStation3.Vz = -3.62;
+                    SearcherStation3.Vz = -3.6719999999999997;
                     searcherStation3.xTextBox.Text = SearcherStation3.X.ToString();
                     searcherStation3.yTextBox.Text = SearcherStation3.Y.ToString();
                     searcherStation3.zTextBox.Text = SearcherStation3.Z.ToString();
 
-                    TrueSource.X = 6034365.9541306281;
-                    TrueSource.Y = 1457231.9555445788;
-                    TrueSource.Z = 1428216.5659902152;
+                    TrueSource.X = 5586213.3877673261;
+                    TrueSource.Y = 15973817.899837304;
+                    TrueSource.Z = 61495483.742841363;
+
+                    X = 5586213.3877673261;
+                    Y = 15973817.899837304;
+                    Z = 61495483.742841363;
+
                     trueSource.xTextBox.Text = TrueSource.X.ToString();
                     trueSource.yTextBox.Text = TrueSource.Y.ToString();
                     trueSource.zTextBox.Text = TrueSource.Z.ToString();
+                    trueSource.Run();
 
-                    NewSource.X = TrueSource.X - 5000;
-                    NewSource.Y = TrueSource.Y - 5000;
-                    NewSource.Z = TrueSource.Z - 5000;
+                    NewSource.X = X - 5000;
+                    NewSource.Y = Y - 5000;
+                    NewSource.Z = Z - 5000;
                     newSource.xTextBox.Text = NewSource.X.ToString();
                     newSource.yTextBox.Text = NewSource.Y.ToString();
                     newSource.zTextBox.Text = NewSource.Z.ToString();
+                    newSource.Run();
                 }
+
             }
             else
             {
-                if (_type == FunctionType.sumEarth)
+                if (_type == FunctionType.sumEarthWithMap)
                 {
-                    SearcherStation1.X = 3050980.433;
-                    SearcherStation1.Y = 21166840.116;
-                    SearcherStation1.Z = 30014830.297000002;
-                    SearcherStation1.Vx = 121.42699999999999;
-                    SearcherStation1.Vy = 31.867;
-                    SearcherStation1.Vz = 2129.0589999999997;
+                    SearcherStation1.X = -1438795.5863861367;
+                    SearcherStation1.Y = 25379248.752880685;
+                    SearcherStation1.Z = 670921.40045146749;
+                    SearcherStation1.Vx = 4397.7097838175059;
+                    SearcherStation1.Vy = 2566.30559571381;
+                    SearcherStation1.Vz = 1237.2528581122183;
                     searcherStation1.xTextBox.Text = SearcherStation1.X.ToString();
                     searcherStation1.yTextBox.Text = SearcherStation1.Y.ToString();
                     searcherStation1.zTextBox.Text = SearcherStation1.Z.ToString();
 
 
-                    SearcherStation2.X = -2946854.585;
-                    SearcherStation2.Y = -21158099.944000002;
-                    SearcherStation2.Z = 30031391.82;
-                    SearcherStation2.Vx = -113.425;
-                    SearcherStation2.Vy = -38.827;
-                    SearcherStation2.Vz = 2124.197;
+                    SearcherStation2.X = 11673015.920991555;
+                    SearcherStation2.Y = 22581344.054512735;
+                    SearcherStation2.Z = -5443216;
+                    SearcherStation2.Vx = 4216.8946513984793;
+                    SearcherStation2.Vy = 4049.1459910055373;
+                    SearcherStation2.Vz = 3299.6417271437317;
                     searcherStation2.xTextBox.Text = SearcherStation2.X.ToString();
                     searcherStation2.yTextBox.Text = SearcherStation2.Y.ToString();
                     searcherStation2.zTextBox.Text = SearcherStation2.Z.ToString();
+                    
+                    TrueSource.X = 4633392.4119862756;
+                    TrueSource.Y = 60677780.192657828;
+                    TrueSource.Z = 19099785.986365132;
 
-                    TrueSource.X = 5826418.0915079154;
-                    TrueSource.Y = 2484117.6945833224;
-                    TrueSource.Z = 677430.07196854427;
+                    X = 4633392.4119862756;
+                    Y = 60677780.192657828;
+                    Z = 19099785.986365132;
+
                     trueSource.xTextBox.Text = TrueSource.X.ToString();
                     trueSource.yTextBox.Text = TrueSource.Y.ToString();
                     trueSource.zTextBox.Text = TrueSource.Z.ToString();
+                    trueSource.Run();
 
-                    NewSource.X = TrueSource.X - 5000;
-                    NewSource.Y = TrueSource.Y - 5000;
-                    NewSource.Z = TrueSource.Z - 5000;
+                    NewSource.X = X- 5000;
+                    NewSource.Y = Y - 5000;
+                    NewSource.Z = Z - 5000;
                     newSource.xTextBox.Text = NewSource.X.ToString();
                     newSource.yTextBox.Text = NewSource.Y.ToString();
                     newSource.zTextBox.Text = NewSource.Z.ToString();
+                    newSource.Run();
                 }
                 else if (_type == FunctionType.sumSpace)
                 {
-                    SearcherStation1.X = 213004.652;
-                    SearcherStation1.Y = 10941934.4259;
-                    SearcherStation1.Z = -1154924.830;
-                    SearcherStation1.Vx = -2116.552;
-                    SearcherStation1.Vy = -4769.517;
-                    SearcherStation1.Vz = -5131.828;
+                    SearcherStation1.X = -2562981.920103997;
+                    SearcherStation1.Y = 25290463.097326234;
+                    SearcherStation1.Z = 1195138.0970572969;
+                    SearcherStation1.Vx = 2335.6780560387665;
+                    SearcherStation1.Vy = 4837.6985778276339;
+                    SearcherStation1.Vz = 1692.1800429430698;
                     searcherStation1.xTextBox.Text = SearcherStation1.X.ToString();
                     searcherStation1.yTextBox.Text = SearcherStation1.Y.ToString();
                     searcherStation1.zTextBox.Text = SearcherStation1.Z.ToString();
 
 
-                    SearcherStation2.X = -210490.857;
-                    SearcherStation2.Y = -10938668.62;
-                    SearcherStation2.Z = -1185906.305;
-                    SearcherStation2.Vx = 2127.344;
-                    SearcherStation2.Vy = 4783.659;
-                    SearcherStation2.Vz = -5112.496;
+                    SearcherStation2.X = -14497527.788298916;
+                    SearcherStation2.Y = 20880567.234332997;
+                    SearcherStation2.Z = 6760308;
+                    SearcherStation2.Vx = 381.48319599287731;
+                    SearcherStation2.Vy = 1916.8746457048107;
+                    SearcherStation2.Vz = 586.30666955667857;
                     searcherStation2.xTextBox.Text = SearcherStation2.X.ToString();
                     searcherStation2.yTextBox.Text = SearcherStation2.Y.ToString();
                     searcherStation2.zTextBox.Text = SearcherStation2.Z.ToString();
 
-                    SearcherStation3.X = 42164147.087;
-                    SearcherStation3.Y = 26.495;
-                    SearcherStation3.Z = 43607.498;
-                    SearcherStation3.Vx = -0.004;
-                    SearcherStation3.Vy = -0.001;
-                    SearcherStation3.Vz = 4.292;
+                    SearcherStation3.X = 24410337.610147119;
+                    SearcherStation3.Y = 7093082.387695564;
+                    SearcherStation3.Z = 5124144;
+                    SearcherStation3.Vx = 2308.0790775400023;
+                    SearcherStation3.Vy = 2090.5410624530823;
+                    SearcherStation3.Vz = 3301.7910100993658;
                     searcherStation3.xTextBox.Text = SearcherStation3.X.ToString();
                     searcherStation3.yTextBox.Text = SearcherStation3.Y.ToString();
                     searcherStation3.zTextBox.Text = SearcherStation3.Z.ToString();
 
-                    TrueSource.X = 4832916.0136173125;
-                    TrueSource.Y = 4149599.7557129469;
-                    TrueSource.Z = 25390.405833661556;
+                    TrueSource.X = 2051215.9433868732;
+                    TrueSource.Y = 63621692.089274965;
+                    TrueSource.Z = 4016960.035646758;
+
+                    X = 2051215.9433868732;
+                    Y = 63621692.089274965;
+                    Z = 4016960.035646758;
+
                     trueSource.xTextBox.Text = TrueSource.X.ToString();
                     trueSource.yTextBox.Text = TrueSource.Y.ToString();
                     trueSource.zTextBox.Text = TrueSource.Z.ToString();
+                    trueSource.Run();
 
-                    NewSource.X = 4832916.0136173125 - 5000;
-                    NewSource.Y = 4149599.7557129469 - 5000;
-                    NewSource.Z = 25390.405833661556 - 5000;
+                    NewSource.X = X - 5000;
+                    NewSource.Y = Y - 5000;
+                    NewSource.Z = Z - 5000;
                     newSource.xTextBox.Text = NewSource.X.ToString();
                     newSource.yTextBox.Text = NewSource.Y.ToString();
                     newSource.zTextBox.Text = NewSource.Z.ToString();
+                    newSource.Run();
                 }
             }
         }
@@ -684,13 +712,13 @@ namespace ResearchModel
         {
             newSource.Run();
             List<double> points = new List<double>();
-            SumMethodsRefreshClick(sender, e);
+            //SumMethodsRefreshClick(sender, e);
 
             F function = Initialization(_type);
 
             FindSatelliteInaccuracy(_delta, _minDelta, _denominator,function, points, progressBar);
             string satSystem = glonassRadioButton.Checked ? "GLONASS" : "Storm";
-            SaveToExcel(points, _type+"", satSystem, "Coord", ElevExplCheckBox.Checked);
+            SaveToExcel(points, _type+"", satSystem, "Coord");
             var form = new ChartsForm();
 
             form.Show();
@@ -698,7 +726,7 @@ namespace ResearchModel
 
             var series = new Series
             {
-                    Name = "сам щит",
+                    Name = _type + "",
                     Color = Color.Green,
                     IsVisibleInLegend = true,
                     IsXValueIndexed = true,
@@ -717,27 +745,35 @@ namespace ResearchModel
 
         private void DtGraphButton(object sender, EventArgs e)
         {
-            SumMethodsRefreshClick(sender, e);
+            //SumMethodsRefreshClick(sender, e);
 
             //newSource.Run();
             List<double> points = new List<double>();
             F function = Initialization(_type);
 
-            if (_type == FunctionType.ddSpace || _type == FunctionType.ddEarth)
+            string explType = "";
+
+            if (_type == FunctionType.ddSpace || _type == FunctionType.ddEarth || _type == FunctionType.ddEarthWithMap)
             {
                 FindDwInaccuracy(_delta, _minDelta, _denominator, function, points, progressBar);
+                explType = "DW";
             }
-            else if (_type == FunctionType.sumEarth || _type == FunctionType.sumSpace)
+            else if (_type == FunctionType.dmEarth || _type == FunctionType.dmSpace || _type == FunctionType.dmEarthWithMap)
             {
-                FindSumInaccuracy(_delta, _minDelta, _denominator, function, points, progressBar);
+                FindDtInaccuracy(_delta, _minDelta, _denominator, function, points, progressBar);
+                explType = "DT";
             }
             else
             {
-               FindDtInaccuracy(_delta, _minDelta, _denominator, function, points, progressBar);
+                FindSumInaccuracy(_delta, _minDelta, _denominator, function, points, progressBar);
+                explType = "DT + DW";
             }
 
             string satSystem = glonassRadioButton.Checked ? "GLONASS" : "Storm";
-            SaveToExcel(points, _type + "", satSystem, "D", ElevExplCheckBox.Checked);
+            
+
+
+            SaveToExcel(points, _type + "", satSystem, explType);
             ChartsForm form = new ChartsForm();
             
             form.Show();
@@ -745,7 +781,7 @@ namespace ResearchModel
             form.dtDifference.Series.Clear();
             var series = new Series
             {
-                Name = "сам щит",
+                Name = _type + "",
                 Color = Color.Green,
                 IsVisibleInLegend = true,
                 IsXValueIndexed = true,
@@ -765,7 +801,9 @@ namespace ResearchModel
         {
             if (euclideanRadioButton.Checked)
             {
-
+                trueSource.X = X;
+                trueSource.Y = Y;
+                trueSource.Z = Z;
                 trueSource.xTextBox.Text = X.ToString();
                 trueSource.yTextBox.Text = Y.ToString();
                 trueSource.zTextBox.Text = Z.ToString();

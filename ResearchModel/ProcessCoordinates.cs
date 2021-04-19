@@ -186,12 +186,12 @@ namespace ResearchModel
 
             Random random = new Random();
 
-            X = random.NextDouble() * 2 * r - r;
-            Coordinate[0, 0] = X;
-            Y =  Math.Sqrt(r * r - X * X);
-            Coordinate[0, 1] = Y;
-            Z = Convert.ToDouble(((-_coef[0, 0] * X - _coef[0, 1] * Y) / _coef[0, 2]));
-            Coordinate[0, 2] = Z;
+            var x = random.NextDouble() * 2 * r - r;
+            Coordinate[0, 0] = x;
+            var y =  Math.Sqrt(r * r - x * x);
+            Coordinate[0, 1] = y;
+            var z = Convert.ToDouble(((-_coef[0, 0] * x - _coef[0, 1] * y) / _coef[0, 2]));
+            Coordinate[0, 2] = z;
             Coordinate[0, 3] = new Random().NextDouble() * 5000;
             Coordinate[0, 4] = new Random().NextDouble() * 5000;
             Coordinate[0, 5] = new Random().NextDouble() * 5000;
@@ -200,16 +200,16 @@ namespace ResearchModel
             {
                 do
                 {
-                    X = random.NextDouble()*2*r- r;
-                    Y = Math.Sqrt(r * r - X * X);
-                    Z = Convert.ToDouble((long) ((-_coef[i - 1, 0] * X - _coef[i - 1, 1] * Y) / _coef[i - 1, 2]));
+                    x = random.NextDouble()*2*r- r;
+                    y = Math.Sqrt(r * r - x * x);
+                    z = Convert.ToDouble((long) ((-_coef[i - 1, 0] * x - _coef[i - 1, 1] * y) / _coef[i - 1, 2]));
 
-                } while (Math.Sqrt((Coordinate[i - 1, 0] - X) * (Coordinate[i - 1, 0] - X)) < 1000000 || Math.Sqrt((Coordinate[i - 1, 1] - Y) * (Coordinate[i - 1, 1] - Y)) < 1000000
-                                                                                                      || Math.Sqrt((Coordinate[i - 1, 2] - Z) * (Coordinate[i - 1, 2] - Z)) < 1000000);
+                } while (Math.Sqrt((Coordinate[i - 1, 0] - x) * (Coordinate[i - 1, 0] - x)) < 1000000 || Math.Sqrt((Coordinate[i - 1, 1] - y) * (Coordinate[i - 1, 1] - y)) < 1000000
+                                                                                                      || Math.Sqrt((Coordinate[i - 1, 2] - z) * (Coordinate[i - 1, 2] - z)) < 1000000);
 
-                Coordinate[i, 0] = X;
-                Coordinate[i, 1] = Y;
-                Coordinate[i, 2] = Z;
+                Coordinate[i, 0] = x;
+                Coordinate[i, 1] = y;
+                Coordinate[i, 2] = z;
                 Coordinate[i, 3] = new Random().NextDouble() * 5000;
                 Coordinate[i, 4] = new Random().NextDouble() * 5000;
                 Coordinate[i, 5] = new Random().NextDouble() * 5000;
