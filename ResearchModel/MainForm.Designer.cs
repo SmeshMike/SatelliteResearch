@@ -87,6 +87,7 @@
             this.ElevationCheckBox = new System.Windows.Forms.CheckBox();
             this.anyInfoLabel = new System.Windows.Forms.Label();
             this.ElevExplCheckBox = new System.Windows.Forms.CheckBox();
+            this.AlpesСheckBox = new System.Windows.Forms.CheckBox();
             this.methodGroupBox.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.systemGroupBox.SuspendLayout();
@@ -714,11 +715,22 @@
             this.ElevExplCheckBox.Text = "ElMap";
             this.ElevExplCheckBox.UseVisualStyleBackColor = true;
             // 
+            // AlpesСheckBox
+            // 
+            this.AlpesСheckBox.AutoSize = true;
+            this.AlpesСheckBox.Location = new System.Drawing.Point(888, 233);
+            this.AlpesСheckBox.Name = "AlpesСheckBox";
+            this.AlpesСheckBox.Size = new System.Drawing.Size(55, 19);
+            this.AlpesСheckBox.TabIndex = 36;
+            this.AlpesСheckBox.Text = "Alpes";
+            this.AlpesСheckBox.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(959, 509);
+            this.Controls.Add(this.AlpesСheckBox);
             this.Controls.Add(this.ElevExplCheckBox);
             this.Controls.Add(this.anyInfoLabel);
             this.Controls.Add(this.ElevationCheckBox);
@@ -844,5 +856,6 @@
         private System.Windows.Forms.CheckBox ElevationCheckBox;
         private System.Windows.Forms.Label anyInfoLabel;
         private System.Windows.Forms.CheckBox ElevExplCheckBox;
+        private System.Windows.Forms.CheckBox AlpesСheckBox;
     }
 }

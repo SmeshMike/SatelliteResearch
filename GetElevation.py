@@ -1,8 +1,8 @@
 import rasterio
 import sys
 
-#path = 'D:\\VS Pojects\\SatelliteResearch\\1dot6gb.tif'
-path = 'C:\\Repository\\SatelliteResearch\\1dot6gb.tif'
+path = 'D:\\VS Pojects\\SatelliteResearch\\1dot6gb.tif'
+#path = 'C:\\Repository\\SatelliteResearch\\1dot6gb.tif'
 dataset = rasterio.open(path)
 band = dataset.read(1)
 

@@ -146,8 +146,8 @@ namespace ResearchModel
             int picWidth = 43200;
             int picLength = 21600;
 
-            var lat = random.Next(21601);
-            var lon = random.Next(43201);
+            var lat = random.Next(21600);
+            var lon = random.Next(43200);
             double latD = 0;
             double lonD = 0;
 
@@ -158,15 +158,52 @@ namespace ResearchModel
             if (lat == picLength / 2)
                 latD = 0;
             else
-                latD = (double) (picLength / 2 - lat) / (picLength / 2) * 90;
+                latD = (double)(picLength / 2 - 1 - lat) / (picLength / 2) * 90;
             if (lon == picWidth / 2)
                 lonD = 0;
             else
-                lonD = (double) (lon - picWidth / 2) / (picWidth / 2) * 180;
+                lonD = (double)(lon - picWidth / 2 + 1) / (picWidth / 2) * 180;
 
             var r = 63781370;
             myStreamWriter.WriteLine(inputText);
             
+            var result = Convert.ToInt32(CoordProcess.StandardOutput.ReadLine());
+            r += result;
+
+            X = r * Math.Cos(Math.PI * Convert.ToDouble(latD) / 180) * Math.Cos(Math.PI * Convert.ToDouble(lonD) / 180);
+            Y = r * Math.Cos(Math.PI * Convert.ToDouble(latD) / 180) * Math.Sin(Math.PI * Convert.ToDouble(lonD) / 180);
+            Z = r * Math.Sin(Math.PI * Convert.ToDouble(latD) / 180);
+
+            // Wait for the sort process to write the sorted text lines.
+        }
+
+        public static void GenerateAlpesSourceWithElevationMap()
+        {
+            Random random = new Random();
+            int picWidth = 43200;
+            int picLength = 21600;
+
+            var lat = (int)(picLength/2-1 - 46.0166667 /90*10800) ;
+            var lon = (int)(picWidth/2-1 + 11.1833333/180*21600);
+            double latD = 0;
+            double lonD = 0;
+
+
+            StreamWriter myStreamWriter = CoordProcess.StandardInput;
+
+            string inputText = $"{lat} {lon}";
+            if (lat == picLength / 2)
+                latD = 0;
+            else
+                latD = (double)(picLength / 2 - 1 - lat) / (picLength / 2) * 90;
+            if (lon == picWidth / 2)
+                lonD = 0;
+            else
+                lonD = (double)(lon - picWidth / 2 +1) / (picWidth / 2) * 180;
+
+            var r = 63781370;
+            myStreamWriter.WriteLine(inputText);
+
             var result = Convert.ToInt32(CoordProcess.StandardOutput.ReadLine());
             r += result;
 

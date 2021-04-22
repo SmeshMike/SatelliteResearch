@@ -119,7 +119,7 @@ namespace ResearchModel
                         Coordinate[3, 5]);
                 searcherStation4.Run(tmp);
             }
-            else if (stormRadioButton.Checked && (_type == FunctionType.ddEarth || _type == FunctionType.dmEarth || _type == FunctionType.sumSpace))
+            else if (stormRadioButton.Checked && (_type == FunctionType.ddEarth || _type == FunctionType.ddEarthWithMap || _type == FunctionType.dmEarth || _type == FunctionType.sumSpace || _type == FunctionType.dmEarthWithMap))
             {
                 var tmp = GetStormCoordinates(3);
 
@@ -146,7 +146,7 @@ namespace ResearchModel
                 searcherStation4.zTextBox.Text = (0).ToString();
 
             }
-            else if (glonassRadioButton.Checked && (_type == FunctionType.ddEarth || _type == FunctionType.dmEarth || _type == FunctionType.sumSpace))
+            else if (glonassRadioButton.Checked && (_type == FunctionType.ddEarth || _type == FunctionType.ddEarthWithMap || _type == FunctionType.dmEarth || _type == FunctionType.sumSpace || _type==FunctionType.dmEarthWithMap))
             {
                 GenerateGlonassSatellites(3);
 
@@ -177,7 +177,7 @@ namespace ResearchModel
                 searcherStation4.yTextBox.Text = (0).ToString();
                 searcherStation4.zTextBox.Text = (0).ToString();
             }
-            else if (stormRadioButton.Checked && _type == FunctionType.sumEarth)
+            else if (stormRadioButton.Checked && (_type == FunctionType.sumEarth|| _type == FunctionType.sumEarthWithMap))
             {
                 var tmp = GetStormCoordinates(2);
 
@@ -203,7 +203,7 @@ namespace ResearchModel
                 searcherStation4.zTextBox.Text = (0).ToString();
 
             }
-            else
+            else if (glonassRadioButton.Checked && (_type == FunctionType.sumEarth || _type == FunctionType.sumEarthWithMap))
             {
 
                 GenerateGlonassSatellites(2);
@@ -234,17 +234,20 @@ namespace ResearchModel
                 searcherStation4.zTextBox.Text = (0).ToString();
             }
 
-
-            if (ElevationCheckBox.Checked)
-                GenerateSourceWithElevationMap();
+            if (AlpesСheckBox.Checked)
+                GenerateAlpesSourceWithElevationMap();
             else
-                GenerateSource();
-
-            if (sphericalRadioButton.Checked)
             {
-                Random rand = new Random();
-                longtitudeTrueTextBox.Text = Math.Round(rand.NextDouble() * 360 - 180, 7).ToString();
-                latitudeTrueTextBox.Text = Math.Round(rand.NextDouble() * 180 - 90, 7).ToString();
+                if (ElevationCheckBox.Checked)
+                    GenerateSourceWithElevationMap();
+                else if(euclideanRadioButton.Checked)
+                    GenerateSource();
+                else
+                {
+                    Random rand = new Random();
+                    longtitudeTrueTextBox.Text = Math.Round(rand.NextDouble() * 360 - 180, 7).ToString();
+                    latitudeTrueTextBox.Text = Math.Round(rand.NextDouble() * 180 - 90, 7).ToString();
+                }
             }
 
             ProcessTextBoxesCoordinates();
@@ -500,209 +503,137 @@ namespace ResearchModel
         {
             if (stormRadioButton.Checked)
             {
-                if (_type == FunctionType.sumEarthWithMap)
-                {
-                    SearcherStation1.X = 19447171.057941005;
-                    SearcherStation1.Y = 16370214.96020079;
-                    SearcherStation1.Z = -9068364.7937681377;
-                    SearcherStation1.Vx = 2566.2295392557185;
-                    SearcherStation1.Vy = 4798.5432039939533;
-                    SearcherStation1.Vz = 3386.603525554111;
-                    searcherStation1.xTextBox.Text = SearcherStation1.X.ToString();
-                    searcherStation1.yTextBox.Text = SearcherStation1.Y.ToString();
-                    searcherStation1.zTextBox.Text = SearcherStation1.Z.ToString();
+
+                SearcherStation1.X = 3445188.207;
+                SearcherStation1.Y = 20934458.335;
+                SearcherStation1.Z = 36563639.56;
+                SearcherStation1.Vx = 74.464;
+                SearcherStation1.Vy = -112.460000;
+                SearcherStation1.Vz = 1311.173;
+                searcherStation1.xTextBox.Text = SearcherStation1.X.ToString();
+                searcherStation1.yTextBox.Text = SearcherStation1.Y.ToString();
+                searcherStation1.zTextBox.Text = SearcherStation1.Z.ToString();
 
 
 
-                    SearcherStation2.X = -13691025.171648258;
-                    SearcherStation2.Y = 21418035.151462745;
-                    SearcherStation2.Z = 6384229;
-                    SearcherStation2.Vx = 3459.9453972000379;
-                    SearcherStation2.Vy = 3563.3585432373725;
-                    SearcherStation2.Vz = 3259.7034905383844;
+                SearcherStation2.X = 32299599.621;
+                SearcherStation2.Y = -27102542.786000002;
+                SearcherStation2.Z = -72388.251;
+                SearcherStation2.Vx = 0.002;
+                SearcherStation2.Vy = 0.005;
+                SearcherStation2.Vz = -0.815;
+                searcherStation2.xTextBox.Text = SearcherStation2.X.ToString();
+                searcherStation2.yTextBox.Text = SearcherStation2.Y.ToString();
+                searcherStation2.zTextBox.Text = SearcherStation2.Z.ToString();
 
-                    searcherStation2.xTextBox.Text = SearcherStation2.X.ToString();
-                    searcherStation2.yTextBox.Text = SearcherStation2.Y.ToString();
-                    searcherStation2.zTextBox.Text = SearcherStation2.Z.ToString();
+                SearcherStation3.X = -3320403.6259999997;
+                SearcherStation3.Y = -20959212.057;
+                SearcherStation3.Z = 36561003.202;
+                SearcherStation3.Vx = -71.80799999999;
+                SearcherStation3.Vy = 102.488;
+                SearcherStation3.Vz = 1306.1229999999998;
+                searcherStation3.xTextBox.Text = SearcherStation3.X.ToString();
+                searcherStation3.yTextBox.Text = SearcherStation3.Y.ToString();
+                searcherStation3.zTextBox.Text = SearcherStation3.Z.ToString();
 
-                    TrueSource.X = -16053977.688941628;
-                    TrueSource.Y = -50052303.706932388;
-                    TrueSource.Z = -36126165.767610423;
-
-                    X = -16053977.688941628;
-                    Y = -50052303.706932388;
-                    Z = -36126165.767610423;
-
-                    trueSource.xTextBox.Text = TrueSource.X.ToString();
-                    trueSource.yTextBox.Text = TrueSource.Y.ToString();
-                    trueSource.zTextBox.Text = TrueSource.Z.ToString();
-                    trueSource.Run();
-
-                    NewSource.X = X - 5000;
-                    NewSource.Y = Y - 5000;
-                    NewSource.Z = Z - 5000;
-                    newSource.xTextBox.Text = NewSource.X.ToString();
-                    newSource.yTextBox.Text = NewSource.Y.ToString();
-                    newSource.zTextBox.Text = NewSource.Z.ToString();
-                    newSource.Run();
-                }
-                else if(_type == FunctionType.sumSpace)
-                {
-                    SearcherStation1.X = 3671454.545;
-                    SearcherStation1.Y = 7774481.823;
-                    SearcherStation1.Z = -3335449.6890000002;
-                    SearcherStation1.Vx = -107.26299999999999;
-                    SearcherStation1.Vy = 6714.665;
-                    SearcherStation1.Vz = 4714.327;
-                    searcherStation1.xTextBox.Text = SearcherStation1.X.ToString();
-                    searcherStation1.yTextBox.Text = SearcherStation1.Y.ToString();
-                    searcherStation1.zTextBox.Text = SearcherStation1.Z.ToString();
+                SearcherStation4.X = 38213720.761;
+                SearcherStation4.Y = 17819336.248;
+                SearcherStation4.Z = -1583.459;
+                SearcherStation4.Vx = 0.002;
+                SearcherStation4.Vy = -0.004;
+                SearcherStation4.Vz = -5.34;
+                searcherStation4.xTextBox.Text = SearcherStation4.X.ToString();
+                searcherStation4.yTextBox.Text = SearcherStation4.Y.ToString();
+                searcherStation4.zTextBox.Text = SearcherStation4.Z.ToString();
 
 
-                    SearcherStation2.X = -3679770.187;
-                    SearcherStation2.Y = -7782445.936;
-                    SearcherStation2.Z = -3307596.9140000003;
-                    SearcherStation2.Vx = 1633.3500838993816;
-                    SearcherStation2.Vy = 4945.1015819539789;
-                    SearcherStation2.Vz = 1083.6350876296103;
-                    searcherStation2.xTextBox.Text = SearcherStation2.X.ToString();
-                    searcherStation2.yTextBox.Text = SearcherStation2.Y.ToString();
-                    searcherStation2.zTextBox.Text = SearcherStation2.Z.ToString();
+                GenerateAlpesSourceWithElevationMap();
 
-                    SearcherStation3.X = 42164136.076000005;
-                    SearcherStation3.Y = 13.354;
-                    SearcherStation3.Z = -53199.236;
-                    SearcherStation3.Vx = -0.005;
-                    SearcherStation3.Vy = 0.001;
-                    SearcherStation3.Vz = -3.6719999999999997;
-                    searcherStation3.xTextBox.Text = SearcherStation3.X.ToString();
-                    searcherStation3.yTextBox.Text = SearcherStation3.Y.ToString();
-                    searcherStation3.zTextBox.Text = SearcherStation3.Z.ToString();
+                TrueSource.X = X;
+                TrueSource.Y = Y;
+                TrueSource.Z = Z;
 
-                    TrueSource.X = 5586213.3877673261;
-                    TrueSource.Y = 15973817.899837304;
-                    TrueSource.Z = 61495483.742841363;
+                trueSource.xTextBox.Text = TrueSource.X.ToString();
+                trueSource.yTextBox.Text = TrueSource.Y.ToString();
+                trueSource.zTextBox.Text = TrueSource.Z.ToString();
+                trueSource.Run();
 
-                    X = 5586213.3877673261;
-                    Y = 15973817.899837304;
-                    Z = 61495483.742841363;
 
-                    trueSource.xTextBox.Text = TrueSource.X.ToString();
-                    trueSource.yTextBox.Text = TrueSource.Y.ToString();
-                    trueSource.zTextBox.Text = TrueSource.Z.ToString();
-                    trueSource.Run();
-
-                    NewSource.X = X - 5000;
-                    NewSource.Y = Y - 5000;
-                    NewSource.Z = Z - 5000;
-                    newSource.xTextBox.Text = NewSource.X.ToString();
-                    newSource.yTextBox.Text = NewSource.Y.ToString();
-                    newSource.zTextBox.Text = NewSource.Z.ToString();
-                    newSource.Run();
-                }
-
+                NewSource.X = X - 5000;
+                NewSource.Y = Y - 5000;
+                NewSource.Z = Z - 5000;
+                newSource.xTextBox.Text = NewSource.X.ToString();
+                newSource.yTextBox.Text = NewSource.Y.ToString();
+                newSource.zTextBox.Text = NewSource.Z.ToString();
+                newSource.Run();
             }
-            else
+            else if (glonassRadioButton.Checked)
             {
-                if (_type == FunctionType.sumEarthWithMap)
-                {
-                    SearcherStation1.X = -1438795.5863861367;
-                    SearcherStation1.Y = 25379248.752880685;
-                    SearcherStation1.Z = 670921.40045146749;
-                    SearcherStation1.Vx = 4397.7097838175059;
-                    SearcherStation1.Vy = 2566.30559571381;
-                    SearcherStation1.Vz = 1237.2528581122183;
-                    searcherStation1.xTextBox.Text = SearcherStation1.X.ToString();
-                    searcherStation1.yTextBox.Text = SearcherStation1.Y.ToString();
-                    searcherStation1.zTextBox.Text = SearcherStation1.Z.ToString();
+                SearcherStation1.X = -5935802.5687354617;
+                SearcherStation1.Y = 24717254.051876262;
+                SearcherStation1.Z = 2767910.195097459;
+                SearcherStation1.Vx = 4730.5250632253128;
+                SearcherStation1.Vy = 2143.6350639647035;
+                SearcherStation1.Vz = 2947.0247509642622;
+                searcherStation1.xTextBox.Text = SearcherStation1.X.ToString();
+                searcherStation1.yTextBox.Text = SearcherStation1.Y.ToString();
+                searcherStation1.zTextBox.Text = SearcherStation1.Z.ToString();
 
 
-                    SearcherStation2.X = 11673015.920991555;
-                    SearcherStation2.Y = 22581344.054512735;
-                    SearcherStation2.Z = -5443216;
-                    SearcherStation2.Vx = 4216.8946513984793;
-                    SearcherStation2.Vy = 4049.1459910055373;
-                    SearcherStation2.Vz = 3299.6417271437317;
-                    searcherStation2.xTextBox.Text = SearcherStation2.X.ToString();
-                    searcherStation2.yTextBox.Text = SearcherStation2.Y.ToString();
-                    searcherStation2.zTextBox.Text = SearcherStation2.Z.ToString();
-                    
-                    TrueSource.X = 4633392.4119862756;
-                    TrueSource.Y = 60677780.192657828;
-                    TrueSource.Z = 19099785.986365132;
 
-                    X = 4633392.4119862756;
-                    Y = 60677780.192657828;
-                    Z = 19099785.986365132;
+                SearcherStation2.X = -22012417.926170126;
+                SearcherStation2.Y = 12713373.157570107;
+                SearcherStation2.Z = 10264559;
+                SearcherStation2.Vx = 2688.5168406593225;
+                SearcherStation2.Vy = 3268.5073107800017;
+                SearcherStation2.Vz = 4955.5059056521886;
+                searcherStation2.xTextBox.Text = SearcherStation2.X.ToString();
+                searcherStation2.yTextBox.Text = SearcherStation2.Y.ToString();
+                searcherStation2.zTextBox.Text = SearcherStation2.Z.ToString();
 
-                    trueSource.xTextBox.Text = TrueSource.X.ToString();
-                    trueSource.yTextBox.Text = TrueSource.Y.ToString();
-                    trueSource.zTextBox.Text = TrueSource.Z.ToString();
-                    trueSource.Run();
+                SearcherStation3.X = 4678350.1451920457;
+                SearcherStation3.Y = 24985784.756916914;
+                SearcherStation3.Z = -16312345;
+                SearcherStation3.Vx = 1493.7551815499342;
+                SearcherStation3.Vy = 4186.350167350075;
+                SearcherStation3.Vz = 4911.5723464226221;
+                searcherStation3.xTextBox.Text = SearcherStation3.X.ToString();
+                searcherStation3.yTextBox.Text = SearcherStation3.Y.ToString();
+                searcherStation3.zTextBox.Text = SearcherStation3.Z.ToString();
 
-                    NewSource.X = X- 5000;
-                    NewSource.Y = Y - 5000;
-                    NewSource.Z = Z - 5000;
-                    newSource.xTextBox.Text = NewSource.X.ToString();
-                    newSource.yTextBox.Text = NewSource.Y.ToString();
-                    newSource.zTextBox.Text = NewSource.Z.ToString();
-                    newSource.Run();
-                }
-                else if (_type == FunctionType.sumSpace)
-                {
-                    SearcherStation1.X = -2562981.920103997;
-                    SearcherStation1.Y = 25290463.097326234;
-                    SearcherStation1.Z = 1195138.0970572969;
-                    SearcherStation1.Vx = 2335.6780560387665;
-                    SearcherStation1.Vy = 4837.6985778276339;
-                    SearcherStation1.Vz = 1692.1800429430698;
-                    searcherStation1.xTextBox.Text = SearcherStation1.X.ToString();
-                    searcherStation1.yTextBox.Text = SearcherStation1.Y.ToString();
-                    searcherStation1.zTextBox.Text = SearcherStation1.Z.ToString();
+                SearcherStation4.X = -14485131.6116681;
+                SearcherStation4.Y = 20889168.537609473;
+                SearcherStation4.Z = 9169112;
+                SearcherStation4.Vx = 1356.56143368993;
+                SearcherStation4.Vy = 1768.0281688310338;
+                SearcherStation4.Vz = 3622.9812650117005;
+                searcherStation4.xTextBox.Text = SearcherStation4.X.ToString();
+                searcherStation4.yTextBox.Text = SearcherStation4.Y.ToString();
+                searcherStation4.zTextBox.Text = SearcherStation4.Z.ToString();
 
 
-                    SearcherStation2.X = -14497527.788298916;
-                    SearcherStation2.Y = 20880567.234332997;
-                    SearcherStation2.Z = 6760308;
-                    SearcherStation2.Vx = 381.48319599287731;
-                    SearcherStation2.Vy = 1916.8746457048107;
-                    SearcherStation2.Vz = 586.30666955667857;
-                    searcherStation2.xTextBox.Text = SearcherStation2.X.ToString();
-                    searcherStation2.yTextBox.Text = SearcherStation2.Y.ToString();
-                    searcherStation2.zTextBox.Text = SearcherStation2.Z.ToString();
+                GenerateAlpesSourceWithElevationMap();
 
-                    SearcherStation3.X = 24410337.610147119;
-                    SearcherStation3.Y = 7093082.387695564;
-                    SearcherStation3.Z = 5124144;
-                    SearcherStation3.Vx = 2308.0790775400023;
-                    SearcherStation3.Vy = 2090.5410624530823;
-                    SearcherStation3.Vz = 3301.7910100993658;
-                    searcherStation3.xTextBox.Text = SearcherStation3.X.ToString();
-                    searcherStation3.yTextBox.Text = SearcherStation3.Y.ToString();
-                    searcherStation3.zTextBox.Text = SearcherStation3.Z.ToString();
+                TrueSource.X = X;
+                TrueSource.Y = Y;
+                TrueSource.Z = Z;
 
-                    TrueSource.X = 2051215.9433868732;
-                    TrueSource.Y = 63621692.089274965;
-                    TrueSource.Z = 4016960.035646758;
+                trueSource.xTextBox.Text = TrueSource.X.ToString();
+                trueSource.yTextBox.Text = TrueSource.Y.ToString();
+                trueSource.zTextBox.Text = TrueSource.Z.ToString();
+                trueSource.Run();
 
-                    X = 2051215.9433868732;
-                    Y = 63621692.089274965;
-                    Z = 4016960.035646758;
 
-                    trueSource.xTextBox.Text = TrueSource.X.ToString();
-                    trueSource.yTextBox.Text = TrueSource.Y.ToString();
-                    trueSource.zTextBox.Text = TrueSource.Z.ToString();
-                    trueSource.Run();
+                NewSource.X = X - 5000;
+                NewSource.Y = Y - 5000;
+                NewSource.Z = Z - 5000;
+                newSource.xTextBox.Text = NewSource.X.ToString();
+                newSource.yTextBox.Text = NewSource.Y.ToString();
+                newSource.zTextBox.Text = NewSource.Z.ToString();
+                newSource.Run();
 
-                    NewSource.X = X - 5000;
-                    NewSource.Y = Y - 5000;
-                    NewSource.Z = Z - 5000;
-                    newSource.xTextBox.Text = NewSource.X.ToString();
-                    newSource.yTextBox.Text = NewSource.Y.ToString();
-                    newSource.zTextBox.Text = NewSource.Z.ToString();
-                    newSource.Run();
-                }
             }
+
         }
         #endregion
 
@@ -740,9 +671,7 @@ namespace ResearchModel
             form.Controls.Add(form.dtDifference);
             form.dtDifference.Show();
         }
-
         
-
         private void DtGraphButton(object sender, EventArgs e)
         {
             //SumMethodsRefreshClick(sender, e);
