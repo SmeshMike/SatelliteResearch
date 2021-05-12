@@ -86,8 +86,8 @@
             this.longtitudeNewTextBox = new System.Windows.Forms.TextBox();
             this.ElevationCheckBox = new System.Windows.Forms.CheckBox();
             this.anyInfoLabel = new System.Windows.Forms.Label();
-            this.ElevExplCheckBox = new System.Windows.Forms.CheckBox();
             this.AlpesСheckBox = new System.Windows.Forms.CheckBox();
+            this.fullResearchButton = new System.Windows.Forms.Button();
             this.methodGroupBox.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.systemGroupBox.SuspendLayout();
@@ -700,20 +700,10 @@
             // anyInfoLabel
             // 
             this.anyInfoLabel.AutoSize = true;
-            this.anyInfoLabel.Location = new System.Drawing.Point(754, 276);
+            this.anyInfoLabel.Location = new System.Drawing.Point(756, 211);
             this.anyInfoLabel.Name = "anyInfoLabel";
             this.anyInfoLabel.Size = new System.Drawing.Size(0, 15);
             this.anyInfoLabel.TabIndex = 34;
-            // 
-            // ElevExplCheckBox
-            // 
-            this.ElevExplCheckBox.AutoSize = true;
-            this.ElevExplCheckBox.Location = new System.Drawing.Point(888, 364);
-            this.ElevExplCheckBox.Name = "ElevExplCheckBox";
-            this.ElevExplCheckBox.Size = new System.Drawing.Size(59, 19);
-            this.ElevExplCheckBox.TabIndex = 35;
-            this.ElevExplCheckBox.Text = "ElMap";
-            this.ElevExplCheckBox.UseVisualStyleBackColor = true;
             // 
             // AlpesСheckBox
             // 
@@ -725,13 +715,23 @@
             this.AlpesСheckBox.Text = "Alpes";
             this.AlpesСheckBox.UseVisualStyleBackColor = true;
             // 
+            // fullResearchButton
+            // 
+            this.fullResearchButton.Location = new System.Drawing.Point(753, 316);
+            this.fullResearchButton.Name = "fullResearchButton";
+            this.fullResearchButton.Size = new System.Drawing.Size(194, 65);
+            this.fullResearchButton.TabIndex = 37;
+            this.fullResearchButton.Text = "Full Research";
+            this.fullResearchButton.UseVisualStyleBackColor = true;
+            this.fullResearchButton.Click += new System.EventHandler(this.fullResearchButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(959, 509);
+            this.Controls.Add(this.fullResearchButton);
             this.Controls.Add(this.AlpesСheckBox);
-            this.Controls.Add(this.ElevExplCheckBox);
             this.Controls.Add(this.anyInfoLabel);
             this.Controls.Add(this.ElevationCheckBox);
             this.Controls.Add(this.newSourceGroupBox);
@@ -855,7 +855,7 @@
         private System.Windows.Forms.TextBox longtitudeNewTextBox;
         private System.Windows.Forms.CheckBox ElevationCheckBox;
         private System.Windows.Forms.Label anyInfoLabel;
-        private System.Windows.Forms.CheckBox ElevExplCheckBox;
         private System.Windows.Forms.CheckBox AlpesСheckBox;
+        private System.Windows.Forms.Button fullResearchButton;
     }
 }

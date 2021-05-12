@@ -404,7 +404,7 @@ namespace ResearchModel
             pb.Value = 0;
             double inaccuracy = 0;
             int iCount = 100;
-            int jCount = 100;
+            int jCount = 1000;
             pb.Maximum = iCount;
             Random rand = new Random();
 
@@ -454,7 +454,7 @@ namespace ResearchModel
             pb.Value = 0;
             double inaccuracy = 0;
             int iCount = 100;
-            int jCount = 100;
+            int jCount = 1000;
             pb.Maximum = iCount;
             Random rand = new Random();
 
@@ -504,7 +504,7 @@ namespace ResearchModel
             pb.Value = 0;
             double inaccuracy = 0;
             int iCount = 100;
-            int jCount = 100;
+            int jCount = 1000;
             pb.Maximum = iCount;
             Random rand = new Random();
 
@@ -570,6 +570,8 @@ namespace ResearchModel
 
             pb.Value = 0;
             double inaccuracy = 0;
+            int iCount = 100;
+            int jCount = 1000;
             RadioStation tmp1 = new RadioStation();
             tmp1.Run(SearcherStation1);
             RadioStation tmp2 = new RadioStation();
@@ -583,8 +585,7 @@ namespace ResearchModel
             double newSourceY = TrueSource.Y - 5000;
             double newSourceZ = TrueSource.Z - 5000;
 
-            int iCount = 100;
-            int jCount = 100;
+            
             pb.Maximum = iCount;
             Random rand = new Random();
             tmpSource = new RadioStation();

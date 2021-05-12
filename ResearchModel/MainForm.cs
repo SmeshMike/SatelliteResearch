@@ -52,7 +52,9 @@ namespace ResearchModel
             newSource.xTextBox.Text = "0";
             newSource.yTextBox.Text = "0";
             newSource.zTextBox.Text = "0";
-
+            _delta = Convert.ToDouble(stepTextBox.Text.Replace('.', ','));
+            _minDelta = Convert.ToDouble(minStepTextBox.Text);
+            _denominator = Convert.ToDouble(denominatorTextBox.Text);
 
             if (stormRadioButton.Checked && (_type == FunctionType.ddSpace || _type == FunctionType.dmSpace))
             {
@@ -305,7 +307,6 @@ namespace ResearchModel
             if (ddRadioButton.Checked  && earthRadioButton.Checked)
             {
                 ElevationCheckBox.Enabled = true;
-                ElevExplCheckBox.Enabled = true;
                 searcherStation3.Enabled = true;
                 searcherStation4.Enabled = false;
                 _type = FunctionType.ddEarth;
@@ -315,7 +316,6 @@ namespace ResearchModel
                 searcherStation3.Enabled = true;
                 searcherStation4.Enabled = false;
                 ElevationCheckBox.Enabled = true;
-                ElevExplCheckBox.Enabled = true;
                 _type = FunctionType.dmEarth;
             }
             else if (sumRadioButton.Checked && earthRadioButton.Checked)
@@ -323,13 +323,11 @@ namespace ResearchModel
                 searcherStation3.Enabled = false;
                 searcherStation4.Enabled = false;
                 ElevationCheckBox.Enabled = true;
-                ElevExplCheckBox.Enabled = true;
+                
                 _type = FunctionType.sumEarth;
             }
             else
             {
-                ElevExplCheckBox.Enabled = false;
-                ElevExplCheckBox.Checked = false;
                 ElevationCheckBox.Checked = false;
                 ElevationCheckBox.Enabled = false;
             }
@@ -424,9 +422,6 @@ namespace ResearchModel
 
             double r = 63781370;
 
-            _delta = Convert.ToDouble(stepTextBox.Text.Replace('.', ','));
-            _minDelta = Convert.ToDouble(minStepTextBox.Text);
-            _denominator = Convert.ToDouble(denominatorTextBox.Text);
             F function = Initialization(_type);
             anyInfoLabel.Text = _type.ToString();
 
@@ -501,6 +496,10 @@ namespace ResearchModel
         #region SumMethodsRefreshClick
         private void SumMethodsRefreshClick(object sender, EventArgs e)
         {
+
+            _delta = Convert.ToDouble(stepTextBox.Text.Replace('.', ','));
+            _minDelta = Convert.ToDouble(minStepTextBox.Text);
+            _denominator = Convert.ToDouble(denominatorTextBox.Text);
             if (stormRadioButton.Checked)
             {
 
@@ -657,7 +656,7 @@ namespace ResearchModel
 
             var series = new Series
             {
-                    Name = _type + "",
+                    Name = "dCooord\n" + _type +"\n" + satSystem + "",
                     Color = Color.Green,
                     IsVisibleInLegend = true,
                     IsXValueIndexed = true,
@@ -671,7 +670,64 @@ namespace ResearchModel
             form.Controls.Add(form.dtDifference);
             form.dtDifference.Show();
         }
-        
+
+        private void fullResearchButton_Click(object sender, EventArgs e)
+        {
+            
+            anyInfoLabel.Text = "0/18";
+            AlpesСheckBox.Checked = true;
+
+            //stormRadioButton.Checked = false;
+            //glonassRadioButton.Checked = true;
+            //MakeResearchOneGroup(sender, e);
+
+            glonassRadioButton.Checked = false;
+            stormRadioButton.Checked = true;
+            MakeResearchOneGroup(sender, e);
+        }
+
+        private void MakeResearchOneGroup(object sender, EventArgs e)
+        {
+            ElevationCheckBox.Checked = false;
+            earthRadioButton.Checked = false;
+            spaceRadioButton.Checked = true;
+            MakeResearchOnePlace(sender, e);
+            
+            spaceRadioButton.Checked = false;
+            earthRadioButton.Checked = true;
+            MakeResearchOnePlace(sender, e);
+            
+            ElevationCheckBox.Checked = true;
+            MakeResearchOnePlace(sender, e);
+            
+        }
+
+        private void MakeResearchOnePlace(object sender, EventArgs e)
+        {
+            dmRadioButton.Checked = true;
+            ddRadioButton.Checked = false;
+            SumMethodsRefreshClick(sender, e);
+            DCoordinatesGraphButtonClick(sender, e);
+            DtGraphButton(sender, e);
+            var explorationsDone = Convert.ToInt32(anyInfoLabel.Text.Remove(anyInfoLabel.Text.Length-3));
+            explorationsDone++;
+            anyInfoLabel.Text = $"{explorationsDone}/12";
+
+            dmRadioButton.Checked = false;
+            //ddRadioButton.Checked = true;
+            //DCoordinatesGraphButtonClick(sender, e);
+            //DtGraphButton(sender, e);
+            //explorationsDone++;
+            //anyInfoLabel.Text = $"{explorationsDone}/18";
+
+            //ddRadioButton.Checked = false;
+            sumRadioButton.Checked = true;
+            DCoordinatesGraphButtonClick(sender, e);
+            DtGraphButton(sender, e);
+            explorationsDone++;
+            anyInfoLabel.Text = $"{explorationsDone}/12";
+        }
+
         private void DtGraphButton(object sender, EventArgs e)
         {
             //SumMethodsRefreshClick(sender, e);
@@ -710,7 +766,7 @@ namespace ResearchModel
             form.dtDifference.Series.Clear();
             var series = new Series
             {
-                Name = _type + "",
+                Name = explType+ "\n" + _type + "\n" + satSystem + "",
                 Color = Color.Green,
                 IsVisibleInLegend = true,
                 IsXValueIndexed = true,
