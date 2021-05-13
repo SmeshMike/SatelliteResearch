@@ -688,14 +688,14 @@ namespace ResearchModel
 
         private void MakeResearchOneGroup(object sender, EventArgs e)
         {
-            ElevationCheckBox.Checked = false;
-            earthRadioButton.Checked = false;
-            spaceRadioButton.Checked = true;
-            MakeResearchOnePlace(sender, e);
+            //ElevationCheckBox.Checked = false;
+            //earthRadioButton.Checked = false;
+            //spaceRadioButton.Checked = true;
+            //MakeResearchOnePlace(sender, e);
             
-            spaceRadioButton.Checked = false;
+            //spaceRadioButton.Checked = false;
             earthRadioButton.Checked = true;
-            MakeResearchOnePlace(sender, e);
+            //MakeResearchOnePlace(sender, e);
             
             ElevationCheckBox.Checked = true;
             MakeResearchOnePlace(sender, e);
