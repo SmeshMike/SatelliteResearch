@@ -420,7 +420,7 @@ namespace ResearchModel
             Stopwatch sp = new Stopwatch();
             sp.Start();
 
-            double r = 63781370;
+            double r = 6378137;
 
             F function = Initialization(_type);
             anyInfoLabel.Text = _type.ToString();
@@ -485,11 +485,12 @@ namespace ResearchModel
             var longtitude = Convert.ToDouble(longtitudeTrueTextBox.Text);
             var latitude = Convert.ToDouble(latitudeTrueTextBox.Text);
 
-
+            string satSystem = glonassRadioButton.Checked ? "GLONASS" : "Storm";
+            string fileName = _type + satSystem;
             if (errorAbs == 0)
-                DrawClearMap( leftFi, rightFi, upperTeta, bottomTeta, brightness, longtitude, latitude, backColor, function);
+                DrawClearMap( leftFi, rightFi, upperTeta, bottomTeta, brightness, longtitude, latitude, backColor, fileName, function);
             else
-                DrawErroredMap(errorAbs, leftFi, rightFi, upperTeta, bottomTeta, brightness, longtitude, latitude, backColor, function);
+                DrawErroredMap(errorAbs, leftFi, rightFi, upperTeta, bottomTeta, brightness, longtitude, latitude, backColor, fileName, function);
 
         }
 
@@ -633,6 +634,7 @@ namespace ResearchModel
 
             }
 
+            ProcessTextBoxesCoordinates();
         }
         #endregion
 
@@ -646,9 +648,9 @@ namespace ResearchModel
 
             F function = Initialization(_type);
 
-            FindSatelliteInaccuracy(_delta, _minDelta, _denominator,function, points, progressBar);
+            FindSatelliteInaccuracy(_delta, _minDelta, _denominator,function, points,SpecialResearchCheckBox.Checked, progressBar);
             string satSystem = glonassRadioButton.Checked ? "GLONASS" : "Storm";
-            SaveToExcel(points, _type+"", satSystem, "Coord");
+            SaveToExcel(points, _type+"", satSystem, false,"Coord");
             var form = new ChartsForm();
 
             form.Show();
@@ -674,12 +676,12 @@ namespace ResearchModel
         private void fullResearchButton_Click(object sender, EventArgs e)
         {
             
-            anyInfoLabel.Text = "0/18";
+            anyInfoLabel.Text = "0/12";
             AlpesСheckBox.Checked = true;
 
-            //stormRadioButton.Checked = false;
-            //glonassRadioButton.Checked = true;
-            //MakeResearchOneGroup(sender, e);
+            stormRadioButton.Checked = false;
+            glonassRadioButton.Checked = true;
+            MakeResearchOneGroup(sender, e);
 
             glonassRadioButton.Checked = false;
             stormRadioButton.Checked = true;
@@ -688,18 +690,18 @@ namespace ResearchModel
 
         private void MakeResearchOneGroup(object sender, EventArgs e)
         {
-            //ElevationCheckBox.Checked = false;
-            //earthRadioButton.Checked = false;
-            //spaceRadioButton.Checked = true;
-            //MakeResearchOnePlace(sender, e);
-            
-            //spaceRadioButton.Checked = false;
+            ElevationCheckBox.Checked = false;
+            earthRadioButton.Checked = false;
+            spaceRadioButton.Checked = true;
+            MakeResearchOnePlace(sender, e);
+
+            spaceRadioButton.Checked = false;
             earthRadioButton.Checked = true;
-            //MakeResearchOnePlace(sender, e);
-            
+            MakeResearchOnePlace(sender, e);
+
             ElevationCheckBox.Checked = true;
             MakeResearchOnePlace(sender, e);
-            
+
         }
 
         private void MakeResearchOnePlace(object sender, EventArgs e)
@@ -709,21 +711,74 @@ namespace ResearchModel
             SumMethodsRefreshClick(sender, e);
             DCoordinatesGraphButtonClick(sender, e);
             DtGraphButton(sender, e);
-            var explorationsDone = Convert.ToInt32(anyInfoLabel.Text.Remove(anyInfoLabel.Text.Length-3));
+            var explorationsDone = Convert.ToInt32(anyInfoLabel.Text.Remove(anyInfoLabel.Text.Length - 3));
+            explorationsDone++;
+            anyInfoLabel.Text = $"{explorationsDone}/12";
+
+            dmRadioButton.Checked = false;
+            ddRadioButton.Checked = true;
+            DCoordinatesGraphButtonClick(sender, e);
+            DtGraphButton(sender, e);
+            explorationsDone++;
+            anyInfoLabel.Text = $"{explorationsDone}/18";
+
+            ddRadioButton.Checked = false;
+            sumRadioButton.Checked = true;
+            DCoordinatesGraphButtonClick(sender, e);
+            DtGraphButton(sender, e);
+            explorationsDone++;
+            anyInfoLabel.Text = $"{explorationsDone}/12";
+        }
+
+        private void fullDrawButton_Click(object sender, EventArgs e)
+        {
+            anyInfoLabel.Text = "0/12";
+            AlpesСheckBox.Checked = true;
+
+            stormRadioButton.Checked = false;
+            glonassRadioButton.Checked = true;
+            DrawHeatMapOneGroup(sender, e);
+
+            glonassRadioButton.Checked = false;
+            stormRadioButton.Checked = true;
+            DrawHeatMapOneGroup(sender, e);
+        }
+
+        private void DrawHeatMapOneGroup(object sender, EventArgs e)
+        {
+            ElevationCheckBox.Checked = false;
+            earthRadioButton.Checked = false;
+            spaceRadioButton.Checked = true;
+            DrawHeatMapOnePlace(sender, e);
+
+            spaceRadioButton.Checked = false;
+            earthRadioButton.Checked = true;
+            DrawHeatMapOnePlace(sender, e);
+
+            ElevationCheckBox.Checked = true;
+            DrawHeatMapOnePlace(sender, e);
+
+        }
+
+        private void DrawHeatMapOnePlace(object sender, EventArgs e)
+        {
+            dmRadioButton.Checked = true;
+            ddRadioButton.Checked = false;
+            SumMethodsRefreshClick(sender, e);
+            DrawMapButton_Click(sender, e);
+            var explorationsDone = Convert.ToInt32(anyInfoLabel.Text.Remove(anyInfoLabel.Text.Length - 3));
             explorationsDone++;
             anyInfoLabel.Text = $"{explorationsDone}/12";
 
             dmRadioButton.Checked = false;
             //ddRadioButton.Checked = true;
-            //DCoordinatesGraphButtonClick(sender, e);
-            //DtGraphButton(sender, e);
+            //DrawMapButton_Click(sender, e);
             //explorationsDone++;
             //anyInfoLabel.Text = $"{explorationsDone}/18";
 
             //ddRadioButton.Checked = false;
             sumRadioButton.Checked = true;
-            DCoordinatesGraphButtonClick(sender, e);
-            DtGraphButton(sender, e);
+            DrawMapButton_Click(sender, e);
             explorationsDone++;
             anyInfoLabel.Text = $"{explorationsDone}/12";
         }
@@ -758,7 +813,7 @@ namespace ResearchModel
             
 
 
-            SaveToExcel(points, _type + "", satSystem, explType);
+            SaveToExcel(points, _type + "", satSystem,false, explType);
             ChartsForm form = new ChartsForm();
             
             form.Show();
@@ -799,7 +854,7 @@ namespace ResearchModel
             }
             else
             {
-                double r = 63781370;
+                double r = 6378137;
                 X = r * Math.Cos(Math.PI * Convert.ToDouble(latitudeTrueTextBox.Text) / 180) * Math.Cos(Math.PI * Convert.ToDouble(longtitudeTrueTextBox.Text) / 180);
                 Y = r * Math.Cos(Math.PI * Convert.ToDouble(latitudeTrueTextBox.Text) / 180) * Math.Sin(Math.PI * Convert.ToDouble(longtitudeTrueTextBox.Text) / 180);
                 Z = r * Math.Sin(Math.PI * Convert.ToDouble(latitudeTrueTextBox.Text) / 180);

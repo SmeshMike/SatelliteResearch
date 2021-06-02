@@ -26,9 +26,9 @@ namespace ResearchModel
             sumEarthWithMap = 8,
         }
 
-        const double w0 = 6000000000;
-        const double c = 300000000;
-        const double rE = 63781370;
+        const double w0 = 600000000;
+        const double c = 30000000;
+        const double rE = 6378137;
 
         private static StreamWriter myStreamWriter;
 
@@ -84,12 +84,12 @@ namespace ResearchModel
             var longtitudeNew = NewSource.X == 0 ? (NewSource.Y > 0 ? 90 : -90) : (Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180);
             var latitudeNew= NewSource.Y * NewSource.Y + NewSource.X * NewSource.X == 0 ? (NewSource.Z > 0 ? 90 : -90) : (Math.Atan(NewSource.Z / Math.Sqrt(NewSource.Y * NewSource.Y + NewSource.X * NewSource.X)) / Math.PI * 180);
 
-            double r = 63781370;
+            //double r = 6378137;
             var d = Math.Acos(Math.Round((TrueSource.X*NewSource.X+ TrueSource.Y * NewSource.Y+ TrueSource.Z * NewSource.Z)/(Math.Sqrt(TrueSource.X* TrueSource.X + TrueSource.Y * TrueSource.Y+ TrueSource.Z * TrueSource.Z)* Math.Sqrt(NewSource.X * NewSource.X + NewSource.Y * NewSource.Y + NewSource.Z * NewSource.Z)),15));
-            var k = Math.Round((TrueSource.X * NewSource.X + TrueSource.Y * NewSource.Y + TrueSource.Z * NewSource.Z) / (r * r), 15);
+            var k = Math.Round((TrueSource.X * NewSource.X + TrueSource.Y * NewSource.Y + TrueSource.Z * NewSource.Z) / (rE * rE), 15);
             var kk = Math.Acos(k);
             //var d = Math.Acos(Math.Round((TrueSource.X * NewSource.X + TrueSource.Y * NewSource.Y + TrueSource.Z * NewSource.Z) / (r*r),15));
-            var tmp = d * 63781370;
+            var tmp = d * rE;
             //var tmp = Math.Sqrt(Math.Pow(NewSource.X - TrueSource.X, 2) + Math.Pow(NewSource.Y - TrueSource.Y, 2) + Math.Pow(NewSource.Z - TrueSource.Z, 2));
             return tmp;
         }
@@ -565,13 +565,24 @@ namespace ResearchModel
 
         }
 
-        public static void FindSatelliteInaccuracy(double delta, double minDelta, double denominator, F function, List<double> inaccuracyArr, ProgressBar pb)
+        public static void FindSatelliteInaccuracy(double delta, double minDelta, double denominator, F function, List<double> inaccuracyArr,bool specialResearch , ProgressBar pb)
         {
 
             pb.Value = 0;
             double inaccuracy = 0;
-            int iCount = 100;
-            int jCount = 1000;
+            int iCount = 0;
+            int jCount = 0;
+            if (specialResearch)
+            {
+                iCount = 1000;
+                jCount = 100;
+            }
+            else
+            {
+                iCount = 100;
+                jCount = 1000;
+            }
+            
             RadioStation tmp1 = new RadioStation();
             tmp1.Run(SearcherStation1);
             RadioStation tmp2 = new RadioStation();
@@ -614,7 +625,7 @@ namespace ResearchModel
 
         }
 
-        public static void DrawClearMap(double leftFi, double rightFi, double upperTeta, double bottomTeta, int brightness, double longtitude, double latitude, double backColor,  F function)
+        public static void DrawClearMap(double leftFi, double rightFi, double upperTeta, double bottomTeta, int brightness, double longtitude, double latitude, double backColor, string fileName,  F function)
         {
             Bitmap startMap = new Bitmap("../../../../WorldMap.jpg");
             Bitmap clearHeat = new Bitmap(startMap.Width, startMap.Height, PixelFormat.Format32bppArgb);
@@ -622,11 +633,10 @@ namespace ResearchModel
             byte iIntense;
             RadioStation rs = new RadioStation();
             List<double> clearResults = new List<double>();
-            const double r = 63781370;
             tmpSource = new RadioStation();
             HookJeeves(1024, 0.015625, 2, function);
-            var trueLongtitude = NewSource.X == 0 ? (NewSource.Y > 0 ? 90 : -90) : (NewSource.X > 0 ? Math.Round(Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180, 7) : (Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180 > 0 ? Math.Round(-90 - Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180, 7) : Math.Round(90 - Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180, 7)));
-            var trueLatitude = NewSource.Y * NewSource.Y + NewSource.X * NewSource.X == 0 ? (NewSource.Z > 0 ? 90 : -90) : (Math.Round(Math.Atan(NewSource.Z / Math.Sqrt(NewSource.Y * NewSource.Y + NewSource.X * NewSource.X)) / Math.PI * 180, 7));
+            var trueLongtitude = NewSource.X == 0 ? (NewSource.Y > 0 ? 90 : -90) : (NewSource.X > 0 ? Math.Round(Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180, 7) : (Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180 > 0 ? -180 + Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180 : 180 + Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180));
+            var trueLatitude = NewSource.Y * NewSource.Y + NewSource.X * NewSource.X == 0 ? (NewSource.Z > 0 ? 90 : -90) : Math.Round(Math.Atan(NewSource.Z / Math.Sqrt(NewSource.Y * NewSource.Y + NewSource.X * NewSource.X)) / Math.PI * 180, 7);
 
             var i = 0;
             int iter = 0;
@@ -635,9 +645,9 @@ namespace ResearchModel
             {
                 for (double teta = 90; teta >= -90; teta -= (double)180 / startMap.Height)
                 {
-                    rs.X = r * Math.Cos(Math.PI * teta / 180) * Math.Cos(Math.PI * fi / 180);
-                    rs.Y = r * Math.Cos(Math.PI * teta / 180) * Math.Sin(Math.PI * fi / 180);
-                    rs.Z = r * Math.Sin(Math.PI * teta / 180);
+                    rs.X = rE * Math.Cos(Math.PI * teta / 180) * Math.Cos(Math.PI * fi / 180);
+                    rs.Y = rE * Math.Cos(Math.PI * teta / 180) * Math.Sin(Math.PI * fi / 180);
+                    rs.Z = rE * Math.Sin(Math.PI * teta / 180);
                     if (trueLongtitude < fi + (double) 360 / startMap.Width && trueLongtitude > fi - (double) 360 / startMap.Width && trueLatitude < teta + (double) 180 / startMap.Height &&
                         trueLatitude > teta - (double) 180 / startMap.Height)
                     {
@@ -736,11 +746,11 @@ namespace ResearchModel
                     }
                 }
 
-                image1.Save("../../../../Heat.jpg", ImageFormat.Jpeg);
+                image1.Save($"../../../../SatteliteData/{fileName}HeatMap.jpg", ImageFormat.Jpeg);
             }
         }
 
-        public static void DrawErroredMap(int errorAbs, double leftFi, double rightFi, double upperTeta, double bottomTeta, int brightness, double longtitude, double latitude, double backColor, F function)
+        public static void DrawErroredMap(int errorAbs, double leftFi, double rightFi, double upperTeta, double bottomTeta, int brightness, double longtitude, double latitude, double backColor, string fileName, F function)
         {
             Random rand = new Random();
             RadioStation tmp1 = new RadioStation();
@@ -759,11 +769,10 @@ namespace ResearchModel
             RadioStation rs = new RadioStation();
             List<double> clearResults = new List<double>();
             List<double> erroredResults = new List<double>();
-            const double r = 63781370;
             tmpSource = new RadioStation();
-            HookJeeves(1024, 0.015625, 2, function);
-            var trueLongtitude = NewSource.X == 0 ? (NewSource.Y > 0 ? 90 : -90) : (NewSource.X > 0 ? Math.Round(Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180, 7) : (Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180 > 0 ? Math.Round(-90 - Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180, 7) : Math.Round(90 - Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180, 7)));
-            var trueLatitude = NewSource.Y * NewSource.Y + NewSource.X * NewSource.X == 0 ? (NewSource.Z > 0 ? 90 : -90) : (Math.Round(Math.Atan(NewSource.Z / Math.Sqrt(NewSource.Y * NewSource.Y + NewSource.X * NewSource.X)) / Math.PI * 180, 7));
+            HookJeeves(8, 0.015625, 2, function);
+            var trueLongtitude = NewSource.X == 0 ? (NewSource.Y > 0 ? 90 : -90) : (NewSource.X > 0 ? Math.Round(Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180, 7) : (Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180 > 0 ? -180 + Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180 : 180 + Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180));
+            var trueLatitude = NewSource.Y * NewSource.Y + NewSource.X * NewSource.X == 0 ? (NewSource.Z > 0 ? 90 : -90) : Math.Round(Math.Atan(NewSource.Z / Math.Sqrt(NewSource.Y * NewSource.Y + NewSource.X * NewSource.X)) / Math.PI * 180, 7);
 
             var i = 0;
             int clearIter = 0, erroredIter=0;
@@ -773,9 +782,9 @@ namespace ResearchModel
             {
                 for (double teta = 90; teta >= -90; teta -= (double)180 / startMap.Height)
                 {
-                    rs.X = r * Math.Cos(Math.PI * teta / 180) * Math.Cos(Math.PI * fi / 180);
-                    rs.Y = r * Math.Cos(Math.PI * teta / 180) * Math.Sin(Math.PI * fi / 180);
-                    rs.Z = r * Math.Sin(Math.PI * teta / 180);
+                    rs.X = rE * Math.Cos(Math.PI * teta / 180) * Math.Cos(Math.PI * fi / 180);
+                    rs.Y = rE * Math.Cos(Math.PI * teta / 180) * Math.Sin(Math.PI * fi / 180);
+                    rs.Z = rE * Math.Sin(Math.PI * teta / 180);
 
                     if (trueLongtitude < fi + (double)360 / startMap.Width && trueLongtitude > fi - (double)360 / startMap.Width && trueLatitude < teta + (double)180 / startMap.Height &&
                         trueLatitude > teta - (double)180 / startMap.Height)
@@ -795,17 +804,18 @@ namespace ResearchModel
             AddInaccuracy(SearcherStation2, tmp2, rand, errorAbs);
             AddInaccuracy(SearcherStation3, tmp3, rand, errorAbs);
             AddInaccuracy(SearcherStation4, tmp4, rand, errorAbs);
-            HookJeeves(1024, 0.015625, 2, function);
-            var erroredLongtitude = NewSource.X == 0 ? (NewSource.Y > 0 ? 90 : -90) : (NewSource.X > 0 ? Math.Round(Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180, 7) : (Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180 > 0 ? Math.Round(-90 - Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180, 7) : Math.Round(90 - Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180, 7)));
-            var erroredLatitude = NewSource.Y * NewSource.Y + NewSource.X * NewSource.X == 0 ? (NewSource.Z > 0 ? 90 : -90) : (Math.Round(Math.Atan(NewSource.Z / Math.Sqrt(NewSource.Y * NewSource.Y + NewSource.X * NewSource.X)) / Math.PI * 180, 7));
+            HookJeeves(8, 0.015625, 2, function);
+            
+            var erroredLongtitude = NewSource.X == 0 ? (NewSource.Y > 0 ? 90 : -90) : (NewSource.X > 0 ? Math.Round(Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180, 7) : (Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180 > 0 ? -180 + Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180 : 180 + Math.Atan(NewSource.Y / NewSource.X) / Math.PI * 180));
+            var erroredLatitude = NewSource.Y * NewSource.Y + NewSource.X * NewSource.X == 0 ? (NewSource.Z > 0 ? 90 : -90) : Math.Round(Math.Atan(NewSource.Z / Math.Sqrt(NewSource.Y * NewSource.Y + NewSource.X * NewSource.X)) / Math.PI * 180, 7);
             i = 0;
             for (double fi = -180; fi <= 180; fi += (double)360 / startMap.Width)
             {
                 for (double teta = 90; teta >= -90; teta -= (double)180 / startMap.Height)
                 {
-                    rs.X = r * Math.Cos(Math.PI * teta / 180) * Math.Cos(Math.PI * fi / 180);
-                    rs.Y = r * Math.Cos(Math.PI * teta / 180) * Math.Sin(Math.PI * fi / 180);
-                    rs.Z = r * Math.Sin(Math.PI * teta / 180);
+                    rs.X = rE * Math.Cos(Math.PI * teta / 180) * Math.Cos(Math.PI * fi / 180);
+                    rs.Y = rE * Math.Cos(Math.PI * teta / 180) * Math.Sin(Math.PI * fi / 180);
+                    rs.Z = rE * Math.Sin(Math.PI * teta / 180);
 
 
                     if (erroredLongtitude < fi + (double)360 / startMap.Width && erroredLongtitude > fi - (double)360 / startMap.Width && erroredLatitude < teta + (double)180 / startMap.Height &&
@@ -975,7 +985,7 @@ namespace ResearchModel
                 }
 
 
-                image1.Save("../../../../Heat.jpg", ImageFormat.Jpeg);
+                image1.Save($"../../../../SatteliteData/{fileName}HeatMap.jpg", ImageFormat.Jpeg);
             }
         }
 

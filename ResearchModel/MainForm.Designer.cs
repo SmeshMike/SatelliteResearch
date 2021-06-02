@@ -88,6 +88,8 @@
             this.anyInfoLabel = new System.Windows.Forms.Label();
             this.AlpesСheckBox = new System.Windows.Forms.CheckBox();
             this.fullResearchButton = new System.Windows.Forms.Button();
+            this.fullDrawButton = new System.Windows.Forms.Button();
+            this.SpecialResearchCheckBox = new System.Windows.Forms.CheckBox();
             this.methodGroupBox.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.systemGroupBox.SuspendLayout();
@@ -708,7 +710,7 @@
             // AlpesСheckBox
             // 
             this.AlpesСheckBox.AutoSize = true;
-            this.AlpesСheckBox.Location = new System.Drawing.Point(888, 233);
+            this.AlpesСheckBox.Location = new System.Drawing.Point(877, 233);
             this.AlpesСheckBox.Name = "AlpesСheckBox";
             this.AlpesСheckBox.Size = new System.Drawing.Size(55, 19);
             this.AlpesСheckBox.TabIndex = 36;
@@ -725,11 +727,33 @@
             this.fullResearchButton.UseVisualStyleBackColor = true;
             this.fullResearchButton.Click += new System.EventHandler(this.fullResearchButton_Click);
             // 
+            // fullDrawButton
+            // 
+            this.fullDrawButton.Location = new System.Drawing.Point(502, 474);
+            this.fullDrawButton.Name = "fullDrawButton";
+            this.fullDrawButton.Size = new System.Drawing.Size(75, 23);
+            this.fullDrawButton.TabIndex = 38;
+            this.fullDrawButton.Text = "Full Draw";
+            this.fullDrawButton.UseVisualStyleBackColor = true;
+            this.fullDrawButton.Click += new System.EventHandler(this.fullDrawButton_Click);
+            // 
+            // SpecialResearchCheckBox
+            // 
+            this.SpecialResearchCheckBox.AutoSize = true;
+            this.SpecialResearchCheckBox.Location = new System.Drawing.Point(877, 258);
+            this.SpecialResearchCheckBox.Name = "SpecialResearchCheckBox";
+            this.SpecialResearchCheckBox.Size = new System.Drawing.Size(73, 34);
+            this.SpecialResearchCheckBox.TabIndex = 39;
+            this.SpecialResearchCheckBox.Text = "Special\r\nResearch";
+            this.SpecialResearchCheckBox.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(959, 509);
+            this.Controls.Add(this.SpecialResearchCheckBox);
+            this.Controls.Add(this.fullDrawButton);
             this.Controls.Add(this.fullResearchButton);
             this.Controls.Add(this.AlpesСheckBox);
             this.Controls.Add(this.anyInfoLabel);
@@ -857,5 +881,7 @@
         private System.Windows.Forms.Label anyInfoLabel;
         private System.Windows.Forms.CheckBox AlpesСheckBox;
         private System.Windows.Forms.Button fullResearchButton;
+        private System.Windows.Forms.Button fullDrawButton;
+        private System.Windows.Forms.CheckBox SpecialResearchCheckBox;
     }
 }

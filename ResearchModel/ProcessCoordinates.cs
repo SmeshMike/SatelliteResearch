@@ -132,7 +132,7 @@ namespace ResearchModel
         }
         public static void GenerateSource()
         {
-            double tmp = 63781370;
+            double tmp = 6378137;
             Random rand = new Random();
             Z = rand.NextDouble() * tmp;
             tmp = Math.Sqrt(tmp * tmp - Z * Z);
@@ -164,7 +164,7 @@ namespace ResearchModel
             else
                 lonD = (double)(lon - picWidth / 2 + 1) / (picWidth / 2) * 180;
 
-            var r = 63781370;
+            var r = 6378137;
             myStreamWriter.WriteLine(inputText);
             
             var result = Convert.ToInt32(CoordProcess.StandardOutput.ReadLine());
@@ -201,7 +201,7 @@ namespace ResearchModel
             else
                 lonD = (double)(lon - picWidth / 2 +1) / (picWidth / 2) * 180;
 
-            var r = 63781370;
+            var r = 6378137;
             myStreamWriter.WriteLine(inputText);
 
             var result = Convert.ToInt32(CoordProcess.StandardOutput.ReadLine());
@@ -219,7 +219,7 @@ namespace ResearchModel
             CreateGlonassPlane();
             Coordinate = new double[n, 6];
 
-            double r = 25420000;
+            double r = 19100000;
 
             Random random = new Random();
 
