@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 using NPOI.HSSF.UserModel;
@@ -26,7 +27,7 @@ namespace ResearchModel
             }
         }
 
-        public static void SaveToExcel(List<double> data, string funcType, string satSystem,bool specialResearch , string explType)
+        public static void SaveToExcel(List<double> data, string funcType, string satSystem,bool specialResearch, List<double> distances, string explType)
         {
             var filename = "";
             if (funcType.Contains("dm"))
@@ -35,6 +36,13 @@ namespace ResearchModel
                 filename = "DD";
             else
                 filename = "SUM";
+
+            if (specialResearch)
+            {
+                DateTime localDate = DateTime.Now;
+                var culture = new CultureInfo("ru-RU");
+                filename = funcType +" "+ satSystem + " " +localDate.ToString(culture).Replace(':', '-');
+            }
 
             var newFile = $@"..\..\..\..\SatteliteData\{filename}.xls";
             FileStream fs;
@@ -50,7 +58,7 @@ namespace ResearchModel
             }
 
             HSSFWorkbook hssfwb;
-            int columnX = 0;
+            int columnX = 1;
             using (fs = new FileStream(newFile, FileMode.Open, FileAccess.Read))
             {
                 fs.Position = 0;
@@ -59,7 +67,7 @@ namespace ResearchModel
                 fs.Close();
             }
 
-            ISheet sheet; //= hssfwb.GetSheet(0);
+            
 
             if (filename == "DM")
             {
@@ -136,7 +144,7 @@ namespace ResearchModel
             }
 
             bool newSheet = true;
-
+            ISheet sheet; 
             var columnY = columnX + 1;
             try
             {
@@ -161,27 +169,26 @@ namespace ResearchModel
             row = newSheet ? sheet.CreateRow(2) : sheet.GetRow(2);
             cellX = row.GetCell(columnX) != null ? row.GetCell(columnX) : row.CreateCell(columnX);
             cellX.SetCellValue(funcType);
-            row = newSheet ? sheet.CreateRow(4) : sheet.GetRow(4);
-            cellX = row.CreateCell(columnX);
+
             row = newSheet ? sheet.CreateRow(5) : sheet.GetRow(5);
             cellX = row.CreateCell(columnX);
-            cellX.SetCellValue(satSystem);
+            cellX.SetCellValue(distances[0]);
             row = newSheet ? sheet.CreateRow(6) : sheet.GetRow(6);
             cellX = row.GetCell(columnX) != null ? row.GetCell(columnX) : row.CreateCell(columnX);
-            cellX.SetCellValue(explType);
+            cellX.SetCellValue(distances[1]);
             row = newSheet ? sheet.CreateRow(7) : sheet.GetRow(7);
             cellX = row.GetCell(columnX) != null ? row.GetCell(columnX) : row.CreateCell(columnX);
-            cellX.SetCellValue(funcType);
+            cellX.SetCellValue(distances[2]);
 
 
             for (int rowIndex = 12; rowIndex < data.Count + 12; rowIndex++)
             {
                 row = newSheet ? sheet.CreateRow(rowIndex) : sheet.GetRow(rowIndex);
                 cellX = row.GetCell(columnX) != null ? row.GetCell(columnX) : row.CreateCell(columnX);
-                cellX.SetCellValue(rowIndex - 5);
+                cellX.SetCellValue(rowIndex - 12);
 
                 var cellY = row.GetCell(columnY) != null ? row.GetCell(columnY) : row.CreateCell(columnY);
-                cellY.SetCellValue(data[rowIndex - 5]);
+                cellY.SetCellValue(data[rowIndex - 12]);
             }
 
             sheet.AutoSizeColumn(0);

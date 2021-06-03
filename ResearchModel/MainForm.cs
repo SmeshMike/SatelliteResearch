@@ -647,10 +647,10 @@ namespace ResearchModel
             //SumMethodsRefreshClick(sender, e);
 
             F function = Initialization(_type);
-
-            FindSatelliteInaccuracy(_delta, _minDelta, _denominator,function, points,SpecialResearchCheckBox.Checked, progressBar);
+            var distances = new List<double>() { FindSatDistance(SearcherStation1, SearcherStation2), FindSatDistance(SearcherStation2, SearcherStation3), FindSatDistance(SearcherStation3, SearcherStation4) };
+            FindSatelliteInaccuracy(_delta, _minDelta, _denominator,function, points, SpecialResearchCheckBox.Checked, progressBar);
             string satSystem = glonassRadioButton.Checked ? "GLONASS" : "Storm";
-            SaveToExcel(points, _type+"", satSystem, false,"Coord");
+            SaveToExcel(points, _type+"", satSystem, SpecialResearchCheckBox.Checked, distances, "Coord");
             var form = new ChartsForm();
 
             form.Show();
@@ -795,25 +795,25 @@ namespace ResearchModel
 
             if (_type == FunctionType.ddSpace || _type == FunctionType.ddEarth || _type == FunctionType.ddEarthWithMap)
             {
-                FindDwInaccuracy(_delta, _minDelta, _denominator, function, points, progressBar);
+                FindDwInaccuracy(_delta, _minDelta, _denominator, function, points, SpecialResearchCheckBox.Checked, progressBar);
                 explType = "DW";
             }
             else if (_type == FunctionType.dmEarth || _type == FunctionType.dmSpace || _type == FunctionType.dmEarthWithMap)
             {
-                FindDtInaccuracy(_delta, _minDelta, _denominator, function, points, progressBar);
+                FindDtInaccuracy(_delta, _minDelta, _denominator, function, points, SpecialResearchCheckBox.Checked, progressBar);
                 explType = "DT";
             }
             else
             {
-                FindSumInaccuracy(_delta, _minDelta, _denominator, function, points, progressBar);
+                FindSumInaccuracy(_delta, _minDelta, _denominator, function, points, SpecialResearchCheckBox.Checked, progressBar);
                 explType = "DT + DW";
             }
 
             string satSystem = glonassRadioButton.Checked ? "GLONASS" : "Storm";
-            
 
 
-            SaveToExcel(points, _type + "", satSystem,false, explType);
+            var distances = new List<double>() { FindSatDistance(SearcherStation1, SearcherStation2), FindSatDistance(SearcherStation2, SearcherStation3), FindSatDistance(SearcherStation3, SearcherStation4) };
+            SaveToExcel(points, _type + "", satSystem,SpecialResearchCheckBox.Checked,distances, explType);
             ChartsForm form = new ChartsForm();
             
             form.Show();

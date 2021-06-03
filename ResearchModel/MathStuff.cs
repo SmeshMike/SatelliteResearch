@@ -399,12 +399,27 @@ namespace ResearchModel
             });
         }
 
-        public static void FindDtInaccuracy(double delta, double minDelta, double denominator,F function, List<double> inaccuracyArr, ProgressBar pb)
+        public static double FindSatDistance(RadioStation rs1, RadioStation rs2)
+        {
+            return Math.Sqrt((rs1.X - rs2.X) * (rs1.X - rs2.X) + (rs1.Y - rs2.Y) * (rs1.Y - rs2.Y) + (rs1.Z - rs2.Z) * (rs1.Z - rs2.Z));
+        }
+
+        public static void FindDtInaccuracy(double delta, double minDelta, double denominator,F function, List<double> inaccuracyArr, bool specialResearch, ProgressBar pb)
         {
             pb.Value = 0;
             double inaccuracy = 0;
-            int iCount = 100;
-            int jCount = 1000;
+            int iCount = 0;
+            int jCount = 0;
+            if (specialResearch)
+            {
+                iCount = 10;
+                jCount = 30;
+            }
+            else
+            {
+                iCount = 100;
+                jCount = 1000;
+            }
             pb.Maximum = iCount;
             Random rand = new Random();
 
@@ -449,12 +464,22 @@ namespace ResearchModel
 
         }
 
-        public static void FindDwInaccuracy(double delta, double minDelta, double denominator, F function, List<double> inaccuracyArr, ProgressBar pb)
+        public static void FindDwInaccuracy(double delta, double minDelta, double denominator, F function, List<double> inaccuracyArr, bool specialResearch, ProgressBar pb)
         {
             pb.Value = 0;
             double inaccuracy = 0;
-            int iCount = 100;
-            int jCount = 1000;
+            int iCount = 0;
+            int jCount = 0;
+            if (specialResearch)
+            {
+                iCount = 1000;
+                jCount = 300;
+            }
+            else
+            {
+                iCount = 100;
+                jCount = 1000;
+            }
             pb.Maximum = iCount;
             Random rand = new Random();
 
@@ -499,12 +524,22 @@ namespace ResearchModel
 
         }
 
-        public static void FindSumInaccuracy(double delta, double minDelta, double denominator, F function, List<double> inaccuracyArr, ProgressBar pb)
+        public static void FindSumInaccuracy(double delta, double minDelta, double denominator, F function, List<double> inaccuracyArr, bool specialResearch, ProgressBar pb)
         {
             pb.Value = 0;
             double inaccuracy = 0;
-            int iCount = 100;
-            int jCount = 1000;
+            int iCount = 0;
+            int jCount = 0;
+            if (specialResearch)
+            {
+                iCount = 10;
+                jCount = 30;
+            }
+            else
+            {
+                iCount = 100;
+                jCount = 1000;
+            }
             pb.Maximum = iCount;
             Random rand = new Random();
 
@@ -565,7 +600,7 @@ namespace ResearchModel
 
         }
 
-        public static void FindSatelliteInaccuracy(double delta, double minDelta, double denominator, F function, List<double> inaccuracyArr,bool specialResearch , ProgressBar pb)
+        public static void FindSatelliteInaccuracy(double delta, double minDelta, double denominator, F function, List<double> inaccuracyArr,bool specialResearch, ProgressBar pb)
         {
 
             pb.Value = 0;
@@ -575,7 +610,7 @@ namespace ResearchModel
             if (specialResearch)
             {
                 iCount = 1000;
-                jCount = 100;
+                jCount = 300;
             }
             else
             {
