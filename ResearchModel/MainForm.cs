@@ -27,10 +27,10 @@ namespace ResearchModel
         private void MainForm_Load(object sender, EventArgs e)
         {
             myProcess = new Process();
-            //myProcess.StartInfo.FileName = @"C:\Users\pravm\AppData\Local\Programs\Python\Python39\python.exe";
-            myProcess.StartInfo.FileName = @"C:\Users\Mishanya - PC\AppData\Local\Programs\Python\Python39\python.exe";
-            //myProcess.StartInfo.Arguments = "\"C:\\Repository\\SatelliteResearch\\GetElevation.py\"";
-            myProcess.StartInfo.Arguments = "\"D:\\VS Pojects\\SatelliteResearch\\GetElevation.py\"";
+            myProcess.StartInfo.FileName = @"C:\Users\pravm\AppData\Local\Programs\Python\Python39\python.exe";
+            //myProcess.StartInfo.FileName = @"C:\Users\Mishanya - PC\AppData\Local\Programs\Python\Python39\python.exe";
+            myProcess.StartInfo.Arguments = "\"C:\\Repository\\SatelliteResearch\\GetElevation.py\"";
+            //myProcess.StartInfo.Arguments = "\"D:\\VS Pojects\\SatelliteResearch\\GetElevation.py\"";
             myProcess.StartInfo.UseShellExecute = false;// Do not use OS shell
             myProcess.StartInfo.CreateNoWindow = true;  // We don't need new window
             myProcess.StartInfo.RedirectStandardInput = true;
@@ -438,6 +438,18 @@ namespace ResearchModel
             Dt24 += err;
             err = new Random().NextDouble() * errorAbs * 2 - errorAbs;
             Dt34 += err;
+            err = new Random().NextDouble() * errorAbs * 2 - errorAbs;
+            Dw12 += err;
+            err = new Random().NextDouble() * errorAbs * 2 - errorAbs;
+            Dw13 += err;
+            err = new Random().NextDouble() * errorAbs * 2 - errorAbs;
+            Dw14 += err;
+            err = new Random().NextDouble() * errorAbs * 2 - errorAbs;
+            Dw23 += err;
+            err = new Random().NextDouble() * errorAbs * 2 - errorAbs;
+            Dw24 += err;
+            err = new Random().NextDouble() * errorAbs * 2 - errorAbs;
+            Dw34 += err;
 
             tmpSource = new RadioStation();
             while (!HookJeeves(_delta, _minDelta, _denominator, function))

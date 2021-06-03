@@ -370,7 +370,7 @@ namespace ResearchModel
 
         public static bool HookJeeves(double delta, double minDelta, double denominator, F function)
         {
-            return ExecuteWithTimeLimit(TimeSpan.FromSeconds(8), () =>
+            return ExecuteWithTimeLimit(TimeSpan.FromSeconds(20), () =>
             {
                 Array.Copy(NewSource.coordinates, tmpSource.coordinates, 3);
 
