@@ -158,10 +158,10 @@ namespace ResearchModel
             Vy = vy;
             Vz = vz;
             VAbs = Math.Sqrt(vx * vx + vy * vy + vz * vz);
-            Wx = w0/(1 + vx/c);
-            Wy = w0 / (1 + vy / c); ;
-            Wz = w0 / (1 + vz / c); ;
-            WAbs = w0 / (1 + Math.Sqrt(vx * vx + vy * vy + vz * vz) / c);
+            Wx = w0/(1 - vx/c);
+            Wy = w0 / (1 - vy / c); ;
+            Wz = w0 / (1 - vz / c); ;
+            WAbs = w0 / (1 - Math.Sqrt(vx * vx + vy * vy + vz * vz) / c);
         }
 
 
@@ -182,10 +182,10 @@ namespace ResearchModel
             Vy = rs.Vy;
             Vz = rs.Vz;
             VAbs = Math.Sqrt(Vx * Vx + Vy * Vy + Vz * Vz);
-            Wx = w0 / (1 + Vx / c);
-            Wy = w0 / (1 + Vy / c);
-            Wz = w0 / (1 + Vz / c);
-            WAbs = w0 / (1 + VAbs / c);
+            Wx = w0 / (1 - Vx / c);
+            Wy = w0 / (1 - Vy / c);
+            Wz = w0 / (1 - Vz / c);
+            WAbs = w0 / (1 - VAbs / c);
         }
 
         public static bool operator ==(RadioStation a, RadioStation b)
