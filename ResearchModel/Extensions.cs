@@ -37,14 +37,10 @@ namespace ResearchModel
             else
                 filename = "SUM";
 
+            string ifSpecial = "";
             if (specialResearch)
-            {
-                DateTime localDate = DateTime.Now;
-                var culture = new CultureInfo("ru-RU");
-                filename = funcType +" "+ satSystem + " " +localDate.ToString(culture).Replace(':', '-');
-            }
-
-            var newFile = $@"..\..\..\..\SatteliteData\{filename}.xls";
+                ifSpecial = "Special";
+            var newFile = $@"..\..\..\..\SatteliteData\{filename+ ifSpecial}.xls";
             FileStream fs;
             if (!System.IO.File.Exists(newFile))
             {
@@ -156,7 +152,6 @@ namespace ResearchModel
             {
                 newSheet = true;
                 sheet = hssfwb.CreateSheet("Sheet");
-
             }
 
 

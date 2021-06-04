@@ -441,8 +441,7 @@ namespace ResearchModel
 
             tmpSource = new RadioStation();
             while (!HookJeeves(_delta, _minDelta, _denominator, function))
-            {
-                
+            { 
                 RefreshButtonClick(null, EventArgs.Empty);
             }
 
@@ -454,7 +453,8 @@ namespace ResearchModel
             longtitudeNewTextBox.Text = newSource.X == 0 ? (newSource.Y > 0 ? 90 : -90).ToString() : (newSource.X > 0 ? Math.Round(Math.Atan(newSource.Y / newSource.X) / Math.PI * 180, 7) : (Math.Atan(newSource.Y / newSource.X) / Math.PI * 180 > 0 ? -180 + Math.Atan(newSource.Y / newSource.X) / Math.PI * 180 : 180 +  Math.Atan(newSource.Y / newSource.X) / Math.PI * 180)).ToString();
             latitudeNewTextBox.Text = newSource.Y * newSource.Y + newSource.X * newSource.X == 0 ? (newSource.Z > 0 ? 90 : -90).ToString() : (Math.Round(Math.Atan(newSource.Z / Math.Sqrt(newSource.Y * newSource.Y + newSource.X * newSource.X)) / Math.PI * 180, 7)).ToString();
             //longtitudeNewTextBox.Text = newSource.X == 0 ? (newSource.Y > 0 ? 90 : -90).ToString() :(newSource.X > 0 ? Math.Round(Math.Atan(newSource.Y / newSource.X) / Math.PI * 180,7) : (Math.Round(Math.Atan(newSource.Y / newSource.X) / Math.PI * 180,7)> 0 ? Math.Round(-180 + Math.Atan(newSource.Y / newSource.X) / Math.PI * 180,7) : Math.Round(180 + Math.Atan(newSource.Y / newSource.X) / Math.PI * 180,7)) ).ToString();
-            var time = sp.Elapsed;
+            anyInfoLabel.Text += $"\n{FindSatDistance(SearcherStation1, SearcherStation2)}\n{FindSatDistance(SearcherStation1, SearcherStation3)}\n{FindSatDistance(SearcherStation1, SearcherStation4)}";
+                               var time = sp.Elapsed;
             timeLabel.Text = $"{time.Minutes:00}:{time.Seconds:00}.{time.Milliseconds:00}";
             errorLabel.Text = Math.Round(GetSourceDifference(),2).ToString();
         }
@@ -634,6 +634,138 @@ namespace ResearchModel
 
             }
 
+
+            //if (stormRadioButton.Checked)
+            //{
+            //    SearcherStation1.X = -3652985.486;
+            //    SearcherStation1.Y = -20380167.211;
+            //    SearcherStation1.Z = 41100388.287;
+            //    SearcherStation1.Vx = -10.136;
+            //    SearcherStation1.Vy = 48.583;
+            //    SearcherStation1.Vz = 291.884;
+            //    searcherStation1.xTextBox.Text = SearcherStation1.X.ToString();
+            //    searcherStation1.yTextBox.Text = SearcherStation1.Y.ToString();
+            //    searcherStation1.zTextBox.Text = SearcherStation1.Z.ToString();
+
+
+
+            //    SearcherStation2.X = 3536317.076;
+            //    SearcherStation2.Y = 20462687.937;
+            //    SearcherStation2.Z = 41069578.763;
+            //    SearcherStation2.Vx = 15.331;
+            //    SearcherStation2.Vy = -39.506;
+            //    SearcherStation2.Vz = 287.260;
+            //    searcherStation2.xTextBox.Text = SearcherStation2.X.ToString();
+            //    searcherStation2.yTextBox.Text = SearcherStation2.Y.ToString();
+            //    searcherStation2.zTextBox.Text = SearcherStation2.Z.ToString();
+
+            //    SearcherStation3.X = 32299611.212;
+            //    SearcherStation3.Y = -27102533.564;
+            //    SearcherStation3.Z = 70648.506;
+            //    SearcherStation3.Vx = 0.005;
+            //    SearcherStation3.Vy = 0.002;
+            //    SearcherStation3.Vz = -1.410;
+            //    searcherStation3.xTextBox.Text = SearcherStation3.X.ToString();
+            //    searcherStation3.yTextBox.Text = SearcherStation3.Y.ToString();
+            //    searcherStation3.zTextBox.Text = SearcherStation3.Z.ToString();
+
+            //    SearcherStation4.X = 38213724.830;
+            //    SearcherStation4.Y = 17819300.081;
+            //    SearcherStation4.Z = 31311.427;
+            //    SearcherStation4.Vx = -0.002;
+            //    SearcherStation4.Vy = -0.004;
+            //    SearcherStation4.Vz = 4.829;
+            //    searcherStation4.xTextBox.Text = SearcherStation4.X.ToString();
+            //    searcherStation4.yTextBox.Text = SearcherStation4.Y.ToString();
+            //    searcherStation4.zTextBox.Text = SearcherStation4.Z.ToString();
+
+
+            //    GenerateAlpesSourceWithElevationMap();
+
+            //    TrueSource.X = X;
+            //    TrueSource.Y = Y;
+            //    TrueSource.Z = Z;
+
+            //    trueSource.xTextBox.Text = TrueSource.X.ToString();
+            //    trueSource.yTextBox.Text = TrueSource.Y.ToString();
+            //    trueSource.zTextBox.Text = TrueSource.Z.ToString();
+            //    trueSource.Run();
+
+
+            //    NewSource.X = X - 5000;
+            //    NewSource.Y = Y - 5000;
+            //    NewSource.Z = Z - 5000;
+            //    newSource.xTextBox.Text = NewSource.X.ToString();
+            //    newSource.yTextBox.Text = NewSource.Y.ToString();
+            //    newSource.zTextBox.Text = NewSource.Z.ToString();
+            //    newSource.Run();
+            //}
+            //else if (glonassRadioButton.Checked)
+            //{
+            //    SearcherStation1.X = -5935802.5687354617;
+            //    SearcherStation1.Y = 24717254.051876262;
+            //    SearcherStation1.Z = 2767910.195097459;
+            //    SearcherStation1.Vx = 4730.5250632253128;
+            //    SearcherStation1.Vy = 2143.6350639647035;
+            //    SearcherStation1.Vz = 2947.0247509642622;
+            //    searcherStation1.xTextBox.Text = SearcherStation1.X.ToString();
+            //    searcherStation1.yTextBox.Text = SearcherStation1.Y.ToString();
+            //    searcherStation1.zTextBox.Text = SearcherStation1.Z.ToString();
+
+
+
+            //    SearcherStation2.X = -22012417.926170126;
+            //    SearcherStation2.Y = 12713373.157570107;
+            //    SearcherStation2.Z = 10264559;
+            //    SearcherStation2.Vx = 2688.5168406593225;
+            //    SearcherStation2.Vy = 3268.5073107800017;
+            //    SearcherStation2.Vz = 4955.5059056521886;
+            //    searcherStation2.xTextBox.Text = SearcherStation2.X.ToString();
+            //    searcherStation2.yTextBox.Text = SearcherStation2.Y.ToString();
+            //    searcherStation2.zTextBox.Text = SearcherStation2.Z.ToString();
+
+            //    SearcherStation3.X = 4678350.1451920457;
+            //    SearcherStation3.Y = 24985784.756916914;
+            //    SearcherStation3.Z = -16312345;
+            //    SearcherStation3.Vx = 1493.7551815499342;
+            //    SearcherStation3.Vy = 4186.350167350075;
+            //    SearcherStation3.Vz = 4911.5723464226221;
+            //    searcherStation3.xTextBox.Text = SearcherStation3.X.ToString();
+            //    searcherStation3.yTextBox.Text = SearcherStation3.Y.ToString();
+            //    searcherStation3.zTextBox.Text = SearcherStation3.Z.ToString();
+
+            //    SearcherStation4.X = -14485131.6116681;
+            //    SearcherStation4.Y = 20889168.537609473;
+            //    SearcherStation4.Z = 9169112;
+            //    SearcherStation4.Vx = 1356.56143368993;
+            //    SearcherStation4.Vy = 1768.0281688310338;
+            //    SearcherStation4.Vz = 3622.9812650117005;
+            //    searcherStation4.xTextBox.Text = SearcherStation4.X.ToString();
+            //    searcherStation4.yTextBox.Text = SearcherStation4.Y.ToString();
+            //    searcherStation4.zTextBox.Text = SearcherStation4.Z.ToString();
+
+
+            //    GenerateAlpesSourceWithElevationMap();
+
+            //    TrueSource.X = X;
+            //    TrueSource.Y = Y;
+            //    TrueSource.Z = Z;
+
+            //    trueSource.xTextBox.Text = TrueSource.X.ToString();
+            //    trueSource.yTextBox.Text = TrueSource.Y.ToString();
+            //    trueSource.zTextBox.Text = TrueSource.Z.ToString();
+            //    trueSource.Run();
+
+
+            //    NewSource.X = X - 5000;
+            //    NewSource.Y = Y - 5000;
+            //    NewSource.Z = Z - 5000;
+            //    newSource.xTextBox.Text = NewSource.X.ToString();
+            //    newSource.yTextBox.Text = NewSource.Y.ToString();
+            //    newSource.zTextBox.Text = NewSource.Z.ToString();
+            //    newSource.Run();
+
+            //}
             ProcessTextBoxesCoordinates();
         }
         #endregion
@@ -675,25 +807,25 @@ namespace ResearchModel
 
         private void fullResearchButton_Click(object sender, EventArgs e)
         {
-            
             anyInfoLabel.Text = "0/12";
             AlpesСheckBox.Checked = true;
 
-            stormRadioButton.Checked = false;
-            glonassRadioButton.Checked = true;
-            MakeResearchOneGroup(sender, e);
+            //stormRadioButton.Checked = false;
+            //glonassRadioButton.Checked = true;
+            //MakeResearchOneGroup(sender, e);
 
             glonassRadioButton.Checked = false;
             stormRadioButton.Checked = true;
             MakeResearchOneGroup(sender, e);
+
         }
 
         private void MakeResearchOneGroup(object sender, EventArgs e)
         {
-            ElevationCheckBox.Checked = false;
-            earthRadioButton.Checked = false;
-            spaceRadioButton.Checked = true;
-            MakeResearchOnePlace(sender, e);
+            //ElevationCheckBox.Checked = false;
+            //earthRadioButton.Checked = false;
+            //spaceRadioButton.Checked = true;
+            //MakeResearchOnePlace(sender, e);
 
             spaceRadioButton.Checked = false;
             earthRadioButton.Checked = true;

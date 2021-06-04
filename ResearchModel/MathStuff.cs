@@ -412,7 +412,7 @@ namespace ResearchModel
             int jCount = 0;
             if (specialResearch)
             {
-                iCount = 10;
+                iCount = 1000;
                 jCount = 30;
             }
             else
@@ -532,8 +532,8 @@ namespace ResearchModel
             int jCount = 0;
             if (specialResearch)
             {
-                iCount = 10;
-                jCount = 30;
+                iCount = 1000;
+                jCount = 300;
             }
             else
             {
